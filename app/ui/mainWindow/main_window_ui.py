@@ -122,11 +122,11 @@ class MainWindowUI:
         window.power_button.setStyleSheet("QLabel { background-color: rgba(255, 0, 0, 0); border-radius: 20px; }")
 
         # Master button just next to the power button with slight margin
-        window.master_button = QLabel(window)
-        window.master_button.setGeometry(window.width() - 120, 20, 40, 40)  # Slightly to the left of the power button
-        master_icon = QPixmap("C:/Users/Vaibhav/Downloads/scrum.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        window.master_button.setPixmap(master_icon)
-        window.master_button.setStyleSheet("QLabel { background-color: rgba(255, 0, 0, 0); border-radius: 20px; }")
+        # window.master_button = QLabel(window)
+        # window.master_button.setGeometry(window.width() - 60, 20, 40, 40)  # Slightly to the left of the power button
+        # master_icon = QPixmap("C:/Users/Vaibhav/Downloads/scrum.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        # window.master_button.setPixmap(master_icon)
+        # window.master_button.setStyleSheet("QLabel { background-color: rgba(255, 0, 0, 0); border-radius: 20px; }")
 
         # Bottom-right image
         window.bottom_right_image = QLabel(window)
