@@ -1,3 +1,5 @@
+# app\services\tools\internalRegistration\internal_registration_window.py
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
 

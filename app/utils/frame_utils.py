@@ -1,8 +1,6 @@
-# app/utils/frame_utils.py
-
-from PyQt5.QtWidgets import QGraphicsDropShadowEffect
-from PyQt5.QtCore import Qt, QRectF
-from PyQt5.QtGui import QPainterPath, QColor, QRegion
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QDesktopWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 
 def apply_drop_shadow(widget):
     """
@@ -16,15 +14,19 @@ def apply_drop_shadow(widget):
     shadow.setColor(QColor(0, 102, 204))  # RGB for professional blue
     widget.setGraphicsEffect(shadow)
 
-def apply_rounded_corners(widget, corner_radius=15):
+def center_window(widget):
     """
-    Applies rounded corners to the given widget by setting a mask.
+    Centers the given window on the screen.
     
-    :param widget: The widget to which rounded corners should be applied.
-    :param corner_radius: The radius of the corners (default is 15px).
+    :param widget: The window or widget to center.
     """
-    path = QPainterPath()
-    rect_f = QRectF(widget.rect())  # Convert QRect to QRectF
-    path.addRoundedRect(rect_f, corner_radius, corner_radius)
-    region = QRegion(path.toFillPolygon().toPolygon())
-    widget.setMask(region)
+    # Get the geometry of the screen
+    screen_geometry = QDesktopWidget().availableGeometry()
+    screen_center = screen_geometry.center()
+
+    # Get the geometry of the window
+    window_geometry = widget.frameGeometry()
+
+    # Move the window to the center of the screen
+    window_geometry.moveCenter(screen_center)
+    widget.move(window_geometry.topLeft())
