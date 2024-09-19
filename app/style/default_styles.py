@@ -1,8 +1,8 @@
 # Styles for widgets in dark and light modes
 
-# Textbox and ComboBox styles
+# Textbox, ComboBox, QDateEdit, and QTimeEdit styles
 dark_mode_style = """
-    QLineEdit, QComboBox, QDateEdit {
+    QLineEdit, QComboBox, QDateEdit, QTimeEdit {
         border-top: none;
         border-left: none;
         border-right: none;
@@ -13,27 +13,27 @@ dark_mode_style = """
         color: white;
         font-size: 14px;  /* Same size as label */
     }
-    QComboBox::drop-down, QDateEdit::drop-down {
+    QComboBox::drop-down, QDateEdit::drop-down, QTimeEdit::drop-down {
         border: none;  /* No borders around the drop-down button */
     }
-    QComboBox::down-arrow, QDateEdit::down-arrow {
+    QComboBox::down-arrow, QDateEdit::down-arrow, QTimeEdit::down-arrow {
         image: url(app/images/processed/down-arrow.png);  /* Set downward arrow image */
         width: 10px;
         height: 10px;
     }
-    QDateEdit::up-arrow {
+    QDateEdit::up-arrow, QTimeEdit::up-arrow {
         image: url(app/images/processed/up-arrow.png);  /* Set upward arrow image */
         width: 10px;
         height: 10px;
     }
-    QComboBox QAbstractItemView, QDateEdit QAbstractItemView {
+    QComboBox QAbstractItemView, QDateEdit QAbstractItemView, QTimeEdit QAbstractItemView {
         background-color: #505050;
         color: white;
     }
 """
 
 light_mode_style = """
-    QLineEdit, QComboBox, QDateEdit {
+    QLineEdit, QComboBox, QDateEdit, QTimeEdit {
         border-top: none;
         border-left: none;
         border-right: none;
@@ -44,20 +44,20 @@ light_mode_style = """
         color: black;
         font-size: 14px;  /* Same size as label */
     }
-    QComboBox::drop-down, QDateEdit::drop-down {
+    QComboBox::drop-down, QDateEdit::drop-down, QTimeEdit::drop-down {
         border: none;  /* No borders around the drop-down button */
     }
-    QComboBox::down-arrow, QDateEdit::down-arrow {
+    QComboBox::down-arrow, QDateEdit::down-arrow, QTimeEdit::down-arrow {
         image: url(app/images/processed/down-arrow.png);  /* Set downward arrow image */
         width: 10px;
         height: 10px;
     }
-    QDateEdit::up-arrow {
+    QDateEdit::up-arrow, QTimeEdit::up-arrow {
         image: url(app/images/processed/up-arrow.png);  /* Set upward arrow image */
         width: 10px;
         height: 10px;
     }
-    QComboBox QAbstractItemView, QDateEdit QAbstractItemView {
+    QComboBox QAbstractItemView, QDateEdit QAbstractItemView, QTimeEdit QAbstractItemView {
         background-color: #C0C0C0;
         color: black;
     }
