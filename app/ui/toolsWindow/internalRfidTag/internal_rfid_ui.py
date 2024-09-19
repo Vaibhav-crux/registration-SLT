@@ -1,13 +1,15 @@
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QFrame, QVBoxLayout
 from PyQt5.QtCore import Qt
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
 from app.style.default_styles import dark_mode_style, light_mode_style
+# Import the button layout function
+from app.ui.toolsWindow.internalRfidTag.internal_rfid_button_ui import create_button_layout
 
 def setup_ui(window):
     """
-    Set up the UI layout for the InternalRegistrationWindow with additional fields.
+    Set up the UI layout for the InternalRegistrationWindow with additional fields and buttons.
     
     :param window: The QDialog window to set up the UI on.
     """
@@ -103,6 +105,39 @@ def setup_ui(window):
     calendar.setFixedWidth(300)
     calendar.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Validity Till:", calendar)
+
+    # Create the status frame
+    status_frame = QFrame(window)
+    status_frame.setFixedHeight(50)  # Set fixed height for the frame
+    status_frame.setStyleSheet("""
+        QFrame {
+            background-color: #3399ff;  /* Light blue background similar to the image */
+            border-radius: 12px;  /* Rounded corners */
+            border: 2px solid #b3d9ff;  /* Slightly lighter blue border */
+        }
+    """)
+
+    # Add a layout to the frame to ensure proper text alignment
+    status_layout = QVBoxLayout(status_frame)
+
+    # Create the label inside the frame and center the text
+    status_label = QLabel("Status: Please Enter Vehicle Number or RFID Tag")
+    status_label.setAlignment(Qt.AlignCenter)  # Center the text in the frame
+    status_label.setStyleSheet("""
+        font-size: 14px;
+        font-weight: 600;  /* Semi-bold */
+        color: white;  /* White text color */
+    """)
+
+    # Add the label to the frame's layout
+    status_layout.addWidget(status_label)
+
+    # Add status frame to the main layout
+    main_layout.addWidget(status_frame)
+
+    # Add the button layout from the imported function
+    button_layout = create_button_layout(window)
+    main_layout.addLayout(button_layout)
 
     # Set the main layout
     window.setLayout(main_layout)

@@ -1,5 +1,6 @@
 # Styles for widgets in dark and light modes
 
+# Textbox and ComboBox styles
 dark_mode_style = """
     QLineEdit, QComboBox, QDateEdit {
         border-top: none;
@@ -59,5 +60,20 @@ light_mode_style = """
     QComboBox QAbstractItemView, QDateEdit QAbstractItemView {
         background-color: #C0C0C0;
         color: black;
+    }
+"""
+
+# Button style
+button_style = """
+    QPushButton {
+        background-color: #007bff;  /* Professional blue background */
+        color: white;
+        border-radius: 8px;  /* Curved corners */
+        font-size: 14px;  /* Increase text size */
+        font-weight: bold;  /* Bold text */
+        padding: 8px 16px;  /* Increase padding to make button larger */
+    }
+    QPushButton:pressed {
+        background-color: #0056b3;  /* Darker blue when pressed */
     }
 """
