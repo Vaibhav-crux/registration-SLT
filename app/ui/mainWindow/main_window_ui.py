@@ -130,8 +130,17 @@ class MainWindowUI:
 
         # Bottom-right image
         window.bottom_right_image = QLabel(window)
-        bottom_right_pixmap = QPixmap("C:/Users/Vaibhav/Desktop/Union (2).png")
+        bottom_right_pixmap = QPixmap("app/images/processed/logo.png").scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         window.bottom_right_image.setPixmap(bottom_right_pixmap)
-        window.bottom_right_image.setScaledContents(True)
+
+        # Set the geometry of the image to place it at the bottom-right corner with the correct size
+        window.bottom_right_image.setGeometry(window.width() - 20, window.height() - 170, 150, 150)
+
+        # Add a background and a border to make it stand out
+        window.bottom_right_image.setStyleSheet("""
+            QLabel {
+                background-color: rgba(255, 255, 255, 50);  /* Light translucent background */
+            }
+        """)
 
         window.showFullScreen()
