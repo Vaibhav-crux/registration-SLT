@@ -6,7 +6,7 @@ from app.services.loginWindow.login_window_service import FullScreenWindow
 from datetime import datetime
 import os
 from app.ui.mainWindow.main_window_ui import MainWindowUI  # Import the UI setup class
-from app.services.tools.internalRegistration.internal_registration_window import InternalRegistrationWindow
+from app.services.tools.internalRegistration.internal_rfid_window_service import InternalRegistrationWindow
 from app.services.tools.externalRegistration.external_registration_window import ExternalRegistrationWindow
 from app.services.utilities.report.report_window import ReportWindow
 from app.services.utilities.shiftTiming.shift_timing_window import ShiftTimingWindow
