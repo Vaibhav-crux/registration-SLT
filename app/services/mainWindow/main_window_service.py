@@ -144,7 +144,7 @@ class MainWindow(QWidget, MainWindowUI):
     def resizeEvent(self, event):
         """Handle the window resize event."""
         # Update the background image when the window is resized
-        self.set_background_image("C:/Users/Vaibhav/Downloads/still-life-ashes-with-charcoal.jpg")
+        self.set_background_image("app/images/menu/background2.jpg")
 
         # Resize and reposition the info frame
         self.info_frame.setGeometry(self.width() - 380, 100, 350, 360)

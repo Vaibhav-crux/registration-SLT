@@ -10,7 +10,7 @@ import calendar
 
 class MainWindowUI:
     def setup_ui(self, window):
-        window.set_background_image("C:/Users/Vaibhav/Downloads/still-life-ashes-with-charcoal.jpg")
+        window.set_background_image("app/images/menu/background2.jpg")
         
         # Create the single frame for displaying time, date, day, and shift information
         window.info_frame = QFrame(window)
