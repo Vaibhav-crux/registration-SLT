@@ -1,0 +1,63 @@
+# Styles for widgets in dark and light modes
+
+dark_mode_style = """
+    QLineEdit, QComboBox, QDateEdit {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid #007bff;  /* Professional blue bottom border */
+        background-color: #505050;  /* Professional grey for dark mode */
+        padding: 2px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;  /* Same size as label */
+    }
+    QComboBox::drop-down, QDateEdit::drop-down {
+        border: none;  /* No borders around the drop-down button */
+    }
+    QComboBox::down-arrow, QDateEdit::down-arrow {
+        image: url(app/images/processed/down-arrow.png);  /* Set downward arrow image */
+        width: 10px;
+        height: 10px;
+    }
+    QDateEdit::up-arrow {
+        image: url(app/images/processed/up-arrow.png);  /* Set upward arrow image */
+        width: 10px;
+        height: 10px;
+    }
+    QComboBox QAbstractItemView, QDateEdit QAbstractItemView {
+        background-color: #505050;
+        color: white;
+    }
+"""
+
+light_mode_style = """
+    QLineEdit, QComboBox, QDateEdit {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid #007bff;  /* Professional blue bottom border */
+        background-color: #C0C0C0;  /* Silver color for light mode */
+        padding: 2px;
+        border-radius: 4px;
+        color: black;
+        font-size: 14px;  /* Same size as label */
+    }
+    QComboBox::drop-down, QDateEdit::drop-down {
+        border: none;  /* No borders around the drop-down button */
+    }
+    QComboBox::down-arrow, QDateEdit::down-arrow {
+        image: url(app/images/processed/down-arrow.png);  /* Set downward arrow image */
+        width: 10px;
+        height: 10px;
+    }
+    QDateEdit::up-arrow {
+        image: url(app/images/processed/up-arrow.png);  /* Set upward arrow image */
+        width: 10px;
+        height: 10px;
+    }
+    QComboBox QAbstractItemView, QDateEdit QAbstractItemView {
+        background-color: #C0C0C0;
+        color: black;
+    }
+"""

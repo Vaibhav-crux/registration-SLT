@@ -11,7 +11,7 @@ class InternalRegistrationWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Registration")
-        self.setGeometry(100, 100, 500, 500)
+        self.setGeometry(100, 100, 400, 500)
 
         # Apply window flags to remove the "?" and only show the close button
         apply_window_flags(self)
