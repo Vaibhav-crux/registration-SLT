@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
 from PyQt5.QtCore import Qt
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode
@@ -7,7 +7,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style, button_s
 
 def setup_ui(window):
     """
-    Set up the UI layout for the InternalRegistrationWindow with additional fields and buttons.
+    Set up the UI layout for the ChangePasswordWindow with additional fields and buttons.
     
     :param window: The QDialog window to set up the UI on.
     """
@@ -23,7 +23,7 @@ def setup_ui(window):
     else:
         common_textbox_style = light_mode_style
 
-    # Helper function to create a label and field (textbox, combobox, or dateedit) in a horizontal layout
+    # Helper function to create a label and field (textbox) in a horizontal layout
     def add_field(layout, label_text, widget):
         hbox = QHBoxLayout()
         label = QLabel(label_text, window)
@@ -36,28 +36,29 @@ def setup_ui(window):
         hbox.addWidget(widget)
         layout.addLayout(hbox)
 
-    # RFID Tag
+    # User Name Field
     user_name = QLineEdit(window)
     user_name.setFixedWidth(300)
     user_name.setStyleSheet(common_textbox_style)
     add_field(main_layout, "User Name:", user_name)
 
-    # Password Tag
+    # Password Field (with hidden characters)
     password = QLineEdit(window)
     password.setFixedWidth(300)
+    password.setEchoMode(QLineEdit.Password)  # Hide the password characters
     password.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Password:", password)
 
     # Create buttons
     button_layout = QHBoxLayout()
 
-    # New Button
+    # Confirm Button
     confirm_button = QPushButton("Confirm", window)
     confirm_button.setFixedWidth(100)
     confirm_button.setStyleSheet(button_style)
     button_layout.addWidget(confirm_button)
 
-    # Clear Button
+    # Cancel Button
     cancel_button = QPushButton("Cancel", window)
     cancel_button.setFixedWidth(100)
     cancel_button.setStyleSheet(button_style)
