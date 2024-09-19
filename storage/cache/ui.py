@@ -1,15 +1,15 @@
 # app\ui\toolsWindow\internalRfidTag\internal_rfid_ui.py
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QPushButton
 from PyQt5.QtCore import Qt
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
-from app.style.default_styles import dark_mode_style, light_mode_style
+from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 
 def setup_ui(window):
     """
-    Set up the UI layout for the InternalRegistrationWindow with additional fields.
+    Set up the UI layout for the InternalRegistrationWindow with additional fields and buttons.
     
     :param window: The QDialog window to set up the UI on.
     """
@@ -105,6 +105,36 @@ def setup_ui(window):
     calendar.setFixedWidth(300)
     calendar.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Validity Till:", calendar)
+
+    # Create buttons
+    button_layout = QHBoxLayout()
+
+    # New Button
+    new_button = QPushButton("New", window)
+    new_button.setFixedWidth(100)
+    new_button.setStyleSheet(button_style)
+    button_layout.addWidget(new_button)
+
+    # Edit Button
+    edit_button = QPushButton("Edit", window)
+    edit_button.setFixedWidth(100)
+    edit_button.setStyleSheet(button_style)
+    button_layout.addWidget(edit_button)
+
+    # Delete Button
+    delete_button = QPushButton("Delete", window)
+    delete_button.setFixedWidth(100)
+    delete_button.setStyleSheet(button_style)
+    button_layout.addWidget(delete_button)
+
+    # Clear Button
+    clear_button = QPushButton("Clear", window)
+    clear_button.setFixedWidth(100)
+    clear_button.setStyleSheet(button_style)
+    button_layout.addWidget(clear_button)
+
+    # Add button layout to main layout
+    main_layout.addLayout(button_layout)
 
     # Set the main layout
     window.setLayout(main_layout)
