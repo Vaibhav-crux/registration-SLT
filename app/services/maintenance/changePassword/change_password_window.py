@@ -10,7 +10,7 @@ from app.ui.maintenance.changePassword.change_password_ui import setup_ui
 class ChangePasswordWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Create User")
+        self.setWindowTitle("Change Crendentials")
         self.setGeometry(100, 100, 200, 200)
 
         # Apply window flags to remove the "?" and only show the close button
