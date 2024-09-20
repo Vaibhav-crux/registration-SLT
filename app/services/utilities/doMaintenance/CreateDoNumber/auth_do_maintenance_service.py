@@ -4,7 +4,7 @@ from app.ui.utilities.doMaintenance.CreateDo.new_do_maintenance_ui import setup_
 from app.utils.mode_utils import apply_mode_styles 
 from app.controllers.utilities.doMaintenance.check_user_creds import check_user_credentials
 
-class NewDoMaintenanceWindow(QDialog):
+class AuthDoMaintenanceWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Create DO Number")

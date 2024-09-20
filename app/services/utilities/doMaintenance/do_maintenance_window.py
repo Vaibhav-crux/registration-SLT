@@ -6,7 +6,7 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
 from app.ui.utilities.doMaintenance.do_maintenance_ui import setup_ui
 # Import the new window for creating DO number
-from app.services.utilities.doMaintenance.CreateDoNumber.new_do_maintenance_service import NewDoMaintenanceWindow
+from app.services.utilities.doMaintenance.CreateDoNumber.auth_do_maintenance_service import AuthDoMaintenanceWindow
 
 class DoMaintenanceWindow(QDialog):
     def __init__(self):
@@ -37,5 +37,5 @@ class DoMaintenanceWindow(QDialog):
         Opens the New DO Maintenance window when the "New" button is clicked.
         Pass self as the parent to apply the blur effect to this window.
         """
-        new_do_window = NewDoMaintenanceWindow(self)
+        new_do_window = AuthDoMaintenanceWindow(self)
         new_do_window.exec_()  # Open the window as a modal dialog
