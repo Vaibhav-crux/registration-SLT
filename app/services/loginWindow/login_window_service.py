@@ -1,3 +1,4 @@
+from app.controllers.login.fetch_user import check_username_exists, verify_user_credentials
 from PyQt5.QtWidgets import QWidget, QApplication, QLineEdit
 from app.ui.loginWindow.login_window_ui import LoginWindowUI
 from app.utils.background_utils import set_background_image
@@ -31,10 +32,14 @@ class FullScreenWindow(QWidget):
             QApplication.beep()  # Beep sound if no text is provided
             return
 
-        # Convert the username to uppercase and update the "Sign In" label
-        self.ui.login_prompt.setText(f"Welcome {username.upper()}")
+        # Check if the username exists in the database
+        if not check_username_exists(username):
+            QApplication.beep()  # Beep sound if username doesn't exist
+            self.ui.username_input.clear()  # Clear the username input field
+            return
 
-        # Change the placeholder text of the input field to "Password"
+        # If username exists, prompt for password
+        self.ui.login_prompt.setText(f"Welcome {username.upper()}")
         self.ui.username_input.clear()  # Clear the input field
         self.ui.username_input.setPlaceholderText("Password")
         self.ui.username_input.setEchoMode(QLineEdit.Password)  # Set input to password mode (hidden characters)
@@ -52,15 +57,17 @@ class FullScreenWindow(QWidget):
             QApplication.beep()  # Beep sound if no text is provided
             return
 
-        # Save the username to a file before opening the MainWindow
-        self.save_username_to_file(username)
-
-        # Close the FullScreenWindow
-        self.close()
-
-        # Now open the MainWindow
-        self.open_main_window(username)
-
+        # Verify the username and password against the database
+        if verify_user_credentials(username, password):
+            # Credentials are correct, proceed to the main window
+            self.save_username_to_file(username)
+            self.close()
+            self.open_main_window(username)
+        else:
+            # Credentials are incorrect, beep and clear the password field
+            QApplication.beep()
+            self.ui.username_input.clear()  # Clear the password input field
+            self.ui.username_input.setFocus()  # Set focus back to the password input field
     def save_username_to_file(self, username):
         # Save the username to a file named "activeUsername.txt"
         with open("activeUsername.txt", "w") as file:
