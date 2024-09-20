@@ -22,7 +22,7 @@ def automate_saving_master_user():
                 password="123",  # It's recommended to hash the password in a real application
                 authType=AuthTypeEnum.MASTER,
                 empId=None,
-                fullName=None,
+                fullName="VAIBHAV",
                 email=None,
                 desigantion=None,
                 Address=None,

@@ -14,6 +14,8 @@ from app.services.utilities.doMaintenance.do_maintenance_window import DoMainten
 from app.services.maintenance.createUser.create_user_window import CreateUserWindow
 from app.services.maintenance.changePassword.change_password_window import ChangePasswordWindow
 from app.services.maintenance.blockUser.block_user_window import BlockUserWindow
+from app.controllers.mainWindow.fetch_user_full_name import fetch_user_full_name
+from app.controllers.mainWindow.fetch_shift_name import fetch_shift_name
 
 class MainWindow(QWidget, MainWindowUI):
     def __init__(self):
@@ -23,13 +25,19 @@ class MainWindow(QWidget, MainWindowUI):
         self.initUI()
 
     def initUI(self):
+        # Fetch the full name for the active username
+        full_name = fetch_user_full_name()
+
+        # Fetch the shift name based on the current time
+        shift_name = fetch_shift_name()
+
         # Initialize the inactivity timer
         self.inactivity_timer = QTimer(self)
         self.inactivity_timer.timeout.connect(self.handle_logout_or_inactivity)
         self.inactivity_timer.setSingleShot(True)
 
-        # Setup UI (moved to the separate UI file)
-        self.setup_ui(self)
+        # Setup UI and pass the full name and shift name to be displayed
+        self.setup_ui(self, full_name, shift_name)
 
         # Start the timer to update the time every second
         self.timer = QTimer(self)

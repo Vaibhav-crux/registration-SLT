@@ -2,7 +2,7 @@ from app.controllers.login.fetch_user import check_username_exists, verify_user_
 from PyQt5.QtWidgets import QWidget, QApplication, QLineEdit
 from app.ui.loginWindow.login_window_ui import LoginWindowUI
 from app.utils.background_utils import set_background_image
-from app.utils.frame_utils import apply_drop_shadow
+import os
 
 class FullScreenWindow(QWidget):
     def __init__(self):
@@ -69,9 +69,20 @@ class FullScreenWindow(QWidget):
             self.ui.username_input.clear()  # Clear the password input field
             self.ui.username_input.setFocus()  # Set focus back to the password input field
     def save_username_to_file(self, username):
-        # Save the username to a file named "activeUsername.txt"
-        with open("activeUsername.txt", "w") as file:
+        # Define the correct path to the app/data/activeUsername.txt file
+        data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
+        data_dir = os.path.abspath(data_dir)  # Get the absolute path
+
+        # Create the directory if it doesn't exist
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir)
+
+        file_path = os.path.join(data_dir, 'activeUsername.txt')
+
+        # Save the username to the file
+        with open(file_path, "w") as file:
             file.write(username)
+
 
     def open_main_window(self, username):
         from app.services.mainWindow.main_window_service import MainWindow  # Import here to avoid circular import
