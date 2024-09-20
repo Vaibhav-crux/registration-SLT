@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
 from PyQt5.QtCore import Qt
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode
@@ -7,9 +7,10 @@ from app.style.default_styles import dark_mode_style, light_mode_style, button_s
 
 def setup_ui(window):
     """
-    Set up the UI layout for the InternalRegistrationWindow with additional fields and buttons.
+    Set up the UI layout for the DO Maintenance window with fields and buttons.
     
     :param window: The QDialog window to set up the UI on.
+    :return: The buttons for further connections.
     """
     # Create the main layout
     main_layout = QVBoxLayout()
@@ -18,12 +19,9 @@ def setup_ui(window):
     dark_mode = is_dark_mode()
 
     # Apply the appropriate stylesheet
-    if dark_mode:
-        common_textbox_style = dark_mode_style
-    else:
-        common_textbox_style = light_mode_style
+    common_textbox_style = dark_mode_style if dark_mode else light_mode_style
 
-    # Helper function to create a label and field (textbox, combobox, or dateedit) in a horizontal layout
+    # Helper function to create a label and field in a horizontal layout
     def add_field(layout, label_text, widget):
         hbox = QHBoxLayout()
         label = QLabel(label_text, window)
@@ -36,7 +34,7 @@ def setup_ui(window):
         hbox.addWidget(widget)
         layout.addLayout(hbox)
 
-    # RFID Tag
+    # DO Number
     do_number = QLineEdit(window)
     do_number.setFixedWidth(300)
     do_number.setStyleSheet(common_textbox_style)
@@ -63,14 +61,17 @@ def setup_ui(window):
     delete_button.setStyleSheet(button_style)
     button_layout.addWidget(delete_button)
 
-    # Clear Button
-    clear_button = QPushButton("Search", window)
-    clear_button.setFixedWidth(100)
-    clear_button.setStyleSheet(button_style)
-    button_layout.addWidget(clear_button)
+    # Search Button (renamed from "Clear" to "Search" as per original code)
+    search_button = QPushButton("Search", window)
+    search_button.setFixedWidth(100)
+    search_button.setStyleSheet(button_style)
+    button_layout.addWidget(search_button)
 
     # Add button layout to main layout
     main_layout.addLayout(button_layout)
 
     # Set the main layout
     window.setLayout(main_layout)
+
+    # Return the buttons so they can be connected later
+    return new_button, edit_button, delete_button, search_button
