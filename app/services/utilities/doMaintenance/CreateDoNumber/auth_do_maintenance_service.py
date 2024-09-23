@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from app.ui.utilities.doMaintenance.CreateDo.new_do_maintenance_ui import setup_new_do_ui
+from app.ui.utilities.doMaintenance.CreateDo.auth_do_maintenance_ui import setup_new_do_ui
 from app.utils.mode_utils import apply_mode_styles 
 from app.controllers.utilities.doMaintenance.check_user_creds import check_user_credentials
 from app.services.utilities.doMaintenance.CreateDoNumber.create_do_maintenance_service import CreateDoMaintenanceWindow
@@ -25,9 +25,6 @@ class AuthDoMaintenanceWindow(QDialog):
         super().closeEvent(event)
 
     def on_confirm(self):
-        """
-        Handles the logic when the Confirm button is clicked.
-        """
         user_name = self.user_name_input.text()
         password = self.password_input.text()
 
@@ -36,10 +33,7 @@ class AuthDoMaintenanceWindow(QDialog):
             return
 
         if check_user_credentials(user_name, password):            
-            # Close the current window
-            self.close()  # Changed from accept() to close()
-
-            # Open the new CreateDoMaintenanceWindow
+            self.close()
             create_do_window = CreateDoMaintenanceWindow(parent=self.parent_window)
             create_do_window.show()
         else:
