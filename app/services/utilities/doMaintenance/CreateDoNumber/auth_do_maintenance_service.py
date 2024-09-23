@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from app.ui.utilities.doMaintenance.CreateDo.new_do_maintenance_ui import setup_new_do_ui
 from app.utils.mode_utils import apply_mode_styles 
 from app.controllers.utilities.doMaintenance.check_user_creds import check_user_credentials
+from app.services.utilities.doMaintenance.CreateDoNumber.create_do_maintenance_service import CreateDoMaintenanceWindow
 
 class AuthDoMaintenanceWindow(QDialog):
     def __init__(self, parent=None):
@@ -86,8 +87,12 @@ class AuthDoMaintenanceWindow(QDialog):
             QMessageBox.critical(self, "Input Error", "Both User Name and Password fields are required.")
             return
 
-        if check_user_credentials(user_name, password):
-            QMessageBox.information(self, "Success", "DO Number creation authorized!")
-            self.accept()  # Close the window if the credentials are valid
+        if check_user_credentials(user_name, password):            
+            # Close the current window
+            self.close()  # Changed from accept() to close()
+            
+            # Open the new CreateDoMaintenanceWindow
+            create_do_window = CreateDoMaintenanceWindow(parent=self.parent_window)
+            create_do_window.show()
         else:
             QMessageBox.critical(self, "Authentication Failed", "Invalid User Name or Password.")

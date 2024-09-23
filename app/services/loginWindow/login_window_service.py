@@ -61,13 +61,13 @@ class FullScreenWindow(QWidget):
         if verify_user_credentials(username, password):
             # Credentials are correct, proceed to the main window
             self.save_username_to_file(username)
-            self.close()
-            self.open_main_window(username)
+            self.open_main_window(username)  # Open main window first
         else:
             # Credentials are incorrect, beep and clear the password field
             QApplication.beep()
             self.ui.username_input.clear()  # Clear the password input field
             self.ui.username_input.setFocus()  # Set focus back to the password input field
+
     def save_username_to_file(self, username):
         # Define the correct path to the app/data/activeUsername.txt file
         data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
@@ -84,10 +84,12 @@ class FullScreenWindow(QWidget):
             file.write(username)
 
 
+    
     def open_main_window(self, username):
-        from app.services.mainWindow.main_window_service import MainWindow  # Import here to avoid circular import
+        from app.services.mainWindow.main_window_service import MainWindow 
         self.main_window = MainWindow()
         self.main_window.show()
+        self.hide()
 
     def resizeEvent(self, event):
         # Update the background image when the window is resized
