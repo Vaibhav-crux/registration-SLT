@@ -73,5 +73,11 @@ def setup_ui(window):
     # Set the main layout
     window.setLayout(main_layout)
 
-    # Return the buttons so they can be connected later
+    # Store the widgets as instance variables
+    window.do_number_input = do_number
+    window.new_button = new_button
+    window.edit_button = edit_button
+    window.delete_button = delete_button
+    window.search_button = search_button
+
     return new_button, edit_button, delete_button, search_button
