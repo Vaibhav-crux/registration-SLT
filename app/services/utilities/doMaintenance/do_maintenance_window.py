@@ -5,6 +5,9 @@ from app.ui.utilities.doMaintenance.do_maintenance_ui import setup_ui
 from app.services.utilities.doMaintenance.CreateDoNumber.auth_do_maintenance_service import AuthDoMaintenanceWindow
 from app.services.utilities.doMaintenance.searchDoNumber.search_do_number_service import SearchDoNumberService
 from app.ui.utilities.doMaintenance.searchDoNumber.search_do_number_ui import show_result_ui
+from app.ui.utilities.doMaintenance.deleteDoNumber.delete_do_number_ui import DeleteDoNumberWindow
+from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_service import DeleteDoNumberService
+from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
 
 class DoMaintenanceWindow(QDialog):
     def __init__(self):
@@ -24,6 +27,7 @@ class DoMaintenanceWindow(QDialog):
         # Connect the buttons to their actions
         self.new_button.clicked.connect(self.open_new_do_window)
         self.search_button.clicked.connect(self.perform_search)
+        self.delete_button.clicked.connect(self.open_delete_do_window)
 
         # Set focus to the Do Number text box
         self.do_number_input.setFocus()
@@ -51,14 +55,27 @@ class DoMaintenanceWindow(QDialog):
         # Set focus back to the Do Number textbox
         self.do_number_input.setFocus()
 
+    def open_delete_do_window(self):
+        do_number = self.do_number_input.text()
+
+        if not do_number:
+            self.show_message("Please enter a DO Number.")
+            return
+
+        # Check if the DO Number exists
+        do_details = fetch_do_details(do_number)
+        if not do_details:
+            self.show_message(f"No record found for DO Number: {do_number}")
+            return
+
+        delete_window = DeleteDoNumberWindow(do_number, self)
+        delete_window.exec_()
+
     def show_message(self, message):
-        QMessageBox.information(self, "Search Result", message)
+        QMessageBox.information(self, "Information", message)
 
     def show_result(self, result):
-        """
-        Displays the search result in a new ResultWindow.
-        """
-
+        # Displays the search result in a new ResultWindow.
         result_window = SearchDoNumberService(result)
         result_window.exec_()
 

@@ -12,6 +12,14 @@ def save_do_maintenance(data: dict, window) -> bool:
     session = create_session()
 
     try:
+        # Check if doNumber already exists
+        existing_do = session.query(DoData).filter_by(doNumber=data['do_number']).first()
+        
+        if existing_do:
+            # Show error message
+            QMessageBox.critical(window, "Error", f"DO Number {data['do_number']} already exists.")
+            return False
+
         # Create a new DoData object with all the provided values
         new_do = DoData(
             doNumber=data['do_number'],
