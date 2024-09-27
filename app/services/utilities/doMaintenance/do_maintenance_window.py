@@ -42,25 +42,13 @@ class DoMaintenanceWindow(QDialog):
         new_do_window.exec_()  # Open the window as a modal dialog
 
     def open_edit_do_window(self):
-        do_number = self.do_number_input.text()
-
-        if not do_number:
-            self.show_message(MESSAGE_ENTER_DO_NUMBER)
-            return
-
-        # Perform the search using the SearchDoNumberService
-        result = SearchDoNumberService.search_do_number(do_number)
-
-        if result:
-            # Open the authentication window if the DO Number is found
-            edit_do_window = AuthEditDoWindow(self)
-            if edit_do_window.exec_() == QDialog.Accepted:
-                # Proceed with edit logic if authentication is successful
-                self.show_message("Authentication successful. Proceed with edit logic.")
-            else:
-                self.show_message("Authentication canceled or failed.")
+        # Open the authentication window directly without checking the DO Number
+        edit_do_window = AuthEditDoWindow(self)
+        if edit_do_window.exec_() == QDialog.Accepted:
+            # Proceed with edit logic if authentication is successful
+            pass  # Removed the message box call
         else:
-            self.show_message(f"No record found for DO Number: {do_number}")
+            self.show_message("Authentication canceled or failed.")
 
         # Set focus back to the Do Number textbox
         self.do_number_input.setFocus()

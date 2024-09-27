@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from app.ui.utilities.doMaintenance.editDoNumber.edit_do_maintenance_ui import setup_edit_do_maintenance_ui
-from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
+from app.controllers.utilities.doMaintenance.fetch_do_detail_edit_controller import fetch_do_details
 
 # Edit window pop-up
 class EditDoMaintenanceWindow(QDialog):
@@ -13,7 +13,7 @@ class EditDoMaintenanceWindow(QDialog):
         do_details = fetch_do_details(do_number)
         if not do_details:
             QMessageBox.warning(self, "Error", "DO Number not found.")
-            self.close()
+            self.reject()  # Reject the dialog instead of closing it
             return
 
         # Set up the UI
@@ -27,7 +27,7 @@ class EditDoMaintenanceWindow(QDialog):
         # Logic to save the updated DO details
         # You will need to implement this based on your application's requirements
         QMessageBox.information(self, "Success", "DO details saved successfully.")
-        self.close()
+        self.accept()  # Accept the dialog after saving
 
     def cancel(self):
-        self.close()
+        self.reject()  # Reject the dialog when cancelled
