@@ -8,6 +8,10 @@ from app.ui.utilities.doMaintenance.searchDoNumber.search_do_number_ui import sh
 from app.ui.utilities.doMaintenance.deleteDoNumber.delete_do_number_ui import DeleteDoNumberWindow
 from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_service import DeleteDoNumberService
 from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
+from app.services.utilities.doMaintenance.editDoNumber.auth_edit_do_service import AuthEditDoWindow
+
+# Define constants for messages
+MESSAGE_ENTER_DO_NUMBER = "Please enter a DO Number."
 
 class DoMaintenanceWindow(QDialog):
     def __init__(self):
@@ -26,6 +30,7 @@ class DoMaintenanceWindow(QDialog):
 
         # Connect the buttons to their actions
         self.new_button.clicked.connect(self.open_new_do_window)
+        self.edit_button.clicked.connect(self.open_edit_do_window)  # Connect the edit button
         self.search_button.clicked.connect(self.perform_search)
         self.delete_button.clicked.connect(self.open_delete_do_window)
 
@@ -36,11 +41,35 @@ class DoMaintenanceWindow(QDialog):
         new_do_window = AuthDoMaintenanceWindow(self)
         new_do_window.exec_()  # Open the window as a modal dialog
 
+    def open_edit_do_window(self):
+        do_number = self.do_number_input.text()
+
+        if not do_number:
+            self.show_message(MESSAGE_ENTER_DO_NUMBER)
+            return
+
+        # Perform the search using the SearchDoNumberService
+        result = SearchDoNumberService.search_do_number(do_number)
+
+        if result:
+            # Open the authentication window if the DO Number is found
+            edit_do_window = AuthEditDoWindow(self)
+            if edit_do_window.exec_() == QDialog.Accepted:
+                # Proceed with edit logic if authentication is successful
+                self.show_message("Authentication successful. Proceed with edit logic.")
+            else:
+                self.show_message("Authentication canceled or failed.")
+        else:
+            self.show_message(f"No record found for DO Number: {do_number}")
+
+        # Set focus back to the Do Number textbox
+        self.do_number_input.setFocus()
+
     def perform_search(self):
         do_number = self.do_number_input.text()
 
         if not do_number:
-            self.show_message("Please enter a DO Number.")
+            self.show_message(MESSAGE_ENTER_DO_NUMBER)
             return
 
         # Perform the search using the SearchDoNumberService
@@ -59,7 +88,7 @@ class DoMaintenanceWindow(QDialog):
         do_number = self.do_number_input.text()
 
         if not do_number:
-            self.show_message("Please enter a DO Number.")
+            self.show_message(MESSAGE_ENTER_DO_NUMBER)
             return
 
         # Check if the DO Number exists
