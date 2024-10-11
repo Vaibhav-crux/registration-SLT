@@ -31,6 +31,11 @@ def setup_edit_do_maintenance_ui(dialog, do_details):
         label.setStyleSheet(label_style)
         line_edit = QLineEdit()
         line_edit.setText(str(getattr(do_details, field_name, "")))  # Ensure the value is a string
+
+        # Make the DO Number field read-only
+        if field_name == "doNumber":
+            line_edit.setReadOnly(True)
+
         layout.addWidget(label, row, 0)
         layout.addWidget(line_edit, row, 1)
         dialog.line_edits[field_name] = line_edit
