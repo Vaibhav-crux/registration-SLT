@@ -8,7 +8,7 @@ class AuthUserWindow(AuthUserUI):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.resize(400, 300)  # Set the initial window size (width, height)
+        self.resize(400, 100)  # Set the initial window size (width, height)
         self.center_window()  # Center the window on the screen
 
         self.create_user_window = None  # Initialize as None

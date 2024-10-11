@@ -7,7 +7,8 @@ from app.utils.mode_utils import apply_mode_styles, apply_window_flags
 from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
 from app.ui.maintenance.createUser.create_user_ui import setup_ui
-from app.controllers.maintenance.user.delete_user import delete_user_by_username  # Import the delete function
+from app.controllers.maintenance.user.delete_user import delete_user_by_username
+
 input_error = "Input Error"
 class CreateUserWindow(QDialog):
     def __init__(self):

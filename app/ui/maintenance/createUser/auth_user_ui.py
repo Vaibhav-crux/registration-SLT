@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QFormLayout, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QFormLayout, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags, is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.utils.cursor.entry_box import MyLineEdit  # Import the custom class
 
 class AuthUserUI(QWidget):
     def __init__(self, *args, **kwargs):
@@ -13,9 +14,9 @@ class AuthUserUI(QWidget):
         # Create a form layout for user input fields
         form_layout = QFormLayout()
         
-        self.username_input = QLineEdit()
-        self.password_input = QLineEdit()
-        self.password_input.setEchoMode(QLineEdit.Password)
+        self.username_input = MyLineEdit()  # Use the custom class
+        self.password_input = MyLineEdit()  # Use the custom class
+        self.password_input.setEchoMode(MyLineEdit.Password)
         
         form_layout.addRow('Username:', self.username_input)
         form_layout.addRow('Password:', self.password_input)
