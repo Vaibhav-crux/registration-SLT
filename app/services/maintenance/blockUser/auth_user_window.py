@@ -7,7 +7,7 @@ from app.utils.cursor.entry_box import MyLineEdit
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags
 from app.utils.frame_utils import apply_drop_shadow, center_window
 
-class ChangePasswordWindow(QDialog):
+class ChangePasswordWindowBlock(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Change Credentials")

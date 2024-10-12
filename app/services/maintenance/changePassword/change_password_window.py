@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QPushButton
 from app.ui.maintenance.changePassword.change_password_ui import setup_ui
 from app.controllers.maintenance.passwordChange.check_user import check_user_auth
 from app.utils.cursor.entry_box import MyLineEdit
+from app.services.maintenance.changePassword.editDetails.auth_edit_details_window import AuthEditDetailsWindow
 
 # Correct import paths for utility functions
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags
@@ -32,8 +33,9 @@ class ChangePasswordWindow(QDialog):
         self.cancel_button.clicked.connect(self.cancel_action)
 
     def confirm_action(self):
-        # Get the username from the input field
+        # Get the username and password from the input fields
         username = self.username_input.text().strip()
+        password = self.password_input.text().strip()
 
         # Check if the user exists and is authorized
         exists, is_authorized = check_user_auth(username)
@@ -46,7 +48,13 @@ class ChangePasswordWindow(QDialog):
             QMessageBox.warning(self, "Error", "User is not authorized to change credentials.")
             return
 
-        QMessageBox.information(self, "Success", "User is authorized. Proceed with password change.")
+        # Close the current ChangePasswordWindow
+        self.close()
+
+        # Open the AuthEditDetailsWindow with the username and password
+        self.auth_edit_details_window = AuthEditDetailsWindow(username, password)
+        self.auth_edit_details_window.exec_()
+
 
     def cancel_action(self):
         # Logic to clear fields or close the dialog
