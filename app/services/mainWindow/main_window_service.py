@@ -14,7 +14,7 @@ from app.services.utilities.doMaintenance.do_maintenance_window import DoMainten
 from app.services.maintenance.createUser.create_user_window import CreateUserWindow
 from app.services.maintenance.createUser.auth_user_window import AuthUserWindow
 from app.services.maintenance.changePassword.change_password_window import ChangePasswordWindow
-from app.services.maintenance.blockUser.block_user_window import BlockUserWindow
+from app.services.maintenance.blockUser.auth_user_window import ChangePasswordWindow
 from app.controllers.mainWindow.fetch_user_full_name import fetch_user_full_name
 from app.controllers.mainWindow.fetch_shift_name import fetch_shift_name
 
@@ -267,12 +267,12 @@ class MainWindow(QWidget, MainWindowUI):
 
     def open_change_password_window (self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = ChangePasswordWindow()
-        self.external_registration_window.show()
+        self.change_password_window = ChangePasswordWindow()
+        self.change_password_window.show()
 
     def open_block_user_window (self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = BlockUserWindow()
+        self.external_registration_window = ChangePasswordWindow()
         self.external_registration_window.show()
 
     def update_time(self):
