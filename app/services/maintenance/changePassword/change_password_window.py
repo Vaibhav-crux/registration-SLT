@@ -35,7 +35,6 @@ class ChangePasswordWindow(QDialog):
     def confirm_action(self):
         # Get the username and password from the input fields
         username = self.username_input.text().strip()
-        password = self.password_input.text().strip()
 
         # Check if the user exists and is authorized
         exists, is_authorized = check_user_auth(username)
@@ -52,7 +51,7 @@ class ChangePasswordWindow(QDialog):
         self.close()
 
         # Open the AuthEditDetailsWindow with the username and password
-        self.auth_edit_details_window = AuthEditDetailsWindow(username, password)
+        self.auth_edit_details_window = AuthEditDetailsWindow(username)
         self.auth_edit_details_window.exec_()
 
 
