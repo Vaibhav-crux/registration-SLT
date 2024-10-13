@@ -6,6 +6,7 @@ from app.utils.cursor.entry_box import MyLineEdit
 # Correct import paths for utility functions
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags
 from app.utils.frame_utils import apply_drop_shadow, center_window
+from app.services.maintenance.blockUser.block_user_window import BlockUserWindow
 
 class ChangePasswordWindowBlock(QDialog):
     def __init__(self):
@@ -46,7 +47,14 @@ class ChangePasswordWindowBlock(QDialog):
             QMessageBox.warning(self, "Error", "User is not authorized to change credentials.")
             return
 
-        QMessageBox.information(self, "Success", "User is authorized. Proceed with password change.")
+        # Close the ChangePasswordWindowBlock
+        self.close()
+        
+        # Open the BlockUserWindow when credentials are correct
+        block_user_window = BlockUserWindow()
+        block_user_window.exec_()
+
+
 
     def cancel_action(self):
         # Logic to clear fields or close the dialog

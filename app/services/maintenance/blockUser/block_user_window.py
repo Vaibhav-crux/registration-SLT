@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox, QComboBox, QLineEdit, QPushButton
 
 # Import the mode utility functions
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags
@@ -6,24 +6,48 @@ from app.utils.mode_utils import apply_mode_styles, apply_window_flags
 from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
 from app.ui.maintenance.blacklistedUser.blacklisted_user_ui import setup_ui
+# Import the change_blacklist_status function
+from app.controllers.maintenance.blockUser.change_blacklist_status import change_blacklist_status
 
 class BlockUserWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Blacklist User")
-        self.setGeometry(100, 100, 200, 200)
+        self.setGeometry(100, 100, 400, 300)
 
-        # Apply window flags to remove the "?" and only show the close button
+        # Apply utility functions
         apply_window_flags(self)
-
-        # Apply the dark or light mode styles
         apply_mode_styles(self)
-
-        # Center the window using frame_utils
         center_window(self)
-
-        # Apply drop shadow using frame_utils
         apply_drop_shadow(self)
 
         # Set up the UI using the external setup function
         setup_ui(self)
+
+        # Get UI elements
+        self.confirm_button = self.findChild(QPushButton, "Confirm")
+        self.cancel_button = self.findChild(QPushButton, "Cancel")
+        self.rfid_tag_input = self.findChild(QLineEdit, "RFID Tag")
+        self.vehicle_no_input = self.findChild(QLineEdit, "Vehicle No")
+        self.action_combo = self.findChild(QComboBox, "Action")
+
+        # Connect button actions
+        self.confirm_button.clicked.connect(self.confirm_action)
+        self.cancel_button.clicked.connect(self.cancel_action)
+
+    def confirm_action(self):
+        rfid_tag = self.rfid_tag_input.text().strip()
+        vehicle_no = self.vehicle_no_input.text().strip()
+        action = self.action_combo.currentText()
+
+        # Perform the blacklist status change
+        message, success = change_blacklist_status(rfid_tag, vehicle_no, action)
+
+        # Show the appropriate message box
+        if success:
+            QMessageBox.information(self, "Success", message)
+        else:
+            QMessageBox.warning(self, "Error", message)
+
+    def cancel_action(self):
+        self.close()
