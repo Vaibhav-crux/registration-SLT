@@ -5,6 +5,14 @@ def update_user_details(user_id, password, fullname, email, mobile, address):
     session = create_session()
     
     try:
+        # Validate mobile number
+        if not mobile.isdigit() or len(mobile) != 10:
+            return False, "Invalid mobile number. It must contain exactly 10 digits."
+
+        # Validate password
+        if not password:
+            return False, "Password cannot be empty."
+
         # Query the user in the database
         user_info = session.query(UserInfo).filter_by(id=user_id).first()
 

@@ -51,7 +51,7 @@ class AuthEditDetailsWindow(QDialog):
             # Open the EditUserDetailsWindow with the user object
             edit_window = EditUserDetailsWindow(user)
             if edit_window.exec_() == QDialog.Accepted:
-                QMessageBox.information(self, "Success", "User details updated successfully.")
+                pass
             else:
                 QMessageBox.warning(self, "Cancelled", "User detail update was cancelled.")
         else:

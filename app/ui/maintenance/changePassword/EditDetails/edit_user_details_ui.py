@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QGridLayout
+from PyQt5.QtWidgets import QLabel, QPushButton, QGridLayout
 from PyQt5.QtGui import QIntValidator
+from app.utils.cursor.entry_box import MyLineEdit  # Import the custom line edit class
 
 def setup_ui(window):
     window.setWindowTitle("Edit User Details")
@@ -8,29 +9,29 @@ def setup_ui(window):
     # Define label style for bold text and 14px font size
     label_style = "font-weight: bold; font-size: 14px;"
 
-    # Create labels and text fields
+    # Create labels and text fields using MyLineEdit
     window.password_label = QLabel("Password:")
     window.password_label.setStyleSheet(label_style)
-    window.password_input = QLineEdit()
-    window.password_input.setEchoMode(QLineEdit.Password)  # Mask the password input
+    window.password_input = MyLineEdit()  # Use custom MyLineEdit
+    window.password_input.setEchoMode(MyLineEdit.Password)  # Mask the password input
     
     window.fullname_label = QLabel("Fullname:")
     window.fullname_label.setStyleSheet(label_style)
-    window.fullname_input = QLineEdit()
+    window.fullname_input = MyLineEdit()  # Use custom MyLineEdit
     
     window.email_label = QLabel("Email:")
     window.email_label.setStyleSheet(label_style)
-    window.email_input = QLineEdit()
+    window.email_input = MyLineEdit()  # Use custom MyLineEdit
     
     window.mobile_label = QLabel("Mobile Number:")
     window.mobile_label.setStyleSheet(label_style)
-    window.mobile_input = QLineEdit()
+    window.mobile_input = MyLineEdit()  # Use custom MyLineEdit
     window.mobile_input.setValidator(QIntValidator())  # Restrict to integers
     window.mobile_input.setMaxLength(10)
     
     window.address_label = QLabel("Address:")
     window.address_label.setStyleSheet(label_style)
-    window.address_input = QLineEdit()
+    window.address_input = MyLineEdit()  # Use custom MyLineEdit
 
     # Create buttons
     window.save_button = QPushButton("Save")
