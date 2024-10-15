@@ -17,7 +17,7 @@ def update_fields_write_access(vehicle_type, fields):
     # Define the editable fields for each vehicle type
     editable_fields = {
         "TCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],
-        "PDV": ["rfid_tag", "vehicle_type", "vehicle_no", "driver_owner", "calendar"],
+        "PDV": ["rfid_tag", "vehicle_type", "vehicle_no", "driver_owner", "calendar", "section"],
         "TVV": ["rfid_tag", "vehicle_no", "vehicle_type", "driver_owner", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
         "TOV": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
         "PCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],

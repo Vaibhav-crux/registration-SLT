@@ -108,6 +108,12 @@ def setup_ui(window):
     calendar.setMinimumDate(QDate.currentDate())  # Prevent selecting a past date
     add_field(main_layout, "Validity Till:", calendar)
 
+    # Section (TextBox)
+    section = QLineEdit(window)
+    section.setFixedWidth(300)
+    section.setStyleSheet(common_textbox_style)
+    add_field(main_layout, "Section:", section)
+
     # Create the status frame
     status_frame = QFrame(window)
     status_frame.setFixedHeight(50)  # Set fixed height for the frame
@@ -130,7 +136,8 @@ def setup_ui(window):
         "visit_purpose": visit_purpose,
         "place_to_visit": place_to_visit,
         "person_to_visit": person_to_visit,
-        "calendar": calendar
+        "calendar": calendar,
+        "section": section
     }
 
     # Initial call to set fields based on the default vehicle type
