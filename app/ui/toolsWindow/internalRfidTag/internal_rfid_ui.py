@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QFrame, QVBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
@@ -105,6 +105,7 @@ def setup_ui(window):
     calendar = QDateEdit(window)
     calendar.setFixedWidth(300)
     calendar.setStyleSheet(common_textbox_style)
+    calendar.setMinimumDate(QDate.currentDate())  # Prevent selecting a past date
     add_field(main_layout, "Validity Till:", calendar)
 
     # Create the status frame
