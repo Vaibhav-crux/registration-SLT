@@ -6,6 +6,7 @@ from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style
 # Import the button layout function
 from app.ui.toolsWindow.internalRfidTag.internal_rfid_button_ui import create_button_layout
+from app.services.tools.internalRegistration.update_fields_write_access import update_fields_write_access
 
 def setup_ui(window):
     """
@@ -46,7 +47,7 @@ def setup_ui(window):
 
     # Type of Vehicle (ComboBox)
     vehicle_type = QComboBox(window)
-    vehicle_type.addItems(["Car", "Truck", "Bus", "Van"])  # Add vehicle types
+    vehicle_type.addItems(["TCT", "PDV", "TVV", "TOV", "PCT", "TDBEV", "SCRAPE"])  # Add vehicle types
     vehicle_type.setFixedWidth(300)
     vehicle_type.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Type of Vehicle:", vehicle_type)
@@ -116,6 +117,26 @@ def setup_ui(window):
             border: 2px solid #b3d9ff;  /* Slightly lighter blue border */
         }
     """)
+
+    fields = {
+        "rfid_tag": rfid_tag,
+        "vehicle_type": vehicle_type,
+        "vehicle_no": vehicle_no,
+        "do_number": do_number,
+        "transporter": transporter,
+        "weighbridge_no": weighbridge_no,
+        "driver_owner": driver_owner,
+        "visit_purpose": visit_purpose,
+        "place_to_visit": place_to_visit,
+        "person_to_visit": person_to_visit,
+        "calendar": calendar
+    }
+
+    # Initial call to set fields based on the default vehicle type
+    update_fields_write_access(vehicle_type.currentText(), fields)
+
+    # Connect the vehicle_type ComboBox signal to update fields
+    vehicle_type.currentIndexChanged.connect(lambda: update_fields_write_access(vehicle_type.currentText(), fields))
 
     # Add a layout to the frame to ensure proper text alignment
     status_layout = QVBoxLayout(status_frame)
