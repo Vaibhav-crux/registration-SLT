@@ -7,6 +7,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style
 # Import the button layout function
 from app.ui.toolsWindow.internalRfidTag.internal_rfid_button_ui import create_button_layout
 from app.services.tools.internalRegistration.update_fields_write_access import update_fields_write_access
+from app.utils.cursor.entry_box import MyDateEdit
 
 def setup_ui(window):
     """
@@ -102,7 +103,7 @@ def setup_ui(window):
     add_field(main_layout, "Person to Visit:", person_to_visit)
 
     # Validity Till (QDateEdit)
-    calendar = QDateEdit(window)
+    calendar = MyDateEdit(window)
     calendar.setFixedWidth(300)
     calendar.setStyleSheet(common_textbox_style)
     calendar.setMinimumDate(QDate.currentDate())  # Prevent selecting a past date
