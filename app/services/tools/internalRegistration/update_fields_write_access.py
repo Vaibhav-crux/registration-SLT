@@ -1,11 +1,48 @@
 from PyQt5.QtWidgets import QLineEdit, QComboBox, QDateEdit
 from app.style.default_styles import dark_mode_style, light_mode_style
 from app.style.disabled_styles import disabled_style
-from app.utils.mode_utils import is_dark_mode  # Assume this function checks the current mode
+from app.utils.mode_utils import is_dark_mode
+from PyQt5.QtCore import QDate
+
+
+def clear_field(field_widget):
+    """Clear the value of a QLineEdit or QDateEdit widget."""
+    if isinstance(field_widget, QLineEdit):
+        field_widget.clear()  # Clear text fields
+    elif isinstance(field_widget, QDateEdit):
+        field_widget.setDate(QDate.currentDate())  # Reset calendar to current date
+
+
+def apply_style(field_widget, base_style, disabled_style, is_readonly):
+    """Apply the base style and disabled style if the field is read-only."""
+    field_widget.setStyleSheet(base_style + (disabled_style if is_readonly else ""))
+
+
+def handle_line_edit(field_name, field_widget, fields_to_edit, base_style):
+    """Handle logic for QLineEdit and QDateEdit widgets."""
+    is_readonly = field_name not in fields_to_edit
+    field_widget.setReadOnly(is_readonly)
+
+    if field_name not in ['rfid_tag', 'vehicle_no', 'vehicle_type']:
+        clear_field(field_widget)
+
+    apply_style(field_widget, base_style, disabled_style, is_readonly)
+
+
+def handle_combo_box(field_name, field_widget, fields_to_edit, base_style):
+    """Handle logic for QComboBox widgets."""
+    is_enabled = field_name in fields_to_edit
+    field_widget.setEnabled(is_enabled)
+
+    if field_name not in ['vehicle_type']:
+        field_widget.setCurrentIndex(-1)  # Deselect ComboBox items
+
+    apply_style(field_widget, base_style, disabled_style, not is_enabled)
+
 
 def update_fields_write_access(vehicle_type, fields):
     """
-    Update the write access of the fields based on the selected vehicle type.
+    Update the write access of the fields based on the selected vehicle type and clear unwanted fields.
 
     :param vehicle_type: The selected type of vehicle.
     :param fields: A dictionary containing field names as keys and their corresponding QLineEdit/QComboBox/QDateEdit objects as values.
@@ -28,15 +65,9 @@ def update_fields_write_access(vehicle_type, fields):
     # Get the editable fields for the selected vehicle type
     fields_to_edit = editable_fields.get(vehicle_type, [])
 
-    # Enable or disable fields based on the selected vehicle type
+    # Iterate through the fields and apply appropriate logic based on the widget type
     for field_name, field_widget in fields.items():
         if isinstance(field_widget, (QLineEdit, QDateEdit)):
-            is_readonly = field_name not in fields_to_edit
-            field_widget.setReadOnly(is_readonly)
-            # Apply base style, then override with red border if read-only
-            field_widget.setStyleSheet(base_style + (disabled_style if is_readonly else ""))
+            handle_line_edit(field_name, field_widget, fields_to_edit, base_style)
         elif isinstance(field_widget, QComboBox):
-            is_enabled = field_name in fields_to_edit
-            field_widget.setEnabled(is_enabled)
-            # Apply base style and override with red border if disabled
-            field_widget.setStyleSheet(base_style + (disabled_style if not is_enabled else ""))
+            handle_combo_box(field_name, field_widget, fields_to_edit, base_style)
