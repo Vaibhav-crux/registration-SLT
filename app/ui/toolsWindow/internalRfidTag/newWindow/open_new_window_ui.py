@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboB
 from app.utils.mode_utils import apply_mode_styles, is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.style.disabled_styles import disabled_style
+from app.services.tools.internalRegistration.newServices.checkbox_status_service import update_due_checkbox_status
+from app.services.tools.internalRegistration.newServices.autofill_total_amount_service import calculate_total_amount  # Import the service
 
 def setup_new_window_ui(window, data):
     """
@@ -57,6 +59,15 @@ def setup_new_window_ui(window, data):
         if key in key_to_label:
             add_label_and_value(layout, key_to_label[key], value)
 
+    # Get the vehicle type from the data
+    vehicle_type = data.get("vehicle_type", "")
+
+    # Calculate the total amount using the service
+    total_amount = calculate_total_amount(vehicle_type)
+
+    # Add 'Total Amount' label and a read-only textbox
+    add_label_and_value(layout, "Total Amount:", str(total_amount))
+
     # Add a non-editable ComboBox for Payment Mode with a 'Due' checkbox
     def add_payment_mode_with_due(layout, label_text, items, fixed_width=230):
         """Helper to add a non-editable combo box for payment mode and a 'Due' checkbox."""
@@ -74,8 +85,28 @@ def setup_new_window_ui(window, data):
         hbox.addWidget(combo_box)
 
         due_checkbox = QCheckBox("Due", window)
-        due_checkbox.setStyleSheet(base_style)
+        
+        # Add style for normal and disabled states
+        due_checkbox.setStyleSheet(base_style + """
+            QCheckBox:disabled {
+                color: grey;  /* Set the text color to grey when disabled */
+            }
+        """)
         hbox.addWidget(due_checkbox)
+
+        # Function to enable/disable the checkbox based on selected payment mode
+        def update_due_checkbox(index):
+            selected_payment_mode = combo_box.itemText(index)
+            checkbox_enabled = update_due_checkbox_status(selected_payment_mode)  # Use the service to determine status
+            due_checkbox.setEnabled(checkbox_enabled)
+            if not checkbox_enabled:
+                due_checkbox.setChecked(False)  # Uncheck the checkbox if disabled
+
+        # Connect the signal to the slot
+        combo_box.currentIndexChanged.connect(update_due_checkbox)
+
+        # Initialize the checkbox state based on the default selection
+        update_due_checkbox(combo_box.currentIndex())
 
         layout.addLayout(hbox)
 
