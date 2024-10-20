@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit
 from app.style.default_styles import button_style
 from app.services.tools.internalRegistration.clear_fields_service import clear_fields
+from app.services.tools.internalRegistration.newServices.open_new_window_service import open_new_window
 
 def create_button_layout(window, fields):
     """
@@ -16,6 +17,12 @@ def create_button_layout(window, fields):
     new_button = QPushButton("New", window)
     new_button.setFixedWidth(100)
     new_button.setStyleSheet(button_style)
+    new_button.clicked.connect(lambda: open_new_window({
+        key: (field.text() if isinstance(field, QLineEdit) else 
+              field.currentText() if isinstance(field, QComboBox) else 
+              field.date().toString("yyyy-MM-dd")) 
+        for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
+    }))
     button_layout.addWidget(new_button)
 
     # Edit Button
@@ -34,7 +41,7 @@ def create_button_layout(window, fields):
     clear_button = QPushButton("Clear", window)
     clear_button.setFixedWidth(100)
     clear_button.setStyleSheet(button_style)
-    clear_button.clicked.connect(lambda: clear_fields(fields))  # Connect the clear action
+    clear_button.clicked.connect(lambda: clear_fields(fields))
     button_layout.addWidget(clear_button)
 
     return button_layout
