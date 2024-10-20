@@ -166,7 +166,7 @@ def setup_ui(window):
     main_layout.addWidget(status_frame)
 
     # Add the button layout from the imported function
-    button_layout = create_button_layout(window)
+    button_layout = create_button_layout(window, fields)  # Pass fields as well
     main_layout.addLayout(button_layout)
 
     # Set the main layout

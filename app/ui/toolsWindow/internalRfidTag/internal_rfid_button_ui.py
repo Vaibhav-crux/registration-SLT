@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import QHBoxLayout, QPushButton
 from app.style.default_styles import button_style
+from app.services.tools.internalRegistration.clear_fields_service import clear_fields
 
-def create_button_layout(window):
+def create_button_layout(window, fields):
     """
     Creates and returns a layout containing the 'New', 'Edit', 'Delete', and 'Clear' buttons.
     
     :param window: The QDialog window to set up the buttons on.
+    :param fields: A dictionary of field widgets to manage.
     :return: QHBoxLayout with the buttons.
     """
     button_layout = QHBoxLayout()
@@ -32,6 +34,7 @@ def create_button_layout(window):
     clear_button = QPushButton("Clear", window)
     clear_button.setFixedWidth(100)
     clear_button.setStyleSheet(button_style)
+    clear_button.clicked.connect(lambda: clear_fields(fields))  # Connect the clear action
     button_layout.addWidget(clear_button)
 
     return button_layout
