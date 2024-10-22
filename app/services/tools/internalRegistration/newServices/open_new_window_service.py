@@ -1,5 +1,3 @@
-# app/services/tools/internalRegistration/newServices/open_new_window_service.py
-
 from PyQt5.QtWidgets import QDialog
 from app.ui.toolsWindow.internalRfidTag.newWindow.open_new_window_ui import setup_new_window_ui
 from app.utils.frame_utils import center_window
