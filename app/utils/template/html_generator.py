@@ -54,3 +54,4 @@ def generate_html(data, file_name="output.html"):
         file.write(html_content)
 
     print(f"HTML file generated at: {output_file_path}")
+    return output_file_path  # Return the full path to the generated HTML file

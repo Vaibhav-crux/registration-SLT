@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 from app.services.loginWindow.login_window_service import FullScreenWindow
 from app.config.db_config import init_db
@@ -20,6 +21,9 @@ def main():
     except Exception as e:
         print(f"Error establishing database connection: {e}")
         sys.exit(1)  # Exit the program if the connection fails
+
+    # Set the OpenGL context sharing attribute before creating the QApplication
+    QApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 
     # Start the PyQt5 application
     app = QApplication(sys.argv)
