@@ -26,7 +26,7 @@ def setup_new_window_ui(window, data):
     # Add details to layout
     add_data_fields(window, layout, data, base_style)
     vehicle_type = data.get("vehicle_type", "")
-    total_amount = add_total_amount(layout, vehicle_type)
+    total_amount = add_total_amount(layout, vehicle_type, base_style)
 
     # Payment mode
     combo_box, due_checkbox = add_payment_mode_with_due(layout, window, base_style)
@@ -71,10 +71,11 @@ def add_label_and_value(window, layout, label_text, value, base_style, fixed_wid
 
     layout.addLayout(hbox)
 
-def add_total_amount(layout, vehicle_type):
+def add_total_amount(layout, vehicle_type, base_style):
     total_amount = calculate_total_amount(vehicle_type)
-    add_label_and_value(None, layout, TOTAL_AMOUNT_LABEL, str(total_amount), "")
+    add_label_and_value(None, layout, TOTAL_AMOUNT_LABEL, str(total_amount), base_style)  # Pass base_style here
     return total_amount
+
 
 def add_payment_mode_with_due(layout, window, base_style, fixed_width=230):
     hbox = QHBoxLayout()
@@ -130,11 +131,15 @@ def add_buttons(window, layout, combo_box, due_checkbox, total_amount, data):
 
 def on_confirm_clicked(window, combo_box, due_checkbox, total_amount, data):
     payment_mode = combo_box.currentText()
+    
     if payment_mode == "Cash" or (payment_mode == "UPI" and due_checkbox.isChecked()):
+        # Show confirmation message box for Cash or UPI with Due
         if show_confirmation_messagebox(window):
             handle_confirm_click(window, payment_mode, due_checkbox.isChecked(), total_amount, data)
     else:
-        handle_confirm_click(window, payment_mode, False, total_amount, data)
+        # For UPI without Due, skip HTML generation and open the UPI payment dialog
+        show_upi_payment_dialog(window, total_amount, data)
+
 
 def show_confirmation_messagebox(window):
     msg_box = QMessageBox(window)

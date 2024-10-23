@@ -3,8 +3,10 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from pathlib import Path
 from app.services.tools.internalRegistration.newServices.paymentServices.check_img_path_service import check_image_exists
+from app.utils.template.html_generator import generate_html
+from app.services.tools.internalRegistration.newServices.paymentServices.payment_receipt_service import show_payment_receipt_window
 
-def setup_upi_payment_ui(dialog):
+def setup_upi_payment_ui(dialog, total_amount, data):
     layout = QVBoxLayout()
 
     # Create a frame to hold the QR code without a border
@@ -38,7 +40,7 @@ def setup_upi_payment_ui(dialog):
     # Confirm button
     confirm_button = QPushButton("Confirm", dialog)
     confirm_button.setFixedWidth(100)
-    confirm_button.clicked.connect(dialog.accept)  # Close dialog with accept
+    confirm_button.clicked.connect(lambda: on_confirm_click(dialog, total_amount, data))  # Call on_confirm_click with necessary params
     button_layout.addWidget(confirm_button)
 
     # Cancel button
@@ -50,3 +52,19 @@ def setup_upi_payment_ui(dialog):
     layout.addLayout(button_layout)
 
     dialog.setLayout(layout)
+
+def on_confirm_click(dialog, total_amount, data):
+    # Add UPI confirmation logic here
+    full_data = data.copy()
+    full_data["Payment Mode"] = "UPI"
+    full_data["Total Amount"] = total_amount
+    full_data["Payment Status"] = "Paid"  # Assuming payment was successful
+
+    # Generate the HTML file now, after UPI payment is confirmed
+    generate_html(full_data, "rfid_details.html")
+
+    # Close the UPI payment dialog before opening the receipt window
+    dialog.reject()
+
+    # Open the payment receipt window after generating the HTML file
+    show_payment_receipt_window()
