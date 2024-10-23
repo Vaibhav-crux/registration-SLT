@@ -8,6 +8,8 @@ from app.services.tools.internalRegistration.newServices.autofill_total_amount_s
 from app.services.tools.internalRegistration.newServices.paymentServices.upi_payment_service import show_upi_payment_dialog
 from app.utils.template.html_generator import generate_html
 from app.services.tools.internalRegistration.newServices.paymentServices.payment_receipt_service import show_payment_receipt_window
+from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
+from datetime import datetime
 
 # Define constants
 TOTAL_AMOUNT_LABEL = "Total Amount"
@@ -152,14 +154,25 @@ def show_confirmation_messagebox(window):
 
 def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
     full_data = data.copy()
-    full_data["Payment Mode"] = payment_mode
-    full_data[TOTAL_AMOUNT_LABEL] = total_amount
-    full_data[PAYMENT_STATUS_LABEL] = NOT_PAID_STATUS if due_checked else PAID_STATUS
+    full_data["SALES ORDER NO."] = generate_sales_order_no()
+    full_data["TRANSACTION ID"] = generate_transaction_id(data.get("vehicle_no", ""))
+    full_data["User id"] = "VAIBHAV"
+    full_data["Create date"] = datetime.now().strftime("%d-%m-%Y")
+    full_data["Create Time"] = datetime.now().strftime("%H:%M:%S HRS")
+    full_data["BARRIER GATE"] = "NCL BINA PROJECT MAIN BARRIER"
+    full_data["SALES TYPE"] = "RFID ALLOCATION"
+    full_data["RFID EPC"] = data.get("rfid_tag", "")
+    full_data["VEHICLE NO."] = data.get("vehicle_no", "")
+    full_data["VEHICLE TYPE"] = data.get("vehicle_type", "")
+    full_data["PAYMENT MODE"] = payment_mode
+    full_data["STATUS"] = NOT_PAID_STATUS if due_checked else PAID_STATUS
+    full_data["TOTAL"] = total_amount
+
+
     generate_html(full_data, RFID_DETAILS_FILE)
 
     if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):
-        show_payment_receipt_window(window)  # Pass the new window as parent
+        show_payment_receipt_window(window)
     else:
-        show_upi_payment_dialog(window, total_amount, data)  # Keep the new window as parent
-
+        show_upi_payment_dialog(window, total_amount, data)
 

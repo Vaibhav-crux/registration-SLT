@@ -1,13 +1,25 @@
 import os
 from pathlib import Path
+from datetime import datetime
+from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
 
 def generate_html(data, file_name="output.html"):
-    """
-    Generate an HTML file from the provided data.
+    fields_to_include = {
+        "SALES ORDER NO.": data.get("SALES ORDER NO."),
+        "TRANSACTION ID": data.get("TRANSACTION ID"),
+        "User id": data.get("User id", "VAIBHAV"),  # Default User ID
+        "Create date": data.get("Create date"),  # Current Date
+        "Create Time": data.get("Create Time"),  # Current Time
+        "BARRIER GATE": data.get("BARRIER GATE"),
+        "SALES TYPE": data.get("SALES TYPE"),
+        "RFID EPC": data.get("RFID EPC", ""),
+        "VEHICLE NO.": data.get("VEHICLE NO.", ""),
+        "VEHICLE TYPE": data.get("VEHICLE TYPE", ""),
+        "PAYMENT MODE": data.get("PAYMENT MODE", ""),  # Correct key access
+        "STATUS": data.get("STATUS", ""),  # Correct key access
+        "TOTAL": str(data.get("TOTAL", ""))  # Correct key access
+    }
 
-    :param data: Dictionary containing the data to be included in the HTML.
-    :param file_name: Name of the HTML file to create.
-    """
     html_content = """
     <!DOCTYPE html>
     <html lang="en">
@@ -31,7 +43,7 @@ def generate_html(data, file_name="output.html"):
             </tr>
     """
 
-    for key, value in data.items():
+    for key, value in fields_to_include.items():
         html_content += f"""
             <tr>
                 <td>{key}</td>
@@ -45,7 +57,6 @@ def generate_html(data, file_name="output.html"):
     </html>
     """
 
-    # Make sure the directory exists
     output_dir = Path(__file__).resolve().parent.parent.parent / 'static' / 'html'
     os.makedirs(output_dir, exist_ok=True)
 
@@ -54,4 +65,4 @@ def generate_html(data, file_name="output.html"):
         file.write(html_content)
 
     print(f"HTML file generated at: {output_file_path}")
-    return output_file_path  # Return the full path to the generated HTML file
+    return output_file_path
