@@ -164,10 +164,15 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
     full_data["RFID EPC"] = data.get("rfid_tag", "")
     full_data["VEHICLE NO."] = data.get("vehicle_no", "")
     full_data["VEHICLE TYPE"] = data.get("vehicle_type", "")
-    full_data["PAYMENT MODE"] = payment_mode
+
+    # Set PAYMENT MODE to "N/A" if payment is "Cash" or "UPI" with "Due" checked
+    if payment_mode == "UPI" and due_checked:
+        full_data["PAYMENT MODE"] = "N/A"
+    else:
+        full_data["PAYMENT MODE"] = payment_mode
+
     full_data["STATUS"] = NOT_PAID_STATUS if due_checked else PAID_STATUS
     full_data["TOTAL"] = total_amount
-
 
     generate_html(full_data, RFID_DETAILS_FILE)
 
@@ -175,4 +180,3 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         show_payment_receipt_window(window)
     else:
         show_upi_payment_dialog(window, total_amount, data)
-

@@ -5,6 +5,8 @@ from pathlib import Path
 from app.services.tools.internalRegistration.newServices.paymentServices.check_img_path_service import check_image_exists
 from app.utils.template.html_generator import generate_html
 from app.services.tools.internalRegistration.newServices.paymentServices.payment_receipt_service import show_payment_receipt_window
+from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
+from datetime import datetime
 
 def setup_upi_payment_ui(dialog, total_amount, data):
     layout = QVBoxLayout()
@@ -54,13 +56,23 @@ def setup_upi_payment_ui(dialog, total_amount, data):
     dialog.setLayout(layout)
 
 def on_confirm_click(dialog, total_amount, data):
-    # Add UPI confirmation logic here
+    # Prepare full data with the necessary keys
     full_data = data.copy()
-    full_data["Payment Mode"] = "UPI"
-    full_data["Total Amount"] = total_amount
-    full_data["Payment Status"] = "Paid"  # Assuming payment was successful
+    full_data["SALES ORDER NO."] = full_data.get("SALES ORDER NO.", generate_sales_order_no())
+    full_data["TRANSACTION ID"] = full_data.get("TRANSACTION ID", generate_transaction_id(data.get("vehicle_no", "")))
+    full_data["User id"] = "VAIBHAV"  # Assuming a static user id
+    full_data["Create date"] = datetime.now().strftime("%d-%m-%Y")
+    full_data["Create Time"] = datetime.now().strftime("%H:%M:%S HRS")
+    full_data["BARRIER GATE"] = "NCL BINA PROJECT MAIN BARRIER"
+    full_data["SALES TYPE"] = "RFID ALLOCATION"
+    full_data["RFID EPC"] = data.get("rfid_tag", "")
+    full_data["VEHICLE NO."] = data.get("vehicle_no", "")
+    full_data["VEHICLE TYPE"] = data.get("vehicle_type", "")
+    full_data["PAYMENT MODE"] = "UPI"
+    full_data["STATUS"] = "Paid"  # Assuming payment was successful
+    full_data["TOTAL"] = str(total_amount)
 
-    # Generate the HTML file now, after UPI payment is confirmed
+    # Generate the HTML file after UPI payment is confirmed
     generate_html(full_data, "rfid_details.html")
 
     # Close the UPI payment dialog
