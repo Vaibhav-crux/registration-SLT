@@ -63,8 +63,8 @@ def on_confirm_click(dialog, total_amount, data):
     # Generate the HTML file now, after UPI payment is confirmed
     generate_html(full_data, "rfid_details.html")
 
-    # Close the UPI payment dialog before opening the receipt window
+    # Close the UPI payment dialog
     dialog.reject()
 
     # Open the payment receipt window after generating the HTML file
-    show_payment_receipt_window()
+    show_payment_receipt_window(dialog.parent())  # Pass the original parent window

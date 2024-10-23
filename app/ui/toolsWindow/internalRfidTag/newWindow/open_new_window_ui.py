@@ -158,6 +158,8 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
     generate_html(full_data, RFID_DETAILS_FILE)
 
     if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):
-        show_payment_receipt_window()
+        show_payment_receipt_window(window)  # Pass the new window as parent
     else:
-        show_upi_payment_dialog(window)
+        show_upi_payment_dialog(window, total_amount, data)  # Keep the new window as parent
+
+
