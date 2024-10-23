@@ -12,7 +12,7 @@ class FullScreenWindow(QWidget):
 
     def initUI(self):
         # Set the initial background image
-        set_background_image(self, "C:\\Users\\Vaibhav\\Downloads\\truck-digital-art-illustration.jpg")
+        set_background_image(self, "app/images/login/login_default.jpg")
 
         # Set up the floating card and the rest of the UI
         self.ui.setup_ui()
@@ -93,5 +93,5 @@ class FullScreenWindow(QWidget):
 
     def resizeEvent(self, event):
         # Update the background image when the window is resized
-        set_background_image(self, "C:\\Users\\Vaibhav\\Downloads\\truck-digital-art-illustration.jpg")
+        set_background_image(self, "app/images/login/login_default.jpg")
         self.ui.reposition_frame()

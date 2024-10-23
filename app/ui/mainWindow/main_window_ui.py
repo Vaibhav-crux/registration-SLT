@@ -68,8 +68,8 @@ class MainWindowUI:
         vbox_left.addWidget(tools_label)
 
         tools_layout = QHBoxLayout()
-        tools = [("Internal RFID\nRegistration", "C:/Users/Vaibhav/Downloads/Internal RFID.png"),
-                 ("External RFID\nRegistration", "C:/Users/Vaibhav/Downloads/External RFID.png")]
+        tools = [("Internal RFID\nRegistration", "app/images/menu/Internal RFID.png"),
+                 ("External RFID\nRegistration", "app/images/menu/External RFID.png")]
         for name, icon in tools:
             window.create_icon_button(name, icon, tools_layout)
         vbox_left.addLayout(tools_layout)
@@ -87,9 +87,9 @@ class MainWindowUI:
         vbox_left.addWidget(utilities_label)
 
         utilities_layout = QHBoxLayout()
-        utilities = [("Report", "C:/Users/Vaibhav/Downloads/chart.png"),
-                     ("Shift Timing", "C:/Users/Vaibhav/Downloads/shift.png"),
-                     ("Do Maintenance", "C:/Users/Vaibhav/Downloads/monitoring.png")]
+        utilities = [("Report", "app/images/menu/chart.png"),
+                     ("Shift Timing", "app/images/menu/shift.png"),
+                     ("Do Maintenance", "app/images/menu/monitoring.png")]
         for name, icon in utilities:
             window.create_icon_button(name, icon, utilities_layout)
         vbox_left.addLayout(utilities_layout)
@@ -107,9 +107,9 @@ class MainWindowUI:
         vbox_left.addWidget(maintenance_label)
 
         maintenance_layout = QHBoxLayout()
-        maintenance = [("Create User", "C:/Users/Vaibhav/Downloads/add-friend.png"),
-                       ("Change Password", "C:/Users/Vaibhav/Downloads/reset-password.png"),
-                       ("Block User", "C:/Users/Vaibhav/Downloads/delete-user.png")]
+        maintenance = [("Create User", "app/images/menu/add-friend.png"),
+                       ("Change Password", "app/images/menu/reset-password.png"),
+                       ("Block User", "app/images/menu/delete-user.png")]
         for name, icon in maintenance:
             window.create_icon_button(name, icon, maintenance_layout)
         vbox_left.addLayout(maintenance_layout)
@@ -117,7 +117,7 @@ class MainWindowUI:
         # Power button at the top right corner
         window.power_button = QLabel(window)
         window.power_button.setGeometry(window.width() - 60, 20, 40, 40)
-        power_icon = QPixmap("C:/Users/Vaibhav/Downloads/switch.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        power_icon = QPixmap("app/images/processed/switch.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         window.power_button.setPixmap(power_icon)
         window.power_button.setStyleSheet("QLabel { background-color: rgba(255, 0, 0, 0); border-radius: 20px; }")
 

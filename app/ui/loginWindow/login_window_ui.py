@@ -35,7 +35,7 @@ class LoginWindowUI:
         # Power button at the top-right corner
         power_button_layout = QHBoxLayout()
         self.power_button = QLabel(self.frame)
-        power_icon = QPixmap("C:/Users/Vaibhav/Downloads/switch.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        power_icon = QPixmap("app/images/processed/switch.png").scaled(30, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.power_button.setPixmap(power_icon)
         self.power_button.setStyleSheet("QLabel { background-color: rgba(255, 0, 0, 0); }")
         self.power_button.setAlignment(Qt.AlignRight | Qt.AlignTop)
