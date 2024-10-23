@@ -9,6 +9,8 @@ from app.services.tools.internalRegistration.newServices.paymentServices.upi_pay
 from app.utils.template.html_generator import generate_html
 from app.services.tools.internalRegistration.newServices.paymentServices.payment_receipt_service import show_payment_receipt_window
 from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
+from app.controllers.tools.internalRegistration.save_into_alloted_tag import save_alloted_tag
+from app.controllers.tools.internalRegistration.save_into_registration import save_vehicle_registration
 from datetime import datetime
 
 # Define constants
@@ -165,7 +167,6 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
     full_data["VEHICLE NO."] = data.get("vehicle_no", "")
     full_data["VEHICLE TYPE"] = data.get("vehicle_type", "")
 
-    # Set PAYMENT MODE to "N/A" if payment is "Cash" or "UPI" with "Due" checked
     if payment_mode == "UPI" and due_checked:
         full_data["PAYMENT MODE"] = "N/A"
     else:
@@ -174,9 +175,57 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
     full_data["STATUS"] = NOT_PAID_STATUS if due_checked else PAID_STATUS
     full_data["TOTAL"] = total_amount
 
-    generate_html(full_data, RFID_DETAILS_FILE)
+    # Save to AllotedTags
+    alloted_tag = save_alloted_tag(
+        rfidTag=full_data["RFID EPC"],
+        typeOfVehicle=full_data["VEHICLE TYPE"],
+        vehicleNumber=full_data["VEHICLE NO."],
+        regDate=full_data["Create date"],
+        regTime=full_data["Create Time"],
+        salesOrder=full_data["SALES ORDER NO."],
+        transationId=full_data["TRANSACTION ID"],
+        userid=full_data["User id"],
+        barrierGate=full_data["BARRIER GATE"],
+        salesType=full_data["SALES TYPE"],
+        quantity="1",
+        total=full_data["TOTAL"],
+        blacklisted=False
+    )
 
-    if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):
-        show_payment_receipt_window(window)
+    if alloted_tag:
+        # Save to VehicleRegistration if AllotedTags save was successful
+        save_vehicle_registration(
+            rfidTag=full_data["RFID EPC"],
+            typeOfVehicle=full_data["VEHICLE TYPE"],
+            vehicleNumber=full_data["VEHICLE NO."],
+            doNumber=data.get("do_number", ""),
+            transporter=data.get("transporter", ""),
+            driverOwner=data.get("driver_owner", ""),
+            weighbridgeNo=data.get("weighbridge_no", ""),
+            visitPurpose=data.get("visit_purpose", ""),
+            placeToVisit=data.get("place_to_visit", ""),
+            personToVisit=data.get("person_to_visit", ""),
+            validityTill=data.get("calendar", ""),
+            section=data.get("section", ""),
+            registerDate=full_data["Create date"],
+            registerTime=full_data["Create Time"],
+            user=full_data["User id"],
+            shift=data.get("shift", ""),
+            loading=data.get("loading", "")
+        )
+
+        # Generate HTML receipt
+        generate_html(full_data, RFID_DETAILS_FILE)
+
+        # Show payment receipt window if a new record was saved
+        if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):
+            show_payment_receipt_window(window)
+        else:
+            show_upi_payment_dialog(window, total_amount, data)
     else:
-        show_upi_payment_dialog(window, total_amount, data)
+        # Show message box if the record in AllotedTags already exists
+        msg_box = QMessageBox(window)
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText("Record already exists. No duplicate entries allowed.")
+        msg_box.setWindowTitle("Duplicate Record Detected")
+        msg_box.exec_()

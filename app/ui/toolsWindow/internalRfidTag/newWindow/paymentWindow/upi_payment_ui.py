@@ -6,6 +6,8 @@ from app.services.tools.internalRegistration.newServices.paymentServices.check_i
 from app.utils.template.html_generator import generate_html
 from app.services.tools.internalRegistration.newServices.paymentServices.payment_receipt_service import show_payment_receipt_window
 from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
+from app.controllers.tools.internalRegistration.save_into_alloted_tag import save_alloted_tag
+from app.controllers.tools.internalRegistration.save_into_registration import save_vehicle_registration
 from datetime import datetime
 
 def setup_upi_payment_ui(dialog, total_amount, data):
@@ -72,11 +74,50 @@ def on_confirm_click(dialog, total_amount, data):
     full_data["STATUS"] = "Paid"  # Assuming payment was successful
     full_data["TOTAL"] = str(total_amount)
 
-    # Generate the HTML file after UPI payment is confirmed
-    generate_html(full_data, "rfid_details.html")
+    # Save to AllotedTags
+    alloted_tag = save_alloted_tag(
+        rfidTag=full_data["RFID EPC"],
+        typeOfVehicle=full_data["VEHICLE TYPE"],
+        vehicleNumber=full_data["VEHICLE NO."],
+        regDate=full_data["Create date"],
+        regTime=full_data["Create Time"],
+        salesOrder=full_data["SALES ORDER NO."],
+        transationId=full_data["TRANSACTION ID"],
+        userid=full_data["User id"],
+        barrierGate=full_data["BARRIER GATE"],
+        salesType=full_data["SALES TYPE"],
+        quantity="1",
+        total=full_data["TOTAL"],
+        blacklisted=False
+    )
 
+    if alloted_tag:
+        # Save to VehicleRegistration if AllotedTags save was successful
+        save_vehicle_registration(
+            rfidTag=full_data["RFID EPC"],
+            typeOfVehicle=full_data["VEHICLE TYPE"],
+            vehicleNumber=full_data["VEHICLE NO."],
+            doNumber=data.get("do_number", ""),
+            transporter=data.get("transporter", ""),
+            driverOwner=data.get("driver_owner", ""),
+            weighbridgeNo=data.get("weighbridge_no", ""),
+            visitPurpose=data.get("visit_purpose", ""),
+            placeToVisit=data.get("place_to_visit", ""),
+            personToVisit=data.get("person_to_visit", ""),
+            validityTill=data.get("calendar", ""),
+            section=data.get("section", ""),
+            registerDate=full_data["Create date"],
+            registerTime=full_data["Create Time"],
+            user=full_data["User id"],
+            shift=data.get("shift", ""),
+            loading=data.get("loading", "")
+        )
+
+        # Generate the HTML file after UPI payment is confirmed
+        generate_html(full_data, "rfid_details.html")
+
+        # Open the payment receipt window after generating the HTML file
+        show_payment_receipt_window(dialog.parent())  # Pass the original parent window
+    
     # Close the UPI payment dialog
     dialog.reject()
-
-    # Open the payment receipt window after generating the HTML file
-    show_payment_receipt_window(dialog.parent())  # Pass the original parent window
