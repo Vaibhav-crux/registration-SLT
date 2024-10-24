@@ -11,6 +11,7 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.ui.toolsWindow.internalRfidTag.internal_rfid_ui import setup_ui
 # Import the new function
 from app.services.tools.internalRegistration.next_entry_box_cursor_services import focus_next_enabled_widget
+from app.controllers.tools.internalRegistration.tag_controller import fetch_tag_data
 
 class InternalRegistrationWindow(QDialog):
     def __init__(self):
@@ -35,7 +36,26 @@ class InternalRegistrationWindow(QDialog):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
-            # Use the imported function to focus the next enabled widget
-            focus_next_enabled_widget(self.focusWidget(), self)
+            current_widget = self.focusWidget()
+            if isinstance(current_widget, QLineEdit):  # Check if the current widget is a QLineEdit
+                tag_value = current_widget.text()
+                tag_data = fetch_tag_data(tag_value)
+                
+                if tag_data:
+                    # Autofill the specified entry boxes with the retrieved data
+                    self.findChild(QLineEdit, "rfid_tag").setText(tag_data["rfidTag"])
+                    
+                    # Convert VehicleTypeEnum to string before setting it
+                    vehicle_type_value = str(tag_data["typeOfVehicle"])  # Convert to string
+                    self.findChild(QComboBox, "vehicle_type").setCurrentText(vehicle_type_value)
+
+                    self.findChild(QLineEdit, "vehicle_no").setText(tag_data["vehicleNumber"])
+
+                    # Move focus to the next enabled widget
+                    focus_next_enabled_widget(current_widget, self)
+                else:
+                    print("No data found for the given RFID or Vehicle Number.")
+            else:
+                focus_next_enabled_widget(current_widget, self)
         else:
             super().keyPressEvent(event)

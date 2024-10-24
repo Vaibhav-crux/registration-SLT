@@ -7,6 +7,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style
 # Import the button layout function
 from app.ui.toolsWindow.internalRfidTag.internal_rfid_button_ui import create_button_layout
 from app.services.tools.internalRegistration.update_fields_write_access import update_fields_write_access
+from app.controllers.tools.internalRegistration.do_no_controller import fetch_do_numbers, fetch_transport_and_weighbridge
 from app.utils.cursor.entry_box import MyDateEdit
 
 def setup_ui(window):
@@ -42,26 +43,32 @@ def setup_ui(window):
 
     # RFID Tag
     rfid_tag = QLineEdit(window)
+    rfid_tag.setObjectName("rfid_tag")  # Set the object name
     rfid_tag.setFixedWidth(300)
     rfid_tag.setStyleSheet(common_textbox_style)
     add_field(main_layout, "RFID Tag:", rfid_tag)
 
     # Type of Vehicle (ComboBox)
     vehicle_type = QComboBox(window)
-    vehicle_type.addItems(["TCT", "PDV", "TVV", "TOV", "PCT", "TDBEV", "SCRAPE"])  # Add vehicle types
+    vehicle_type.setObjectName("vehicle_type")  # Set the object name
+    vehicle_type.addItems(["TCT", "PDV", "TVV", "TOV", "PCT", "TDBEV", "SCRAPE"])
     vehicle_type.setFixedWidth(300)
     vehicle_type.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Type of Vehicle:", vehicle_type)
 
     # Vehicle No (TextBox)
     vehicle_no = QLineEdit(window)
+    vehicle_no.setObjectName("vehicle_no")  # Set the object name
     vehicle_no.setFixedWidth(300)
     vehicle_no.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Vehicle No:", vehicle_no)
 
+    # Fetch DO Numbers from the database
+    do_number_list = fetch_do_numbers()
+
     # DO Number (ComboBox)
     do_number = QComboBox(window)
-    do_number.addItems(["DO123", "DO456", "DO789"])  # Add dummy DO numbers
+    do_number.addItems(do_number_list)  # Populate with fetched DO numbers
     do_number.setFixedWidth(300)
     do_number.setStyleSheet(common_textbox_style)
     add_field(main_layout, "DO Number:", do_number)
@@ -77,6 +84,18 @@ def setup_ui(window):
     weighbridge_no.setFixedWidth(300)
     weighbridge_no.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Weighbridge No:", weighbridge_no)
+
+    # Function to update transporter and weighbridge_no based on selected DO Number
+    def update_transport_and_weighbridge():
+        selected_do_number = do_number.currentText()
+        transporter_value, weighbridge_value = fetch_transport_and_weighbridge(selected_do_number)
+        if transporter_value is not None:
+            transporter.setText(transporter_value)
+        if weighbridge_value is not None:
+            weighbridge_no.setText(weighbridge_value)
+
+    # Connect the signal to the slot
+    do_number.currentIndexChanged.connect(update_transport_and_weighbridge)
 
     # Driver/Owner (TextBox)
     driver_owner = QLineEdit(window)
