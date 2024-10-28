@@ -1,28 +1,55 @@
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit, QMessageBox
 from app.style.default_styles import button_style
 from app.services.tools.internalRegistration.clear_fields_service import clear_fields
 from app.services.tools.internalRegistration.newServices.open_new_window_service import open_new_window
+from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
 
 def create_button_layout(window, fields):
     """
     Creates and returns a layout containing the 'New', 'Edit', 'Delete', and 'Clear' buttons.
-    
     :param window: The QDialog window to set up the buttons on.
     :param fields: A dictionary of field widgets to manage.
     :return: QHBoxLayout with the buttons.
     """
     button_layout = QHBoxLayout()
 
+    # Function to handle "New" button click
+    def handle_new_button():
+        rfid_tag = fields["rfid_tag"].text()
+        vehicle_no = fields["vehicle_no"].text()
+
+        # Fetch data for RFID tag and vehicle number
+        rfid_data = fetch_vehicle_registration_data(rfid_tag)
+        vehicle_data = fetch_vehicle_registration_data(vehicle_no)
+
+        # Check if RFID tag exists
+        if rfid_data:
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("RFID tag already registered.")
+            msg_box.setWindowTitle("Warning")
+            msg_box.exec_()
+        # Check if vehicle number exists and RFID tag does not exist
+        elif vehicle_data and not rfid_data:
+            open_new_window({
+                key: (field.text() if isinstance(field, QLineEdit) else
+                      field.currentText() if isinstance(field, QComboBox) else
+                      field.date().toString("yyyy-MM-dd"))
+                for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
+            })
+        else:
+            open_new_window({
+                key: (field.text() if isinstance(field, QLineEdit) else
+                      field.currentText() if isinstance(field, QComboBox) else
+                      field.date().toString("yyyy-MM-dd"))
+                for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
+            })
+
     # New Button
     new_button = QPushButton("New", window)
     new_button.setFixedWidth(100)
     new_button.setStyleSheet(button_style)
-    new_button.clicked.connect(lambda: open_new_window({
-        key: (field.text() if isinstance(field, QLineEdit) else 
-              field.currentText() if isinstance(field, QComboBox) else 
-              field.date().toString("yyyy-MM-dd")) 
-        for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
-    }))
+    new_button.clicked.connect(handle_new_button)
     button_layout.addWidget(new_button)
 
     # Edit Button

@@ -100,7 +100,7 @@ class MainWindow(QWidget, MainWindowUI):
     def start_inactivity_timer(self):
         """Start the inactivity timer."""
         if not self.is_logged_out:
-            self.inactivity_timer.start(60000)  # 5 seconds of inactivity triggers the login window
+            self.inactivity_timer.start(60000000)  # 5 seconds of inactivity triggers the login window
 
     def stop_inactivity_timer(self):
         """Stop the inactivity timer."""

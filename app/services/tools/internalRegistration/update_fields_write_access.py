@@ -53,13 +53,13 @@ def update_fields_write_access(vehicle_type, fields):
 
     # Define the editable fields for each vehicle type
     editable_fields = {
-        "TCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],
+        "TCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
         "PDV": ["rfid_tag", "vehicle_type", "vehicle_no", "driver_owner", "calendar", "section"],
         "TVV": ["rfid_tag", "vehicle_no", "vehicle_type", "driver_owner", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
-        "TOV": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
-        "PCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],
-        "TDBEV": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],
-        "SCRAPE": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "transporter", "driver_owner", "weighbridge_no", "calendar"],
+        "TOV": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
+        "PCT": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
+        "TDBEV": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
+        "SCRAPE": ["rfid_tag", "vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
     }
 
     # Get the editable fields for the selected vehicle type
