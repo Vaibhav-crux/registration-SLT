@@ -1,4 +1,4 @@
-from app.controllers.login.fetch_user import check_username_exists, verify_user_credentials
+from app.controllers.auth.fetch_user import check_username_exists, verify_user_credentials
 from PyQt5.QtWidgets import QWidget, QApplication, QLineEdit
 from app.ui.loginWindow.login_window_ui import LoginWindowUI
 from app.utils.background_utils import set_background_image
