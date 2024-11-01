@@ -11,7 +11,7 @@ def setup_edit_window_ui(window, data, enabled_fields):
     common_textbox_style = dark_mode_style if dark_mode else light_mode_style
     label_style = "font-size: 14px; font-weight: 600;"
     combined_style = common_textbox_style + disabled_style
-    
+
     fields = {}
 
     for key, value in data.items():
@@ -45,6 +45,22 @@ def setup_edit_window_ui(window, data, enabled_fields):
         layout.addWidget(label)
         layout.addWidget(field)
         main_layout.addLayout(layout)
+
+    # Ensure rfid_tag is added to fields
+    if "rfid_tag" not in fields:
+        rfid_label = QLabel("RFID Tag:", window)
+        rfid_label.setStyleSheet(label_style)
+        rfid_field = QLineEdit(window)
+        rfid_field.setText(data.get("rfid_tag", ""))
+        rfid_field.setReadOnly(True)
+        rfid_field.setStyleSheet(combined_style)
+        rfid_field.setFixedWidth(300)
+        fields["rfid_tag"] = rfid_field
+
+        rfid_layout = QHBoxLayout()
+        rfid_layout.addWidget(rfid_label)
+        rfid_layout.addWidget(rfid_field)
+        main_layout.addLayout(rfid_layout)
 
     button_layout = QHBoxLayout()
     confirm_button = QPushButton("Confirm", window)
