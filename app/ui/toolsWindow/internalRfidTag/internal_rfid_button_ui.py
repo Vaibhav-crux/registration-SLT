@@ -61,19 +61,26 @@ def create_button_layout(window, fields):
 
     # Function to handle "Edit" button click
     def handle_edit_button():
-        # Gather the current data
-        data = {key: field.text() if isinstance(field, QLineEdit) else
+        # Gather the current data from the form fields
+        data = {
+            key: field.text() if isinstance(field, QLineEdit) else
                 field.currentText() if isinstance(field, QComboBox) else
-                field.date().toString("yyyy-MM-dd") for key, field in fields.items()}
+                field.date().toString("yyyy-MM-dd")  # Format the date correctly for "calendar" field
+            for key, field in fields.items()
+        }
 
-        # Ensure the vehicle_type is extracted as a string
+        # Ensure vehicle_type is correctly formatted as a string
         vehicle_type = data.get("vehicle_type", "")
 
         if isinstance(vehicle_type, list):  # Just to ensure it's not a list
             vehicle_type = vehicle_type[0] if vehicle_type else ""
 
-        # Open the edit window with the correct vehicle_type
+        # Add the "calendar" field's current date in a format expected by the edit window
+        data["validity_till"] = fields["calendar"].date().toString("yyyy-MM-dd")
+
+        # Open the edit window with the complete data dictionary
         open_edit_window(data, vehicle_type)
+
 
 
     # New Button

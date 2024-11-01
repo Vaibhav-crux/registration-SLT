@@ -1,4 +1,4 @@
-# app/ui/toolsWindow/internalRfidTag/editWindow/edit_window_ui.py
+# edit_window_ui.py
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QPushButton
 from PyQt5.QtCore import QDate
 from app.utils.mode_utils import is_dark_mode
@@ -15,7 +15,13 @@ def setup_edit_window_ui(window, data, enabled_fields):
     fields = {}
 
     for key, value in data.items():
-        label = QLabel(f"{key.replace('_', ' ').capitalize()}:", window)
+        # Skip the "validity_till" field since it will be handled as "calendar"
+        if key == "validity_till":
+            continue
+        
+        # Set label and field according to key
+        label_text = "Validity Till:" if key == "calendar" else f"{key.replace('_', ' ').capitalize()}:"
+        label = QLabel(label_text, window)
         label.setStyleSheet(label_style)
 
         field = None
@@ -23,7 +29,7 @@ def setup_edit_window_ui(window, data, enabled_fields):
             field = QLineEdit(window)
             field.setText(value)
             field.setReadOnly(True)  # Read-only vehicle type
-        elif key == "calendar":
+        elif key == "calendar":  # Treat "calendar" as "Validity Till"
             field = QDateEdit(window)
             field.setDate(QDate.fromString(value, "yyyy-MM-dd"))
         else:
