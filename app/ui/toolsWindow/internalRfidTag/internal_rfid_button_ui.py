@@ -1,8 +1,10 @@
+# app/ui/toolsWindow/internalRfidTag/internal_rfid_button_ui.py
 from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit, QMessageBox
 from app.style.default_styles import button_style
 from app.services.tools.internalRegistration.clear_fields_service import clear_fields
 from app.services.tools.internalRegistration.newServices.open_new_window_service import open_new_window
 from app.services.tools.internalRegistration.deleteServices.delete_window_service import open_delete_window
+from app.services.tools.internalRegistration.editServices.edit_window_service import open_edit_window
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
 
 def create_button_layout(window, fields):
@@ -57,6 +59,23 @@ def create_button_layout(window, fields):
             msg_box.setWindowTitle("Warning")
             msg_box.exec_()
 
+    # Function to handle "Edit" button click
+    def handle_edit_button():
+        # Gather the current data
+        data = {key: field.text() if isinstance(field, QLineEdit) else
+                field.currentText() if isinstance(field, QComboBox) else
+                field.date().toString("yyyy-MM-dd") for key, field in fields.items()}
+
+        # Ensure the vehicle_type is extracted as a string
+        vehicle_type = data.get("vehicle_type", "")
+
+        if isinstance(vehicle_type, list):  # Just to ensure it's not a list
+            vehicle_type = vehicle_type[0] if vehicle_type else ""
+
+        # Open the edit window with the correct vehicle_type
+        open_edit_window(data, vehicle_type)
+
+
     # New Button
     new_button = QPushButton("New", window)
     new_button.setFixedWidth(100)
@@ -68,6 +87,7 @@ def create_button_layout(window, fields):
     edit_button = QPushButton("Edit", window)
     edit_button.setFixedWidth(100)
     edit_button.setStyleSheet(button_style)
+    edit_button.clicked.connect(handle_edit_button)
     button_layout.addWidget(edit_button)
 
     # Delete Button

@@ -71,3 +71,41 @@ def update_fields_write_access(vehicle_type, fields):
             handle_line_edit(field_name, field_widget, fields_to_edit, base_style)
         elif isinstance(field_widget, QComboBox):
             handle_combo_box(field_name, field_widget, fields_to_edit, base_style)
+
+def update_edit_fields_write_access(vehicle_type, fields):
+    """
+    Update write access for fields based on vehicle type.
+    Sets all fields to read-only by default, enabling only those that
+    are specified as editable for the selected vehicle type.
+    :param vehicle_type: The selected type of vehicle.
+    :param fields: A dictionary containing field names as keys and their corresponding QLineEdit/QComboBox/QDateEdit objects as values.
+    """
+    dark_mode = is_dark_mode()
+    base_style = dark_mode_style if dark_mode else light_mode_style
+
+    # Define the editable fields for each vehicle type
+    editable_fields = {
+        "TCT": ["driver_owner", "calendar"],
+        "PDV": ["driver_owner", "calendar", "section"],
+        "TVV": ["driver_owner", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
+        "TOV": ["visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
+        "PCT": ["driver_owner", "calendar"],
+        "TDBEV": ["driver_owner", "calendar"],
+        "SCRAPE": ["driver_owner", "calendar"],
+    }
+
+    # Get the list of fields that should be editable for the current vehicle type
+    fields_to_edit = editable_fields.get(vehicle_type, [])
+
+    # Iterate over all fields to set their editability
+    for field_name, field_widget in fields.items():
+        is_editable = field_name in fields_to_edit
+        
+        # Handle the read-only status and style based on whether the field is editable
+        if isinstance(field_widget, (QLineEdit, QDateEdit)):
+            field_widget.setReadOnly(not is_editable)
+        elif isinstance(field_widget, QComboBox):
+            field_widget.setEnabled(is_editable)
+        
+        # Apply styling based on the field's editability
+        apply_style(field_widget, base_style, disabled_style, not is_editable)
