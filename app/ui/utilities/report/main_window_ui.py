@@ -1,9 +1,10 @@
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QFrame, QGridLayout, QLabel, QDateEdit, QTimeEdit, QComboBox, QTableWidget
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QFrame, QGridLayout, QLabel, QDateEdit, QTimeEdit, QComboBox, QTableWidget, QWidget
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import QDate, QTime
+from PyQt5.QtCore import QDate, QTime, Qt
 from app.services.utilities.report.buttons_actions_service import handle_button_action
+from app.style.report_button_style import button_styles
 
-def setup_main_window_ui(window):
+def setup_main_window_ui(window: QWidget):
     """
     Set up the UI layout for the main window of the report utility.
     :param window: The QWidget window to set up the UI on.
@@ -22,21 +23,8 @@ def setup_main_window_ui(window):
 
     for button_text in frame1_buttons:
         button = QPushButton(button_text, frame1)
-        buttons[button_text] = button  # Store button in dictionary
-        button.clicked.connect(lambda _, text=button_text: handle_button_action(text, {
-            "from_date_label": from_date_label,
-            "from_date_value": from_date_value,
-            "to_date_label": to_date_label,
-            "to_date_value": to_date_value,
-            "from_time_label": from_time_label,
-            "from_time_value": from_time_value,
-            "to_time_label": to_time_label,
-            "to_time_value": to_time_value,
-            "vehicle_type_label": vehicle_type_label,
-            "vehicle_type_value": vehicle_type_value,
-            "search_label": search_label,
-            "search_value": search_value
-        }))
+        buttons[button_text] = button
+        button.clicked.connect(lambda _, text=button_text: handle_button_action(text, ui_elements))
         frame1_layout.addWidget(button)
 
     frame1.setLayout(frame1_layout)
@@ -55,7 +43,7 @@ def setup_main_window_ui(window):
     current_time = QTime.currentTime()
     time_six_hours_back = current_time.addSecs(-12 * 3600)  # Subtract 6 hours
 
-        # Labels and entry boxes
+    # Labels and entry boxes
     from_date_label = QLabel("From date:")
     from_date_label.setFont(label_font)
 
@@ -81,7 +69,6 @@ def setup_main_window_ui(window):
     to_time_value = QTimeEdit(frame2)
     to_time_value.setTime(current_time)  # Set current time as default
     to_time_value.setDisplayFormat("HH:mm")  # Set to 24-hour format
-
 
     vehicle_type_label = QLabel("Vehicle Type:")
     vehicle_type_label.setFont(label_font)
@@ -131,29 +118,42 @@ def setup_main_window_ui(window):
     # Frame 3
     frame3 = QFrame(window)
     frame3_layout = QVBoxLayout()
-    table = QTableWidget(10, 5, frame3)  # Example table with 10 rows and 5 columns
-    table.setHorizontalHeaderLabels(["Column 1", "Column 2", "Column 3", "Column 4", "Column 5"])
-
-    # Hide both vertical and horizontal headers
-    table.verticalHeader().setVisible(False)
-    table.horizontalHeader().setVisible(False)
-
+    table = QTableWidget(frame3)  # Ensure the table is created correctly
     frame3_layout.addWidget(table)
     frame3.setLayout(frame3_layout)
     frame3.setFrameShape(QFrame.StyledPanel)
+
+    # Reset and Search buttons
+    buttons_layout = QHBoxLayout()
+    reset_button = QPushButton("Reset")
+    search_button = QPushButton("Search")
+
+    # Set the width of the buttons
+    reset_button.setFixedWidth(150)
+    search_button.setFixedWidth(150)
+
+    # Set the stylesheet to the buttons
+    reset_button.setStyleSheet(button_styles)
+    search_button.setStyleSheet(button_styles)
+
+    # Add the buttons to the layout and align them to the right
+    buttons_layout.addWidget(reset_button)
+    buttons_layout.addWidget(search_button)
+    buttons_layout.setAlignment(Qt.AlignRight)
 
     # Arrange frames in the main layout
     main_layout.addWidget(frame1)
     right_layout = QVBoxLayout()
     right_layout.addWidget(frame2)
-    right_layout.addWidget(separator)  # Add the separator
+    right_layout.addWidget(separator)
     right_layout.addWidget(frame3)
+    right_layout.addLayout(buttons_layout)
     main_layout.addLayout(right_layout)
 
     window.setLayout(main_layout)
 
-    # Set the default button state to "Summary" when the window opens
-    handle_button_action("Summary", {
+    # Set up UI elements dictionary
+    ui_elements = {
         "from_date_label": from_date_label,
         "from_date_value": from_date_value,
         "to_date_label": to_date_label,
@@ -165,6 +165,10 @@ def setup_main_window_ui(window):
         "vehicle_type_label": vehicle_type_label,
         "vehicle_type_value": vehicle_type_value,
         "search_label": search_label,
-        "search_value": search_value
-    })
-    buttons["Summary"].setDefault(True)  # Set the "Summary" button as the default
+        "search_value": search_value,
+        "table": table  # Make sure the table is included
+    }
+
+    # Pass the UI elements dictionary to handle_button_action
+    handle_button_action("Summary", ui_elements)
+    buttons["Summary"].setDefault(True)

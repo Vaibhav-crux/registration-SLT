@@ -32,3 +32,20 @@ clicked_button_style = """
         border-radius: 10px;  /* Rounded corners for selected state */
     }
 """
+
+# Apply styles for professional blue background, curved corners, and 14px font
+button_styles = """
+    QPushButton {
+        background-color: #007bff;  /* Professional blue */
+        color: white;               /* Text color */
+        border-radius: 8px;         /* Curved corners */
+        font-size: 14px;            /* Font size */
+        padding: 8px 16px;          /* Padding for a more substantial button appearance */
+    }
+    QPushButton:hover {
+        background-color: #0056b3;  /* Darker blue on hover */
+    }
+    QPushButton:pressed {
+        background-color: #003f7f;  /* Even darker blue when pressed */
+    }
+"""
