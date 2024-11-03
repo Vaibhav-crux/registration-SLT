@@ -19,7 +19,7 @@ from datetime import datetime
 class InternalRegistrationWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Registration")
+        self.setWindowTitle("Internal Registration")
         self.setGeometry(100, 100, 400, 500)
         apply_window_flags(self)
         apply_mode_styles(self)
