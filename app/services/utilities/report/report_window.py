@@ -3,7 +3,7 @@ from app.ui.utilities.report.main_window_ui import setup_main_window_ui
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags, is_dark_mode
 from app.utils.frame_utils import center_window
 from app.style.default_styles import dark_mode_style, light_mode_style
-from app.style.report_button_style import button_style
+from app.style.report_button_style import button_style, clicked_button_style  # Import both styles
 
 class ReportWindow(QWidget):
     def __init__(self):
@@ -43,7 +43,21 @@ class ReportWindow(QWidget):
         if frame1:
             for button in frame1.findChildren(QPushButton):
                 button.setStyleSheet(button_style)
-    
+                button.clicked.connect(lambda _, b=button: self.handle_button_click(b))
+
+    def handle_button_click(self, clicked_button):
+        """
+        Handle the button click event to apply the dark grey color to the clicked button.
+        """
+        frame1 = self.findChild(QFrame)
+        if frame1:
+            for button in frame1.findChildren(QPushButton):
+                # Reset style to default button style
+                button.setStyleSheet(button_style)
+
+        # Apply dark grey color to the clicked button
+        clicked_button.setStyleSheet(clicked_button_style)
+
     def set_frame_color(self):
         # Set the frame color based on the current mode
         if is_dark_mode():
