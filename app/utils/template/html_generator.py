@@ -29,90 +29,92 @@ def generate_html(data, file_name="output.html"):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sales Order Receipt</title>
         <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
             body {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-                padding-top: 20px;
-                margin: 40px;
-                width: 600px;
+                height: 480px;
+                width: 400px;
+                margin-top: 10px;
                 text-align: center;
                 border: 1px solid black;
             }
 
             .header {
+                height: 60px;
                 width: 100%;
+                padding-top: 5px;
                 border-bottom: 2px solid;
-            }
-
-            .address {
-                font-size: 0.9em;
-                color: #555;
             }
 
             table {
                 width: 100%;
-            }
-
-            h2 {
-                letter-spacing: 12px;
-                font-weight: lighter;
+                font-size: small;
             }
 
             .footer {
                 display: flex;
                 justify-content: center;
                 text-align: left;
+                font-size: x-small;
             }
 
             .footer-container {
-                width: 200px;
-                padding: 40px;
+                width: 180px;
+                padding: 5px;
             }
 
             .footer-divider {
                 border-right: 1.5px dashed;
-                margin: 20px;
+                margin: 5px;
+            }
+
+            .type {
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            .star-divider {
+                font-size: small;
             }
         </style>
     </head>
 
     <body>
         <div class="header">
-            <div style="font-size: xx-large;">*</div>
-            <h1>STARLABS TECHNOLOGIES</h1>
-            <h2>PRIVATE LIMITED</h2>
-            <div class="address">
-                <p>NORTHERN COAL FIELDS LIMITED</p>
-                <p>BONA PROJECT</p>
-                <p>SONBHADRA, UP - 231220</p>
-                <p> PH-03261234567</p>
+            STARLABS
+            <div class="type">
+                SPECIALIZED TEAM FOR<br>
+                ALTERNATIVE RESEARCH LABS
             </div>
         </div>
-        <div>**************************************************************</div>
+        <div class="star-divider">***************************************************</div>
 
         <table>
         """
     for key, value in fields_to_include.items():
         html_content += f"""
             <tr>
-                <td style="padding: 20px; margin-left: 20px; text-align: left;">{key}</td>
+                <td style="padding-left: 20px; padding-bottom: 5px; margin-left: 20px; text-align: left;">{key}</td>
                 <td>:</td>
-                <td style="padding: 20px; margin-left: 20px; text-align: left;">{value}</td>
+                <td style="padding-left: 20px; padding-bottom: 5px; margin-left: 20px; text-align: left;">{value}</td>
             </tr>
         """
 
     html_content +="""
-            <tr>
-                <td style="padding: 20px; margin-left: 20px; text-align: left;">TRANSACTION ID</td>
-                <td>:</td>
-                <td style="padding: 20px; margin-left: 20px; text-align: left;">U54656S116DA355Q61A3S8</td>
-            </tr>
         </table>
 
-        <div>**************************************************************</div>
+        <div class="star-divider">***************************************************</div>
         """
     user_id=data.get('User id', 'VAIBHAV')
     html_content+= f"""

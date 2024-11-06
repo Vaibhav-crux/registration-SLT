@@ -1,7 +1,8 @@
 import os
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QDialog
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QFrame
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
+from pathlib import Path
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 
@@ -36,7 +37,7 @@ def setup_payment_receipt_ui(dialog, html_file_path, parent_window):
     # Save button (placeholder functionality)
     save_button = QPushButton("Save", dialog)
     save_button.setFixedWidth(100)
-    save_button.clicked.connect(lambda: save_receipt(dialog))  # Placeholder function for saving
+    save_button.clicked.connect(lambda: save_receipt(dialog,absolute_html_file_path))  # Placeholder function for saving
 
     # Cancel button
     cancel_button = QPushButton("Cancel", dialog)
@@ -70,13 +71,39 @@ def print_receipt(dialog):
     print("Print functionality is not implemented yet.")
     dialog.reject()  # Close the dialog
 
-def save_receipt(dialog):
-    """
-    Placeholder function to handle saving logic.
-    Currently just closes the dialog.
-    """
-    print("Save functionality is not implemented yet.")
-    dialog.reject()  # Close the dialog
+def save_receipt(dialog,absolute_html_file_path):
+    web_view = dialog.findChild(QWebEngineView)
+
+    html_file_name = os.path.basename(absolute_html_file_path)
+    file_name = os.path.splitext(html_file_name)[0]
+
+    file_name = f"{file_name}.png"
+
+
+    def capture_image():
+        content_size = web_view.page().contentsSize()
+
+        original_device_pixel_ratio = web_view.devicePixelRatio()
+
+        web_view.setFixedSize(int(content_size.width()), int(content_size.height()))
+
+        pixmap = web_view.grab()
+
+        pixmap.setDevicePixelRatio(10)
+
+        output_dir = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / 'files'
+        os.makedirs(output_dir, exist_ok=True)
+
+        pixmap.save(os.path.join(output_dir, file_name), 'PNG')
+
+        pixmap.setDevicePixelRatio(original_device_pixel_ratio)
+
+        print("Receipt saved as an image at: ",output_dir)
+        dialog.reject()
+
+    web_view.loadFinished.connect(lambda success: capture_image() if success else print("Failed to load HTML."))
+
+    web_view.setUrl(QUrl.fromLocalFile(absolute_html_file_path))
 
 def cancel_and_delete(dialog, parent_window, html_file_path):
     """
