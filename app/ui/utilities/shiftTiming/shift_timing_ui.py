@@ -56,7 +56,8 @@ def setup_ui(window, get_shift_timings, shift_rows):
 
         from_time, to_time = shift_timings.get(shift_name, (QTime(0, 0, 0), QTime(0, 0, 0)))
 
-        from_time_edit = QTimeEdit(QTime.fromString(from_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        # from_time_edit = QTimeEdit(QTime.fromString(from_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        from_time_edit = QTimeEdit(from_time, window)
         from_time_edit.setFixedWidth(150)
         from_time_edit.setDisplayFormat("HH:mm:ss")
         from_time_edit.setStyleSheet(common_textbox_style)
@@ -67,7 +68,8 @@ def setup_ui(window, get_shift_timings, shift_rows):
         dash_label.setStyleSheet("font-size: 14px; color: white;")
         hbox.addWidget(dash_label)
 
-        to_time_edit = QTimeEdit(QTime.fromString(to_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        # to_time_edit = QTimeEdit(QTime.fromString(to_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        to_time_edit = QTimeEdit(to_time, window)
         to_time_edit.setFixedWidth(150)
         to_time_edit.setDisplayFormat("HH:mm:ss")
         to_time_edit.setStyleSheet(common_textbox_style)

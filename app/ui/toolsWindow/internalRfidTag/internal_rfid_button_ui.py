@@ -6,6 +6,7 @@ from app.services.tools.internalRegistration.newServices.open_new_window_service
 from app.services.tools.internalRegistration.deleteServices.delete_window_service import open_delete_window
 from app.services.tools.internalRegistration.editServices.edit_window_service import open_edit_window
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
+from app.utils.fetchRfidTag.fetchRfidTag import fetch_rfid_tag
 
 def create_button_layout(window, fields):
     """
@@ -15,6 +16,11 @@ def create_button_layout(window, fields):
     :return: QHBoxLayout with the buttons.
     """
     button_layout = QHBoxLayout()
+
+    # Function to handle "Fetch" button click
+    def handle_fetch_button():
+        rfid_tag=fetch_rfid_tag()
+        fields["rfid_tag"].setText(rfid_tag)
 
     # Function to handle "New" button click without checking for empty fields
     def handle_new_button():
@@ -81,32 +87,37 @@ def create_button_layout(window, fields):
         # Open the edit window with the complete data dictionary
         open_edit_window(data, vehicle_type)
 
-
+    # New Button
+    fetch_button = QPushButton("Fetch", window)
+    fetch_button.setFixedWidth(80)
+    fetch_button.setStyleSheet(button_style)
+    fetch_button.clicked.connect(handle_fetch_button)
+    button_layout.addWidget(fetch_button)
 
     # New Button
     new_button = QPushButton("New", window)
-    new_button.setFixedWidth(100)
+    new_button.setFixedWidth(80)
     new_button.setStyleSheet(button_style)
     new_button.clicked.connect(handle_new_button)
     button_layout.addWidget(new_button)
 
     # Edit Button
     edit_button = QPushButton("Edit", window)
-    edit_button.setFixedWidth(100)
+    edit_button.setFixedWidth(80)
     edit_button.setStyleSheet(button_style)
     edit_button.clicked.connect(handle_edit_button)
     button_layout.addWidget(edit_button)
 
     # Delete Button
     delete_button = QPushButton("Delete", window)
-    delete_button.setFixedWidth(100)
+    delete_button.setFixedWidth(80)
     delete_button.setStyleSheet(button_style)
     delete_button.clicked.connect(handle_delete_button)
     button_layout.addWidget(delete_button)
 
     # Clear Button
     clear_button = QPushButton("Clear", window)
-    clear_button.setFixedWidth(100)
+    clear_button.setFixedWidth(80)
     clear_button.setStyleSheet(button_style)
     clear_button.clicked.connect(lambda: clear_fields(fields))
     button_layout.addWidget(clear_button)
