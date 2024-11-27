@@ -7,6 +7,10 @@ from app.services.tools.internalRegistration.deleteServices.delete_window_servic
 from app.services.tools.internalRegistration.editServices.edit_window_service import open_edit_window
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
 from app.utils.fetchRfidTag.fetchRfidTag import fetch_rfid_tag
+from app.controllers.tools.internalRegistration.alloted_tag_controller import check_alloted_and_registered_status
+from app.models.vehicleRegistration import VehicleTypeEnum
+from datetime import datetime
+from PyQt5.QtCore import Qt, QDate
 
 def create_button_layout(window, fields):
     """
@@ -21,6 +25,66 @@ def create_button_layout(window, fields):
     def handle_fetch_button():
         rfid_tag=fetch_rfid_tag()
         fields["rfid_tag"].setText(rfid_tag)
+
+        rfid_data = fetch_vehicle_registration_data(rfid_tag)
+
+        if rfid_data:
+            # Fill fields with data from VehicleRegistration if present
+            def set_field_value(widget, value):
+                if widget is None:
+                    print(f"Warning: Widget not found.")
+                    return
+                if isinstance(widget, QComboBox):
+                    if isinstance(value, VehicleTypeEnum):
+                        value = value.value
+                    widget.setCurrentText(value)
+                elif isinstance(widget, QDateEdit):
+                    if isinstance(value, QDate):
+                        widget.setDate(value)
+                    elif isinstance(value, datetime):
+                        widget.setDate(value.date())
+                elif isinstance(widget, QLineEdit):
+                    widget.setText(value if value else "")
+                # print(f"{widget.objectName()}: {value if value else 'Empty'}")
+
+            set_field_value(fields["vehicle_type"], rfid_data.get("typeOfVehicle"))
+            set_field_value(fields["vehicle_no"], rfid_data.get("vehicleNumber"))
+            set_field_value(fields["do_number"], rfid_data.get("doNumber"))
+            set_field_value(fields["transporter"], rfid_data.get("transporter"))
+            set_field_value(fields["weighbridge_no"], rfid_data.get("weighbridgeNo"))
+            set_field_value(fields["driver_owner"], rfid_data.get("driverOwner"))
+            set_field_value(fields["visit_purpose"], rfid_data.get("visitPurpose"))
+            set_field_value(fields["place_to_visit"], rfid_data.get("placeToVisit"))
+            set_field_value(fields["person_to_visit"], rfid_data.get("personToVisit"))
+            set_field_value(fields["calendar"], rfid_data.get("validityTill"))
+            set_field_value(fields["section"], rfid_data.get("section"))
+
+            status, alloted_data = check_alloted_and_registered_status(fields["rfid_tag"].text(), fields["vehicle_no"].text())
+            window.status_label.setText(f"Status: {status}")
+
+            if alloted_data:
+                # Fill fields with data from AllotedTags if present
+                fields["vehicle_type"].setCurrentText(alloted_data.typeOfVehicle.value)
+                fields["vehicle_no"].setText(alloted_data.vehicleNumber)
+
+        else:
+            for field_name, field_widget in fields.items():
+                if isinstance(field_widget, QLineEdit):
+                    if field_name != 'vehicle_type' and field_name != "rfid_tag":
+                        field_widget.clear()  # Clear text fields
+                elif isinstance(field_widget, QDateEdit):
+                    field_widget.setDate(QDate.currentDate())  # Reset calendar to current date
+                elif isinstance(field_widget, QComboBox):
+                    if field_name != 'vehicle_type':
+                        field_widget.setCurrentIndex(-1)
+
+            status, alloted_data = check_alloted_and_registered_status(fields["rfid_tag"].text(), fields["vehicle_no"].text())
+            window.status_label.setText(f"Status: {status}")
+
+            if alloted_data:
+                # Fill fields with data from AllotedTags if present
+                fields["vehicle_type"].setCurrentText(alloted_data.typeOfVehicle.value)
+                fields["vehicle_no"].setText(alloted_data.vehicleNumber)
 
     # Function to handle "New" button click without checking for empty fields
     def handle_new_button():
