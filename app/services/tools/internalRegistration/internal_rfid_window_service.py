@@ -16,6 +16,8 @@ from app.controllers.tools.internalRegistration.alloted_tag_controller import ch
 from app.models.vehicleRegistration import VehicleTypeEnum
 from datetime import datetime
 
+from app.utils.fetchRfidTag.fetchRfidTag import open_com_port,close_com_port
+
 class InternalRegistrationWindow(QDialog):
     def __init__(self):
         super().__init__()
@@ -26,6 +28,8 @@ class InternalRegistrationWindow(QDialog):
         center_window(self)
         apply_drop_shadow(self)
         setup_ui(self)  # Set up UI and initialize widgets
+
+        open_com_port()
 
         # Assign references to widgets using findChild
         self.rfid_tag = self.findChild(QLineEdit, "rfid_tag")
@@ -96,3 +100,8 @@ class InternalRegistrationWindow(QDialog):
                 focus_next_enabled_widget(current_widget, self)
         else:
             super().keyPressEvent(event)
+
+    def closeEvent(self, event):
+        """Handle the window close event."""
+        close_com_port()  # Close the COM port
+        event.accept() 
