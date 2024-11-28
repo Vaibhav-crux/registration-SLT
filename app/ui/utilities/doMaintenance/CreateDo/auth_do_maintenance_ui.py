@@ -3,7 +3,8 @@ from PyQt5.QtCore import Qt
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.utils.cursor.entry_box import MyLineEdit
-
+# Import the frame utility functions
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 def setup_new_do_ui(window):
     main_layout = QVBoxLayout()
@@ -47,6 +48,9 @@ def setup_new_do_ui(window):
 
     main_layout.addLayout(button_layout)
     window.setLayout(main_layout)
+
+    center_window(window)
+
     QWidget.setTabOrder(user_name_input, password_input)
     QWidget.setTabOrder(password_input, confirm_button)
     QWidget.setTabOrder(confirm_button, cancel_button)

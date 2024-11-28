@@ -58,9 +58,10 @@ class CreateUserWindow(QDialog):
         password = self.password.text().strip()
         full_name = self.full_name.text().strip()
         mobile_number = self.mobile_number.text().strip()
+        designation = self.designation.text().strip()
 
         # Validate essential fields
-        if not username or not password or not full_name:
+        if not username or not password or not full_name or not designation:
             QMessageBox.warning(self, input_error, "Please ensure username, password, and full name are filled out.")
             return
 

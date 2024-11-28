@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QFormLayout, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QFormLayout, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy, QLabel,QLineEdit
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags, is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.utils.cursor.entry_box import MyLineEdit  # Import the custom class
@@ -8,18 +8,26 @@ class AuthUserUI(QWidget):
         super().__init__(*args, **kwargs)
         
         self.initUI()
+        self.setWindowTitle("Authenticate User")
         self.applyStyles()
         
     def initUI(self):
         # Create a form layout for user input fields
         form_layout = QFormLayout()
         
+        username_label = QLabel("Username:")
+        username_label.setStyleSheet("font-size: 14px; font-weight: 600;")
+
+        password_label = QLabel("Password:")
+        password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
+
         self.username_input = MyLineEdit()  # Use the custom class
         self.password_input = MyLineEdit()  # Use the custom class
         self.password_input.setEchoMode(MyLineEdit.Password)
-        
-        form_layout.addRow('Username:', self.username_input)
-        form_layout.addRow('Password:', self.password_input)
+
+        # Add to form layout
+        form_layout.addRow(username_label, self.username_input)
+        form_layout.addRow(password_label, self.password_input)
         
         # Create a horizontal layout for buttons
         button_layout = QHBoxLayout()
@@ -42,6 +50,8 @@ class AuthUserUI(QWidget):
         
         # Combine form layout and button layout in a vertical layout
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(20, 20, 20, 20)
+        main_layout.setSpacing(20)
         main_layout.addLayout(form_layout)
         main_layout.addLayout(button_layout)
         

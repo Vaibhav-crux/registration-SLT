@@ -5,6 +5,8 @@ from PyQt5.QtGui import QIntValidator, QKeyEvent
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+# Import the frame utility functions
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 from app.utils.cursor.entry_box import MyLineEdit, MyDoubleSpinBox, MyDateEdit
 
@@ -151,6 +153,8 @@ def setup_create_do_ui(window):
 
     # Set the main layout
     window.setLayout(main_layout)
+
+    center_window(window)
 
     return (
         do_number_input, 

@@ -4,6 +4,8 @@ from PyQt5.QtCore import QDate
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.style.disabled_styles import disabled_style
+# Import the frame utility functions
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 def setup_edit_window_ui(window, data, enabled_fields):
     main_layout = QVBoxLayout()

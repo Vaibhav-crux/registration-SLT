@@ -40,6 +40,37 @@ def handle_combo_box(field_name, field_widget, fields_to_edit, base_style):
     apply_style(field_widget, base_style, disabled_style, not is_enabled)
 
 
+def check_null_fields(vehicle_type,fields):
+    # Define the editable fields for each vehicle type
+    editable_fields = {
+        "TCT": ["vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
+        "PDV": ["vehicle_type", "vehicle_no", "driver_owner", "calendar", "section"],
+        "TVV": ["vehicle_no", "vehicle_type", "driver_owner", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
+        "TOV": ["vehicle_type", "vehicle_no", "do_number", "visit_purpose", "place_to_visit", "person_to_visit", "calendar"],
+        "PCT": ["vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
+        "TDBEV": ["vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"],
+        "SCRAPE": ["vehicle_type", "vehicle_no", "do_number", "driver_owner", "calendar"]
+    }
+
+    required_fields = editable_fields[vehicle_type]
+
+    missing_or_null=[]
+
+    # Check if any required field is missing or has a null/empty value
+    for field_name, field_widget in fields.items():
+        if field_name in required_fields:
+            if isinstance(field_widget, (QLineEdit, QDateEdit)):
+                if not fields.get(field_name).text():
+                    missing_or_null.append(field_name)
+            elif isinstance(field_widget, QComboBox):
+                if not fields.get(field_name).currentText():
+                    missing_or_null.append(field_name)
+
+    if missing_or_null:
+        return False
+    else: 
+        return True
+
 def update_fields_write_access(vehicle_type, fields):
     """
     Update the write access of the fields based on the selected vehicle type and clear unwanted fields.

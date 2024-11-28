@@ -20,10 +20,12 @@ def setup_delete_window_ui(window, rfid_tag, vehicle_no):
 
     # User ID and Password fields
     user_id_label = QLabel("User ID:", window)
+    user_id_label.setStyleSheet("font-size: 14px; font-weight: 600;")
     user_id_input = QLineEdit(window)
     user_id_input.setStyleSheet(common_textbox_style)
 
     password_label = QLabel("Password:", window)
+    password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
     password_input = QLineEdit(window)
     password_input.setEchoMode(QLineEdit.Password)
     password_input.setStyleSheet(common_textbox_style)

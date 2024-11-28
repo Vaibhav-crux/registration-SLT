@@ -34,7 +34,7 @@ class CreateDoMaintenanceWindow(QDialog):
         validity_till = self.validity_till_input.text()
         alloted_qty = self.alloted_qty_input.value()
         released_qty = self.released_qty_input.value()
-        left_qty = self.left_qty_input.value()
+        left_qty = alloted_qty-released_qty  # left_qty = self.left_qty_input.value()
         do_address = self.do_address_input.text()
         do_route = self.do_route_input.text()
         sales_order = self.sales_order_input.text()
@@ -42,13 +42,17 @@ class CreateDoMaintenanceWindow(QDialog):
         mobile_number = self.mobile_number_input.text()
 
         # Validate required inputs (example: do_number and transporter)
-        if not do_number or not transporter:
-            QMessageBox.critical(self, "Input Error", "Both DO Number and Transporter fields are required.")
+        if not do_number or not transporter or not weighbridge_no or not validity_till or not alloted_qty or not released_qty:
+            QMessageBox.critical(self, "Input Error", "Please input the required fields.")
             return
 
         # Check if mobile number consists of exactly 10 digits
         if len(mobile_number) != 10 or not mobile_number.isdigit():
             QMessageBox.critical(self, "Input Error", "Mobile Number must consist of exactly 10 digits.")
+            return
+        
+        if alloted_qty<released_qty:
+            QMessageBox.critical(self, "Input Error", "Released Quantity must not be greater than Alloted Quantity")
             return
 
         # Call the controller to save the data (pass all values)

@@ -10,9 +10,9 @@ def setup_ui(dialog):
 
     # Create and style the Username label
     dialog.username_label = QLabel("Username:")
-    dialog.username_label.setStyleSheet("font-size: 14px;")  # Increase font size to 14px
+    dialog.username_label.setStyleSheet("font-size: 14px; font-weight: 600;")  # Increase font size to 14px
     dialog.username_input = QLineEdit()
-    dialog.username_input.setFixedWidth(200)
+    dialog.username_input.setFixedWidth(280)
     layout.addWidget(dialog.username_label, 0, 0)
     layout.addWidget(dialog.username_input, 0, 1, 1, 2)  # Span across two columns
 

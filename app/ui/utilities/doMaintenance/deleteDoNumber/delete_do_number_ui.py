@@ -2,7 +2,18 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit
 from PyQt5.QtCore import Qt
 from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_service import DeleteDoNumberService
 from app.utils.frame_utils import apply_drop_shadow, center_window
-from app.style.default_styles import dark_mode_style, button_style
+from app.style.default_styles import dark_mode_style, button_style, light_mode_style
+# Import mode utility function
+from app.utils.mode_utils import is_dark_mode
+
+# Check if the current mode is dark or light
+dark_mode = is_dark_mode()
+
+# Apply the appropriate stylesheet
+if dark_mode:
+    common_textbox_style = dark_mode_style
+else:
+    common_textbox_style = light_mode_style
 
 class DeleteDoNumberWindow(QDialog):
 
@@ -41,6 +52,7 @@ class DeleteDoNumberWindow(QDialog):
     def add_do_number_label(self):
         """ Add the DO Number label to the layout """
         do_number_label = QLabel(f"You are deleting DO Number: {self.do_number}")
+        do_number_label.setStyleSheet("font-size: 14px; font-weight: 600;")
         do_number_label.setAlignment(Qt.AlignCenter)
         self.main_layout.addWidget(do_number_label)
 
@@ -48,6 +60,7 @@ class DeleteDoNumberWindow(QDialog):
         """ Add the username input field to the layout """
         username_layout = QHBoxLayout()
         username_label = QLabel("Username:")
+        username_label.setStyleSheet("font-size: 14px; font-weight: 600;")
         self.username_input = QLineEdit()
         username_layout.addWidget(username_label)
         username_layout.addWidget(self.username_input)
@@ -57,6 +70,7 @@ class DeleteDoNumberWindow(QDialog):
         """ Add the password input field to the layout """
         password_layout = QHBoxLayout()
         password_label = QLabel("Password:")
+        password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.Password)
         password_layout.addWidget(password_label)
@@ -99,7 +113,7 @@ class DeleteDoNumberWindow(QDialog):
 
     def apply_widget_styles(self):
         """ Apply the default dark mode styles to the widgets """
-        self.username_input.setStyleSheet(dark_mode_style)
-        self.password_input.setStyleSheet(dark_mode_style)
+        self.username_input.setStyleSheet(common_textbox_style)
+        self.password_input.setStyleSheet(common_textbox_style)
         self.confirm_button.setStyleSheet(button_style)
         self.cancel_button.setStyleSheet(button_style)
