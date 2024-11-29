@@ -49,7 +49,7 @@ def setup_ui(window, get_shift_timings, shift_rows):
     def add_shift_row(shift_name):
         hbox = QHBoxLayout()
 
-        shift_label = QLabel(shift_name, window)
+        shift_label = QLabel(shift_name.title(), window)
         shift_label.setStyleSheet(style)
         shift_label.setFixedWidth(60)
         hbox.addWidget(shift_label)
@@ -78,7 +78,7 @@ def setup_ui(window, get_shift_timings, shift_rows):
         return hbox, from_time_edit, to_time_edit
 
     # Adding shift rows with values from the database
-    for shift_name in ["A Shift", "B Shift", "C Shift"]:
+    for shift_name in ["A shift", "B shift", "C shift"]:
         shift_row, from_time_edit, to_time_edit = add_shift_row(shift_name)
         shift_rows.append((shift_name, from_time_edit, to_time_edit))
         main_layout.addLayout(shift_row)

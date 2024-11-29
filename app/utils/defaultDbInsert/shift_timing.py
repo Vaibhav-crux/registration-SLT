@@ -11,9 +11,9 @@ def automate_saving_default_shifts():
     if existing_shifts == 0:
         # If no data exists, insert the default shifts
         default_shifts = [
-            ShiftTiming(shift_name="A Shift", from_time=time(6, 0, 0), to_time=time(13, 59, 59)),
-            ShiftTiming(shift_name="B Shift", from_time=time(14, 0, 0), to_time=time(21, 59, 59)),
-            ShiftTiming(shift_name="C Shift", from_time=time(22, 0, 0), to_time=time(5, 59, 59)),
+            ShiftTiming(shift_name="A shift", from_time=time(6, 0, 0), to_time=time(13, 59, 59)),
+            ShiftTiming(shift_name="B shift", from_time=time(14, 0, 0), to_time=time(21, 59, 59)),
+            ShiftTiming(shift_name="C shift", from_time=time(22, 0, 0), to_time=time(5, 59, 59)),
         ]
         
         session.add_all(default_shifts)

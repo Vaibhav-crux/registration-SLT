@@ -42,6 +42,8 @@ class DeleteDoNumberWindow(QDialog):
         """ Initialize the UI components and layout """
         self.main_layout = QVBoxLayout()
 
+        self.main_layout.setContentsMargins(20, 20, 20, 20)
+        self.main_layout.setSpacing(20)
         self.add_do_number_label()
         self.add_username_field()
         self.add_password_field()

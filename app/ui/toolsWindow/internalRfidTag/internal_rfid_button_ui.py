@@ -141,6 +141,20 @@ def create_button_layout(window, fields):
         # Check if both RFID tag and vehicle number exist
         if rfid_data and vehicle_data:
             open_delete_window(rfid_tag, vehicle_no)
+            rfid_data = fetch_vehicle_registration_data(rfid_tag)
+
+            if not rfid_data:
+                for field_name, field_widget in fields.items():
+                    if isinstance(field_widget, QLineEdit):
+                        if field_name != 'vehicle_type':
+                            field_widget.clear()  # Clear text fields
+                    elif isinstance(field_widget, QDateEdit):
+                        field_widget.setDate(QDate.currentDate())  # Reset calendar to current date
+                    elif isinstance(field_widget, QComboBox):
+                        if field_name != 'vehicle_type':
+                            field_widget.setCurrentIndex(-1)
+                
+                window.status_label.setText("Status: Please Enter Vehicle Number or RFID Tag")
         else:
             msg_box = QMessageBox()
             msg_box.setIcon(QMessageBox.Warning)
