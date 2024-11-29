@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from app.ui.utilities.doMaintenance.searchDoNumber.search_do_number_ui import show_result_ui
 from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
+from app.utils.mode_utils import apply_mode_styles
 
 class SearchDoNumberService(QDialog):  
     def __init__(self, result):
@@ -21,6 +22,8 @@ class SearchDoNumberService(QDialog):
 
         # Optionally, apply a drop shadow effect
         apply_drop_shadow(self)  
+
+        apply_mode_styles(self)
 
         # Call the show_result_ui to set up the UI with the result
         show_result_ui(result, self)

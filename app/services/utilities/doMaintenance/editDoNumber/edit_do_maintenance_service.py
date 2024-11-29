@@ -3,6 +3,9 @@ from app.ui.utilities.doMaintenance.editDoNumber.edit_do_maintenance_ui import s
 from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
 from app.style.default_styles import dark_mode_style, button_style  # Import styles
 from app.utils.frame_utils import apply_drop_shadow, center_window  # Import utility functions
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar,apply_mode_styles
+
+dark_mode=is_dark_mode()
 
 class EditDoMaintenanceWindow(QDialog):
     def __init__(self, do_number, parent=None):
@@ -16,6 +19,8 @@ class EditDoMaintenanceWindow(QDialog):
         # Apply drop shadow effect
         apply_drop_shadow(self)
 
+        apply_mode_styles(self)
+
         # Center the window on the screen
         center_window(self)
 
@@ -23,7 +28,15 @@ class EditDoMaintenanceWindow(QDialog):
         do_details = fetch_do_details(do_number)
 
         if not do_details:
-            QMessageBox.warning(self, "Error", "DO Number not found.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("DO Number not found.")
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", "DO Number not found.")
             self.reject()  # Reject the dialog instead of closing it
             return
 
@@ -40,7 +53,15 @@ class EditDoMaintenanceWindow(QDialog):
 
     def save(self):
         # Logic to save the updated DO details
-        QMessageBox.information(self, "Success", "DO details saved successfully.")
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText("DO details saved successfully.")
+        msg_box.setWindowTitle("Success")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.exec_()
+        # QMessageBox.Information(self, "Success", "DO details saved successfully.")
         self.accept()  # Accept the dialog after saving
 
     def cancel(self):

@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from app.ui.utilities.doMaintenance.CreateDo.auth_do_maintenance_ui import setup_new_do_ui
-from app.utils.mode_utils import apply_mode_styles 
+from app.utils.mode_utils import apply_mode_styles ,is_dark_mode,set_dark_mode_title_bar
 from app.controllers.utilities.doMaintenance.check_user_creds import check_user_credentials
 from app.services.utilities.doMaintenance.CreateDoNumber.create_do_maintenance_service import CreateDoMaintenanceWindow
+
+dark_mode=is_dark_mode()
 
 class AuthDoMaintenanceWindow(QDialog):
     def __init__(self, parent=None):
@@ -29,7 +31,15 @@ class AuthDoMaintenanceWindow(QDialog):
         password = self.password_input.text()
 
         if not user_name or not password:
-            QMessageBox.critical(self, "Input Error", "Both User Name and Password fields are required.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Critical)
+            msg_box.setText("Both User Name and Password fields are required.")
+            msg_box.setWindowTitle("Input Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Critical(self, "Input Error", "Both User Name and Password fields are required.")
             return
 
         if check_user_credentials(user_name, password):            
@@ -37,4 +47,12 @@ class AuthDoMaintenanceWindow(QDialog):
             create_do_window = CreateDoMaintenanceWindow(parent=self.parent_window)
             create_do_window.show()
         else:
-            QMessageBox.critical(self, "Authentication Failed", "Invalid User Name or Password.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Critical)
+            msg_box.setText("Invalid User Name or Password.")
+            msg_box.setWindowTitle("Authentication Failed")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Critical(self, "Authentication Failed", "Invalid User Name or Password.")

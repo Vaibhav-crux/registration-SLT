@@ -4,7 +4,7 @@ from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_servic
 from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.style.default_styles import dark_mode_style, button_style, light_mode_style
 # Import mode utility function
-from app.utils.mode_utils import is_dark_mode
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar,apply_mode_styles,apply_window_flags
 
 # Check if the current mode is dark or light
 dark_mode = is_dark_mode()
@@ -21,6 +21,8 @@ class DeleteDoNumberWindow(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Delete DO Number")
         self.setGeometry(100, 100, 400, 200)
+        apply_window_flags(self)
+        apply_mode_styles(self)
         self.do_number = do_number
 
         # Initialize the UI components
@@ -101,10 +103,26 @@ class DeleteDoNumberWindow(QDialog):
         success, message = DeleteDoNumberService.delete_do_number(self.do_number, username, password)
 
         if success:
-            QMessageBox.information(self, "Success", message)
+            msg_box = QMessageBox(self)
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Success")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Information(self, "Success", message)
             self.accept()
         else:
-            QMessageBox.warning(self, "Error", message)
+            msg_box = QMessageBox(self)
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", message)
             self.clear_inputs()
 
     def clear_inputs(self):

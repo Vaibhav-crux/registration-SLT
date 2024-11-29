@@ -11,7 +11,7 @@ from app.controllers.auth.fetch_user import verify_user_credentials
 # Import the delete function
 from app.controllers.tools.internalRegistration.delete_registration_controller import delete_vehicle_registration
 # Import mode utility function
-from app.utils.mode_utils import is_dark_mode
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
 
 class DeleteWindow(QDialog):
     def __init__(self, rfid_tag, vehicle_no):
@@ -51,6 +51,7 @@ class DeleteWindow(QDialog):
                     msg_box.setWindowTitle("Success")
                     if dark_mode:
                         msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                        set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
                     self.accept()
                 else:
@@ -60,6 +61,7 @@ class DeleteWindow(QDialog):
                     msg_box.setWindowTitle("Warning")
                     if dark_mode:
                         msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                        set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
             else:
                 msg_box = QMessageBox()
@@ -68,6 +70,7 @@ class DeleteWindow(QDialog):
                 msg_box.setWindowTitle("Warning")
                 if dark_mode:
                     msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
         else:
             msg_box = QMessageBox()
@@ -76,6 +79,7 @@ class DeleteWindow(QDialog):
             msg_box.setWindowTitle("Warning")
             if dark_mode:
                 msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
 def open_delete_window(rfid_tag, vehicle_no):

@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QComboBox, QMessageBox
-from app.utils.mode_utils import apply_mode_styles, is_dark_mode
+from app.utils.mode_utils import apply_mode_styles, is_dark_mode,set_dark_mode_title_bar
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.style.disabled_styles import disabled_style
 from app.services.tools.internalRegistration.newServices.checkbox_status_service import update_due_checkbox_status
@@ -145,6 +145,7 @@ def on_confirm_clicked(window, combo_box, due_checkbox, total_amount, data):
         msg_box.setIcon(QMessageBox.Information)
         if dark_mode:
             msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
         msg_box.setText("Payment already done.")
         msg_box.setWindowTitle("Duplicate Record Detected")
         msg_box.exec_()
@@ -163,6 +164,7 @@ def show_confirmation_messagebox(window):
     msg_box.setIcon(QMessageBox.Question)
     if dark_mode:
         msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+        set_dark_mode_title_bar(msg_box)
     msg_box.setText("Are you sure you want to proceed with this payment?")
     msg_box.setWindowTitle("Confirm Payment")
     msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -243,4 +245,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         msg_box.setIcon(QMessageBox.Information)
         msg_box.setText("Record already exists. No duplicate entries allowed.")
         msg_box.setWindowTitle("Duplicate Record Detected")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
         msg_box.exec_()

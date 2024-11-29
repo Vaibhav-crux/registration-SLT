@@ -8,6 +8,9 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
 from app.ui.maintenance.createUser.create_user_ui import setup_ui
 from app.controllers.maintenance.user.delete_user import delete_user_by_username
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
+
+dark_mode=is_dark_mode()
 
 input_error = "Input Error"
 class CreateUserWindow(QDialog):
@@ -62,12 +65,28 @@ class CreateUserWindow(QDialog):
 
         # Validate essential fields
         if not username or not password or not full_name or not designation:
-            QMessageBox.warning(self, input_error, "Please ensure username, password, and full name are filled out.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("Please ensure username, password, designation and full name are filled out.")
+            msg_box.setWindowTitle('Input Error')
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, input_error, "Please ensure username, password, and full name are filled out.")
             return
 
         # Validate mobile number for 10 digits
         if len(mobile_number) != 10 or not mobile_number.isdigit():
-            QMessageBox.warning(self, input_error, "Please enter a valid 10-digit mobile number.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("Please enter a valid 10-digit mobile number.")
+            msg_box.setWindowTitle('Input Error')
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, input_error, "Please enter a valid 10-digit mobile number.")
             return
 
         # If all validations pass, save the data
@@ -85,7 +104,15 @@ class CreateUserWindow(QDialog):
         )
 
         # Display message to the user
-        QMessageBox.information(self, "Result", message)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText(message)
+        msg_box.setWindowTitle('Result')
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.exec_()
+        # QMessageBox.Information(self, "Result", message)
         self.clear_fields()  # Clear inputs after successful save
 
     def clear_fields(self):
@@ -98,15 +125,40 @@ class CreateUserWindow(QDialog):
     def delete_user(self):
         username = self.user_name.text()
         if not username:
-            QMessageBox.warning(self, input_error, "Please enter a username to delete.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("Please enter a username to delete.")
+            msg_box.setWindowTitle('Input Error')
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, input_error, "Please enter a username to delete.")
             return
 
         # Confirm deletion
-        confirm = QMessageBox.question(self, "Confirm Delete", f"Are you sure you want to delete the user '{username}'?",
-                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Question)
+        msg_box.setText(f"Are you sure you want to delete the user '{username}'?")
+        msg_box.setWindowTitle("Confirm Delete")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirm = msg_box.exec_()
+        # confirm = QMessageBox.Question(self, "Confirm Delete", f"Are you sure you want to delete the user '{username}'?",
+                                    #    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if confirm == QMessageBox.Yes:
             # Call the function to delete user
             message = delete_user_by_username(username)
-            QMessageBox.information(self, "Result", message)
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle('Result')
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Information(self, "Result", message)
             self.clear_fields()  # Clear inputs after successful delete

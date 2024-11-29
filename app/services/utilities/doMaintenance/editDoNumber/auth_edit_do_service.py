@@ -1,10 +1,13 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from app.ui.utilities.doMaintenance.editDoNumber.auth_edit_do_ui import setup_auth_edit_do_ui
 from app.utils.frame_utils import apply_drop_shadow, center_window
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar,apply_mode_styles
 from app.style.default_styles import dark_mode_style, button_style  # Import styles
 from app.controllers.utilities.doMaintenance.check_user_creds import check_user_credentials  # Import credential check
 from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details  # Import fetch function
 from app.services.utilities.doMaintenance.editDoNumber.edit_do_maintenance_service import EditDoMaintenanceWindow
+
+dark_mode=is_dark_mode()
 
 class AuthEditDoWindow(QDialog):
     def __init__(self, parent=None):
@@ -15,6 +18,7 @@ class AuthEditDoWindow(QDialog):
         # Apply drop shadow and center the window
         apply_drop_shadow(self)
         center_window(self)
+        apply_mode_styles(self)
 
         # Set up the UI using the external setup function, and retrieve the buttons
         self.confirm_button, self.cancel_button = setup_auth_edit_do_ui(self)
@@ -51,4 +55,12 @@ class AuthEditDoWindow(QDialog):
         self.reject()  # Close the dialog with a "Rejected" status
 
     def show_message(self, message):
-        QMessageBox.information(self, "Information", message)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText(message)
+        msg_box.setWindowTitle("Information")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.exec_()
+        # QMessageBox.Information(self, "Information", message)

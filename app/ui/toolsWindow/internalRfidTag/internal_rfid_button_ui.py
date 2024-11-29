@@ -12,7 +12,7 @@ from app.models.vehicleRegistration import VehicleTypeEnum
 from datetime import datetime
 from PyQt5.QtCore import Qt, QDate
 # Import mode utility function
-from app.utils.mode_utils import is_dark_mode
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
 # Import the function to update field write access based on vehicle type
 from app.services.tools.internalRegistration.update_fields_write_access import check_null_fields
 
@@ -105,6 +105,7 @@ def create_button_layout(window, fields):
             msg_box.setWindowTitle("Warning")
             if dark_mode:
                 msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
         else:
@@ -120,6 +121,7 @@ def create_button_layout(window, fields):
                 msg_box.setWindowTitle("Warning")
                 if dark_mode:
                     msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
             else:
                 open_new_window({
@@ -162,6 +164,7 @@ def create_button_layout(window, fields):
             msg_box.setWindowTitle("Warning")
             if dark_mode:
                 msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
     # Function to handle "Edit" button click
@@ -197,6 +200,7 @@ def create_button_layout(window, fields):
             msg_box.setWindowTitle("Warning")
             if dark_mode:
                 msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
     # New Button

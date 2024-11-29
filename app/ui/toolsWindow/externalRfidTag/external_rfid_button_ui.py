@@ -6,6 +6,9 @@ from app.services.tools.externalRegistration.newServices.open_new_window_service
 from app.services.tools.externalRegistration.deleteServices.delete_window_service import open_delete_window
 from app.services.tools.externalRegistration.editServices.edit_window_service import open_edit_window
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
+
+dark_mode=is_dark_mode()
 
 def create_button_layout(window, fields):
     """
@@ -31,6 +34,8 @@ def create_button_layout(window, fields):
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("RFID tag already registered.")
             msg_box.setWindowTitle("Warning")
+            if dark_mode:
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
         else:
             open_new_window({
@@ -57,6 +62,7 @@ def create_button_layout(window, fields):
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("The provided RFID tag or Vehicle No is not registered.")
             msg_box.setWindowTitle("Warning")
+            set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
     # Function to handle "Edit" button click
