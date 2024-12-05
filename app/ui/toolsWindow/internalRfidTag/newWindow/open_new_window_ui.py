@@ -12,6 +12,7 @@ from app.utils.random_string_generator import generate_sales_order_no, generate_
 from app.controllers.tools.internalRegistration.save_into_alloted_tag import save_alloted_tag
 from app.controllers.tools.internalRegistration.save_into_registration import save_vehicle_registration
 from datetime import datetime
+from app.utils.cursor.entry_box import MyLineEdit
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
 
 # Define constants
@@ -68,7 +69,7 @@ def add_label_and_value(window, layout, label_text, value, base_style, fixed_wid
     label.setStyleSheet("font-size: 14px; font-weight: bold;")
     hbox.addWidget(label)
 
-    value_widget = QLineEdit(window)
+    value_widget = MyLineEdit(window)
     value_widget.setText(value)
     value_widget.setReadOnly(True)
     value_widget.setFixedWidth(fixed_width)
@@ -83,12 +84,14 @@ def add_total_amount(layout, vehicle_type, base_style):
     return total_amount
 
 
-def add_payment_mode_with_due(layout, window, base_style, fixed_width=230):
+def add_payment_mode_with_due(layout, window, base_style, fixed_width=243):
     hbox = QHBoxLayout()
     label = QLabel("Payment Mode:", window)
     label.setAlignment(Qt.AlignLeft)
     label.setStyleSheet("font-size: 14px; font-weight: bold;")
     hbox.addWidget(label)
+
+    hbox.addSpacing(15) 
 
     combo_box = QComboBox(window)
     combo_box.addItems(["Cash", "UPI"])
@@ -206,6 +209,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         salesType=full_data["SALES TYPE"],
         quantity="1",
         total=full_data["TOTAL"],
+        due=True if due_checked else False,
         blacklisted=False
     )
 
@@ -232,7 +236,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         )
 
         # Generate HTML receipt
-        generate_html(full_data, RFID_DETAILS_FILE)
+        generate_html(full_data, False, RFID_DETAILS_FILE)
 
         # Show payment receipt window if a new record was saved
         if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):

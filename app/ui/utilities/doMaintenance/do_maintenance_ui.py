@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.utils.cursor.entry_box import MyLineEdit
 
 def setup_ui(window):
     """
@@ -35,7 +36,7 @@ def setup_ui(window):
         layout.addLayout(hbox)
 
     # DO Number
-    do_number = QLineEdit(window)
+    do_number = MyLineEdit(window)
     do_number.setFixedWidth(300)
     do_number.setStyleSheet(common_textbox_style)
     add_field(main_layout, "DO Number:", do_number)

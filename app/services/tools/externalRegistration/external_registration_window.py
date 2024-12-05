@@ -15,6 +15,7 @@ from app.controllers.tools.internalRegistration.vehicle_registration_controller 
 from app.controllers.tools.internalRegistration.alloted_tag_controller import check_alloted_and_registered_status
 from app.models.vehicleRegistration import VehicleTypeEnum
 from datetime import datetime
+from app.utils.cursor.entry_box import MyLineEdit
 
 class ExternalRegistrationWindow(QDialog):
     def __init__(self):
@@ -28,24 +29,24 @@ class ExternalRegistrationWindow(QDialog):
         setup_ui(self)  # Set up UI and initialize widgets
 
         # Assign references to widgets using findChild
-        self.rfid_tag = self.findChild(QLineEdit, "rfid_tag")
+        self.rfid_tag = self.findChild(MyLineEdit, "rfid_tag")
         self.vehicle_type = self.findChild(QComboBox, "vehicle_type")
-        self.vehicle_no = self.findChild(QLineEdit, "vehicle_no")
+        self.vehicle_no = self.findChild(MyLineEdit, "vehicle_no")
         self.do_number = self.findChild(QComboBox, "do_number")
-        self.transporter = self.findChild(QLineEdit, "transporter")
-        self.weighbridge_no = self.findChild(QLineEdit, "weighbridge_no")
-        self.driver_owner = self.findChild(QLineEdit, "driver_owner")
-        self.visit_purpose = self.findChild(QLineEdit, "visit_purpose")
-        self.place_to_visit = self.findChild(QLineEdit, "place_to_visit")
-        self.person_to_visit = self.findChild(QLineEdit, "person_to_visit")
+        self.transporter = self.findChild(MyLineEdit, "transporter")
+        self.weighbridge_no = self.findChild(MyLineEdit, "weighbridge_no")
+        self.driver_owner = self.findChild(MyLineEdit, "driver_owner")
+        self.visit_purpose = self.findChild(MyLineEdit, "visit_purpose")
+        self.place_to_visit = self.findChild(MyLineEdit, "place_to_visit")
+        self.person_to_visit = self.findChild(MyLineEdit, "person_to_visit")
         self.calendar = self.findChild(QDateEdit, "calendar")
-        self.section = self.findChild(QLineEdit, "section")
+        self.section = self.findChild(MyLineEdit, "section")
         self.status_label = self.findChild(QLabel, "status_label")
 
     def keyPressEvent(self, event):
         if event.key() in (Qt.Key_Return, Qt.Key_Enter):
             current_widget = self.focusWidget()
-            if isinstance(current_widget, QLineEdit):
+            if isinstance(current_widget, MyLineEdit):
                 tag_value = current_widget.text()
                 tag_data = fetch_vehicle_registration_data(tag_value)
                 
@@ -73,7 +74,7 @@ class ExternalRegistrationWindow(QDialog):
                                 widget.setDate(value)
                             elif isinstance(value, datetime):
                                 widget.setDate(value.date())
-                        elif isinstance(widget, QLineEdit):
+                        elif isinstance(widget, MyLineEdit):
                             widget.setText(value if value else "")
                         print(f"{widget.objectName()}: {value if value else 'Empty'}")
 

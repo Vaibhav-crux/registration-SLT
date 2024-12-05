@@ -5,6 +5,8 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.style.default_styles import dark_mode_style, button_style, light_mode_style
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar,apply_mode_styles,apply_window_flags
+from app.utils.cursor.entry_box import MyLineEdit
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
 
 # Check if the current mode is dark or light
 dark_mode = is_dark_mode()
@@ -65,7 +67,8 @@ class DeleteDoNumberWindow(QDialog):
         username_layout = QHBoxLayout()
         username_label = QLabel("Username:")
         username_label.setStyleSheet("font-size: 14px; font-weight: 600;")
-        self.username_input = QLineEdit()
+        self.username_input = MyLineEdit()
+        self.username_input.setText(get_username_from_file())
         username_layout.addWidget(username_label)
         username_layout.addWidget(self.username_input)
         self.main_layout.addLayout(username_layout)
@@ -75,8 +78,8 @@ class DeleteDoNumberWindow(QDialog):
         password_layout = QHBoxLayout()
         password_label = QLabel("Password:")
         password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
-        self.password_input = QLineEdit()
-        self.password_input.setEchoMode(QLineEdit.Password)
+        self.password_input = MyLineEdit()
+        self.password_input.setEchoMode(MyLineEdit.Password)
         password_layout.addWidget(password_label)
         password_layout.addWidget(self.password_input)
         self.main_layout.addLayout(password_layout)

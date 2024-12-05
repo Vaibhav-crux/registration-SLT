@@ -6,6 +6,7 @@ from app.services.tools.externalRegistration.update_fields_write_access import u
 from app.models.vehicleRegistration import VehicleRegistration
 from app.config.refreshSession import create_session
 from datetime import datetime
+from app.utils.cursor.entry_box import MyLineEdit
 # edit_window_service.py
 from app.controllers.tools.internalRegistration.update_registration_controller import update_vehicle_registration
 
@@ -58,10 +59,10 @@ class EditWindow(QDialog):
 
 def open_edit_window(data, vehicle_type):
     fields = {
-        "driver_owner": QLineEdit(),
-        "visit_purpose": QLineEdit(),
-        "place_to_visit": QLineEdit(),
-        "person_to_visit": QLineEdit(),
+        "driver_owner": MyLineEdit(),
+        "visit_purpose": MyLineEdit(),
+        "place_to_visit": MyLineEdit(),
+        "person_to_visit": MyLineEdit(),
         "calendar": QDateEdit()
     }
     

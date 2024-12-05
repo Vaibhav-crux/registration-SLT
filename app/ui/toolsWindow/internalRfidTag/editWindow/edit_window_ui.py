@@ -6,6 +6,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style, button_s
 from app.style.disabled_styles import disabled_style
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
+from app.utils.cursor.entry_box import MyLineEdit
 
 def setup_edit_window_ui(window, data, enabled_fields):
     main_layout = QVBoxLayout()
@@ -28,14 +29,14 @@ def setup_edit_window_ui(window, data, enabled_fields):
 
         field = None
         if key == "vehicle_type":
-            field = QLineEdit(window)
+            field = MyLineEdit(window)
             field.setText(value)
             field.setReadOnly(True)  # Read-only vehicle type
         elif key == "calendar":  # Treat "calendar" as "Validity Till"
             field = QDateEdit(window)
             field.setDate(QDate.fromString(value, "yyyy-MM-dd"))
         else:
-            field = QLineEdit(window)
+            field = MyLineEdit(window)
             field.setText(value)
 
         # Enable or disable fields based on enabled_fields
@@ -58,7 +59,7 @@ def setup_edit_window_ui(window, data, enabled_fields):
     if "rfid_tag" not in fields:
         rfid_label = QLabel("RFID Tag:", window)
         rfid_label.setStyleSheet(label_style)
-        rfid_field = QLineEdit(window)
+        rfid_field = MyLineEdit(window)
         rfid_field.setText(data.get("rfid_tag", ""))
         rfid_field.setReadOnly(True)
         rfid_field.setStyleSheet(combined_style)

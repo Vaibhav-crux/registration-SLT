@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QLineEdit, QPushButton
+from app.utils.cursor.entry_box import MyLineEdit
 
 def setup_edit_do_maintenance_ui(dialog, do_details):
     layout = QGridLayout()
@@ -29,7 +30,7 @@ def setup_edit_do_maintenance_ui(dialog, do_details):
     for row, (label_text, field_name) in enumerate(fields):
         label = QLabel(label_text + ":")
         label.setStyleSheet(label_style)
-        line_edit = QLineEdit()
+        line_edit = MyLineEdit()
         line_edit.setText(str(getattr(do_details, field_name, "")))  # Ensure the value is a string
 
         # Make the DO Number field read-only

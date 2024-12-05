@@ -8,6 +8,7 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.ui.maintenance.blacklistedUser.blacklisted_user_ui import setup_ui
 # Import the change_blacklist_status function
 from app.controllers.maintenance.blockUser.change_blacklist_status import change_blacklist_status
+from app.utils.cursor.entry_box import MyLineEdit
 
 dark_mode=is_dark_mode()
 
@@ -29,8 +30,8 @@ class BlockUserWindow(QDialog):
         # Get UI elements
         self.confirm_button = self.findChild(QPushButton, "Confirm")
         self.cancel_button = self.findChild(QPushButton, "Cancel")
-        self.rfid_tag_input = self.findChild(QLineEdit, "RFID Tag")
-        self.vehicle_no_input = self.findChild(QLineEdit, "Vehicle No")
+        self.rfid_tag_input = self.findChild(MyLineEdit, "RFID Tag")
+        self.vehicle_no_input = self.findChild(MyLineEdit, "Vehicle No")
         self.action_combo = self.findChild(QComboBox, "Action")
 
         # Connect button actions

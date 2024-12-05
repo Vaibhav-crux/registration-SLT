@@ -11,10 +11,13 @@ from app.controllers.tools.internalRegistration.alloted_tag_controller import ch
 from app.models.vehicleRegistration import VehicleTypeEnum
 from datetime import datetime
 from PyQt5.QtCore import Qt, QDate
+from app.utils.cursor.entry_box import MyLineEdit
 # Import mode utility function
 from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
 # Import the function to update field write access based on vehicle type
 from app.services.tools.internalRegistration.update_fields_write_access import check_null_fields
+from app.controllers.tools.internalRegistration.alloted_tag_controller import get_alloted_tag
+from app.services.tools.internalRegistration.newServices.open_new_window_alloted_service import open_new_alloted_window
 
 def create_button_layout(window, fields):
     """
@@ -50,7 +53,7 @@ def create_button_layout(window, fields):
                         widget.setDate(value)
                     elif isinstance(value, datetime):
                         widget.setDate(value.date())
-                elif isinstance(widget, QLineEdit):
+                elif isinstance(widget, MyLineEdit):
                     widget.setText(value if value else "")
                 # print(f"{widget.objectName()}: {value if value else 'Empty'}")
 
@@ -76,7 +79,7 @@ def create_button_layout(window, fields):
 
         else:
             for field_name, field_widget in fields.items():
-                if isinstance(field_widget, QLineEdit):
+                if isinstance(field_widget, MyLineEdit):
                     if field_name != 'vehicle_type' and field_name != "rfid_tag":
                         field_widget.clear()  # Clear text fields
                 elif isinstance(field_widget, QDateEdit):
@@ -110,11 +113,19 @@ def create_button_layout(window, fields):
 
         else:
             # Fetch data for RFID tag and vehicle number
+            alloted_tag=get_alloted_tag(rfid_tag)
             rfid_data = fetch_vehicle_registration_data(rfid_tag)
             vehicle_data = fetch_vehicle_registration_data(vehicle_no)
 
+            if alloted_tag and not rfid_data:
+                open_new_alloted_window({
+                    key: (field.text() if isinstance(field, MyLineEdit) else
+                        field.currentText() if isinstance(field, QComboBox) else
+                        field.date().toString("yyyy-MM-dd"))
+                    for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
+                })
             # Check if RFID tag exists
-            if rfid_data:
+            elif alloted_tag and rfid_data:
                 msg_box = QMessageBox()
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText("RFID tag already registered.")
@@ -125,7 +136,7 @@ def create_button_layout(window, fields):
                 msg_box.exec_()
             else:
                 open_new_window({
-                    key: (field.text() if isinstance(field, QLineEdit) else
+                    key: (field.text() if isinstance(field, MyLineEdit) else
                         field.currentText() if isinstance(field, QComboBox) else
                         field.date().toString("yyyy-MM-dd"))
                     for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
@@ -147,7 +158,7 @@ def create_button_layout(window, fields):
 
             if not rfid_data:
                 for field_name, field_widget in fields.items():
-                    if isinstance(field_widget, QLineEdit):
+                    if isinstance(field_widget, MyLineEdit):
                         if field_name != 'vehicle_type':
                             field_widget.clear()  # Clear text fields
                     elif isinstance(field_widget, QDateEdit):
@@ -171,7 +182,7 @@ def create_button_layout(window, fields):
     def handle_edit_button():
         # Gather the current data from the form fields
         data = {
-            key: field.text() if isinstance(field, QLineEdit) else
+            key: field.text() if isinstance(field, MyLineEdit) else
                 field.currentText() if isinstance(field, QComboBox) else
                 field.date().toString("yyyy-MM-dd")  # Format the date correctly for "calendar" field
             for key, field in fields.items()
@@ -206,6 +217,7 @@ def create_button_layout(window, fields):
     # New Button
     fetch_button = QPushButton("Fetch", window)
     fetch_button.setFixedWidth(80)
+    fetch_button.setObjectName("Fetch") 
     fetch_button.setStyleSheet(button_style)
     fetch_button.clicked.connect(handle_fetch_button)
     button_layout.addWidget(fetch_button)
@@ -213,6 +225,7 @@ def create_button_layout(window, fields):
     # New Button
     new_button = QPushButton("New", window)
     new_button.setFixedWidth(80)
+    new_button.setObjectName("New") 
     new_button.setStyleSheet(button_style)
     new_button.clicked.connect(handle_new_button)
     button_layout.addWidget(new_button)
@@ -235,7 +248,7 @@ def create_button_layout(window, fields):
     clear_button = QPushButton("Clear", window)
     clear_button.setFixedWidth(80)
     clear_button.setStyleSheet(button_style)
-    clear_button.clicked.connect(lambda: clear_fields(fields))
+    clear_button.clicked.connect(lambda: clear_fields(window,fields))
     button_layout.addWidget(clear_button)
 
     return button_layout

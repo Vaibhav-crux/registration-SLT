@@ -47,6 +47,7 @@ class DeleteWindow(QDialog):
                     msg_box.setText("Data has been deleted successfully.")
                     msg_box.setWindowTitle("Success")
                     if dark_mode:
+                        msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
                         set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
                     self.accept()
@@ -56,6 +57,7 @@ class DeleteWindow(QDialog):
                     msg_box.setText("Failed to delete the data. Please try again.")
                     msg_box.setWindowTitle("Warning")
                     if dark_mode:
+                        msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
                         set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
             else:
@@ -64,6 +66,7 @@ class DeleteWindow(QDialog):
                 msg_box.setText("Invalid User ID or Password.")
                 msg_box.setWindowTitle("Warning")
                 if dark_mode:
+                    msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
                     set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
         else:
@@ -72,6 +75,7 @@ class DeleteWindow(QDialog):
             msg_box.setText("Please enter both User ID and Password.")
             msg_box.setWindowTitle("Warning")
             if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
                 set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 

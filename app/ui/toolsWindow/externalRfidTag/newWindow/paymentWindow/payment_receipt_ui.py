@@ -4,6 +4,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 def setup_payment_receipt_ui(dialog, html_file_path, parent_window):
     layout = QVBoxLayout()
@@ -61,6 +62,8 @@ def setup_payment_receipt_ui(dialog, html_file_path, parent_window):
         dialog.setStyleSheet(light_mode_style)
 
     dialog.setLayout(layout)
+
+    center_window(dialog)
 
 def print_receipt(dialog):
     """

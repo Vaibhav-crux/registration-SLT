@@ -36,3 +36,13 @@ def check_alloted_and_registered_status(rfid_tag, vehicle_no):
             return "Not alloted not registered", None
     finally:
         session.close()
+
+def get_alloted_tag(rfidTag):
+    session = create_session()
+    try:
+        alloted_tag = session.query(AllotedTags).filter_by(rfidTag=rfidTag).first()
+
+        return alloted_tag
+
+    finally:
+        session.close()

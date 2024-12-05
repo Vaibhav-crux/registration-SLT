@@ -36,14 +36,14 @@ def setup_ui(window):
         layout.addLayout(hbox)
 
     # RFID Tag
-    rfid_tag = MyLineEdit(window)  # Use MyLineEdit instead of QLineEdit
+    rfid_tag = MyLineEdit(window)  # Use MyLineEdit instead of MyLineEdit
     rfid_tag.setFixedWidth(300)
     rfid_tag.setStyleSheet(common_textbox_style)
     rfid_tag.setObjectName("RFID Tag")  # Set object name
     add_field(main_layout, "RFID Tag:", rfid_tag)
 
     # Vehicle Number Tag
-    vehicle_no = MyLineEdit(window)  # Use MyLineEdit instead of QLineEdit
+    vehicle_no = MyLineEdit(window)  # Use MyLineEdit instead of MyLineEdit
     vehicle_no.setFixedWidth(300)
     vehicle_no.setStyleSheet(common_textbox_style)
     vehicle_no.setObjectName("Vehicle No")  # Set object name

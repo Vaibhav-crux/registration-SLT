@@ -5,6 +5,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style, button_s
 from app.utils.cursor.entry_box import MyLineEdit
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
 
 def setup_new_do_ui(window):
     main_layout = QVBoxLayout()
@@ -26,11 +27,12 @@ def setup_new_do_ui(window):
     user_name_input = MyLineEdit(window)
     user_name_input.setFixedWidth(300)
     user_name_input.setStyleSheet(common_textbox_style)
+    user_name_input.setText(get_username_from_file())
     add_field(main_layout, "User Name:", user_name_input)
 
     password_input = MyLineEdit(window)
     password_input.setFixedWidth(300)
-    password_input.setEchoMode(QLineEdit.Password)
+    password_input.setEchoMode(MyLineEdit.Password)
     password_input.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Password:", password_input)
 

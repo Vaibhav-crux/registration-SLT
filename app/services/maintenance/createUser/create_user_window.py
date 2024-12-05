@@ -9,6 +9,7 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.ui.maintenance.createUser.create_user_ui import setup_ui
 from app.controllers.maintenance.user.delete_user import delete_user_by_username
 from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
+from app.utils.cursor.entry_box import MyLineEdit
 
 dark_mode=is_dark_mode()
 

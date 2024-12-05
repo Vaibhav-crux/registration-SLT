@@ -95,6 +95,7 @@ def on_confirm_click(dialog, total_amount, data):
         salesType=full_data["SALES TYPE"],
         quantity="1",
         total=full_data["TOTAL"],
+        due=True,
         blacklisted=False
     )
 

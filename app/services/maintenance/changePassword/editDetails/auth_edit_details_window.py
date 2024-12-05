@@ -6,6 +6,7 @@ from app.style.default_styles import dark_mode_style, light_mode_style, button_s
 
 from app.services.maintenance.changePassword.editDetails.edit_user_details_window import EditUserDetailsWindow
 from app.controllers.maintenance.passwordChange.edit_check_user import check_user_credentials
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
 
 dark_mode=is_dark_mode()
 
@@ -42,6 +43,7 @@ class AuthEditDetailsWindow(QDialog):
     def clear_fields(self):
         # Clear the text fields when the window is opened
         self.username_input.clear()
+        self.username_input.setText(get_username_from_file())
 
     def confirm_action(self):
         # Get the new username

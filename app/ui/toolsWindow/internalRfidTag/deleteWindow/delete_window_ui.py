@@ -2,6 +2,8 @@
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QFrame
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.utils.cursor.entry_box import MyLineEdit
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
 
 def setup_delete_window_ui(window, rfid_tag, vehicle_no):
     """
@@ -21,13 +23,14 @@ def setup_delete_window_ui(window, rfid_tag, vehicle_no):
     # User ID and Password fields
     user_id_label = QLabel("User ID:", window)
     user_id_label.setStyleSheet("font-size: 14px; font-weight: 600;")
-    user_id_input = QLineEdit(window)
+    user_id_input = MyLineEdit(window)
     user_id_input.setStyleSheet(common_textbox_style)
+    user_id_input.setText(get_username_from_file())
 
     password_label = QLabel("Password:", window)
     password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
-    password_input = QLineEdit(window)
-    password_input.setEchoMode(QLineEdit.Password)
+    password_input = MyLineEdit(window)
+    password_input.setEchoMode(MyLineEdit.Password)
     password_input.setStyleSheet(common_textbox_style)
 
     user_id_input.setFixedWidth(300)

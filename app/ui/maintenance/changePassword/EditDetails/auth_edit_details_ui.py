@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QLineEdit
+from app.utils.cursor.entry_box import MyLineEdit
 
 def setup_ui(dialog):
     dialog.setWindowTitle("Edit User Details")
@@ -11,7 +12,7 @@ def setup_ui(dialog):
     # Create and style the Username label
     dialog.username_label = QLabel("Username:")
     dialog.username_label.setStyleSheet("font-size: 14px; font-weight: 600;")  # Increase font size to 14px
-    dialog.username_input = QLineEdit()
+    dialog.username_input = MyLineEdit()
     dialog.username_input.setFixedWidth(280)
     layout.addWidget(dialog.username_label, 0, 0)
     layout.addWidget(dialog.username_input, 0, 1, 1, 2)  # Span across two columns

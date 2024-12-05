@@ -3,6 +3,7 @@ from app.models.vehicleRegistration import VehicleRegistration
 from app.config.refreshSession import create_session
 from datetime import datetime
 from PyQt5.QtWidgets import QLineEdit
+from app.utils.cursor.entry_box import MyDateEdit,MyLineEdit
 
 def update_vehicle_registration(data, fields):
     session = create_session()
@@ -37,7 +38,7 @@ def update_vehicle_registration(data, fields):
         }
         for key, field in fields.items():
             if key in updatable_fields:
-                new_value = field.text() if isinstance(field, QLineEdit) else field.date().toString("yyyy-MM-dd")
+                new_value = field.text() if isinstance(field, MyLineEdit) else field.date().toString("yyyy-MM-dd")
                 model_field = updatable_fields[key]
                 print(f"Updating {model_field}: Old value = {getattr(vehicle_registration, model_field)}, New value = {new_value}")
                 setattr(vehicle_registration, model_field, new_value)

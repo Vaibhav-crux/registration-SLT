@@ -1,23 +1,50 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMessageBox
-from app.ui.maintenance.createUser.auth_user_ui import AuthUserUI
+from PyQt5.QtWidgets import QApplication, QMessageBox,QDialog,QPushButton
+from app.ui.maintenance.createUser.auth_user_ui import setup_ui
+from app.utils.cursor.entry_box import MyLineEdit
 from app.controllers.maintenance.user.check_user import check_user_credentials
 from app.services.maintenance.createUser.create_user_window import CreateUserWindow
 from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
+# Correct import paths for utility functions
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 dark_mode=is_dark_mode()
 
-class AuthUserWindow(AuthUserUI):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.resize(400, 100)  # Set the initial window size (width, height)
-        self.center_window()  # Center the window on the screen
+class AuthUserWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Change Credentials")
+        self.setGeometry(100, 100, 400, 300)
 
-        self.create_user_window = None  # Initialize as None
+        # Apply utility functions
+        apply_window_flags(self)
+        apply_mode_styles(self)
+        center_window(self)
+        apply_drop_shadow(self)
+
+        # Set up the UI
+        setup_ui(self)
+
+        # Connect the button actions
+        self.confirm_button = self.findChild(QPushButton, "Confirm")
+        self.cancel_button = self.findChild(QPushButton, "Cancel")
+        self.username_input = self.findChild(MyLineEdit, "user_name")
+        self.password_input = self.findChild(MyLineEdit, "password")
 
         self.confirm_button.clicked.connect(self.confirm_action)
         self.cancel_button.clicked.connect(self.cancel_action)
+    
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+        
+    #     self.resize(400, 100)  # Set the initial window size (width, height)
+    #     self.center_window()  # Center the window on the screen
+
+    #     self.create_user_window = None  # Initialize as None
+
+    #     self.confirm_button.clicked.connect(self.confirm_action)
+    #     self.cancel_button.clicked.connect(self.cancel_action)
     
     def confirm_action(self):
         username = self.username_input.text()
@@ -55,6 +82,7 @@ class AuthUserWindow(AuthUserUI):
                     msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
                     set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
+
                 # QMessageBox.Warning(self, 'Login Failed', 'Invalid username or password.')
         except Exception as e:
             msg_box = QMessageBox()
@@ -66,18 +94,24 @@ class AuthUserWindow(AuthUserUI):
                 set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
             # QMessageBox.Critical(self, 'Error', f'An error occurred: {str(e)}')
-    
+        self.close()
+
     def cancel_action(self):
         self.username_input.clear()
         self.password_input.clear()
 
-    def center_window(self):
-        # Move this logic from import to a method for cleaner code
-        from app.utils.frame_utils import center_window
-        center_window(self)
+    # def center_window(self):
+    #     # Move this logic from import to a method for cleaner code
+    #     from app.utils.frame_utils import center_window
+    #     center_window(self)
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = AuthUserWindow()
-    window.show()
-    sys.exit(app.exec_())
+    # def closeEvent(self, event):
+    #     """Override closeEvent to resume the inactivity timer."""
+    #     super().closeEvent(event)
+    #     self.parent().resume_inactivity_timer()
+
+# if __name__ == "__main__":
+#     app = QApplication(sys.argv)
+#     window = AuthUserWindow()
+#     window.show()
+#     sys.exit(app.exec_())
