@@ -9,7 +9,7 @@ import calendar
 
 
 class MainWindowUI:
-    def setup_ui(self, window, full_name, shift_name):
+    def setup_ui(self, window, full_name, shift_name,due_amount):
         window.set_background_image("app/images/menu/background2.jpg")
         
         # Create the single frame for displaying time, date, day, and shift information
@@ -27,7 +27,7 @@ class MainWindowUI:
         window.day_label = QLabel(current_day, window.info_frame)
         window.user_label = QLabel(full_name, window.info_frame)  # Display the full name passed from the controller
         window.shift_label = QLabel(shift_name, window.info_frame)  # Display the shift name passed from the controller
-        window.id_label = QLabel("2500", window.info_frame)
+        window.id_label = QLabel(due_amount, window.info_frame)
 
         # Add shadow effect to labels
         labels = [window.time_label, window.date_label, window.day_label, window.user_label, window.shift_label, window.id_label]

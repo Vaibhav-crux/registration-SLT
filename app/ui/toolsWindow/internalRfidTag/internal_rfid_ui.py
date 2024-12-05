@@ -11,7 +11,7 @@ from app.services.tools.internalRegistration.update_fields_write_access import u
 # Import functions to fetch data from the database
 from app.controllers.tools.internalRegistration.do_no_controller import fetch_do_numbers, fetch_transport_and_weighbridge
 # Import custom date entry box with specific settings
-from app.utils.cursor.entry_box import MyDateEdit
+from app.utils.cursor.entry_box import MyDateEdit,MyLineEdit
 
 def setup_ui(window):
     """
@@ -27,18 +27,18 @@ def setup_ui(window):
 
     # Create fields
     fields = {
-        "rfid_tag": QLineEdit(window),
+        "rfid_tag": MyLineEdit(window),
         "vehicle_type": QComboBox(window),
-        "vehicle_no": QLineEdit(window),
+        "vehicle_no": MyLineEdit(window),
         "do_number": QComboBox(window),
-        "transporter": QLineEdit(window),
-        "weighbridge_no": QLineEdit(window),
-        "driver_owner": QLineEdit(window),
-        "visit_purpose": QLineEdit(window),
-        "place_to_visit": QLineEdit(window),
-        "person_to_visit": QLineEdit(window),
+        "transporter": MyLineEdit(window),
+        "weighbridge_no": MyLineEdit(window),
+        "driver_owner": MyLineEdit(window),
+        "visit_purpose": MyLineEdit(window),
+        "place_to_visit": MyLineEdit(window),
+        "person_to_visit": MyLineEdit(window),
         "calendar": MyDateEdit(window),
-        "section": QLineEdit(window)
+        "section": MyLineEdit(window)
     }
     
     # Set object names

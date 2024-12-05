@@ -2,7 +2,7 @@
 
 # Textbox, ComboBox, QDateEdit, and QTimeEdit styles
 dark_mode_style = """
-    QLineEdit, QComboBox, QDateEdit, QTimeEdit, QDoubleSpinBox {
+    MyLineEdit, QLineEdit, QComboBox, QDateEdit, QTimeEdit, QDoubleSpinBox {
         border-top: none;
         border-left: none;
         border-right: none;
@@ -33,7 +33,7 @@ dark_mode_style = """
 """
 
 light_mode_style = """
-    QLineEdit, QComboBox, QDateEdit, QTimeEdit, QDoubleSpinBox {
+    MyLineEdit, QLineEdit, QComboBox, QDateEdit, QTimeEdit, QDoubleSpinBox {
         border-top: none;
         border-left: none;
         border-right: none;

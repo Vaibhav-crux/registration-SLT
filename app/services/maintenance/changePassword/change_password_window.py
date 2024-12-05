@@ -5,8 +5,10 @@ from app.utils.cursor.entry_box import MyLineEdit
 from app.services.maintenance.changePassword.editDetails.auth_edit_details_window import AuthEditDetailsWindow
 
 # Correct import paths for utility functions
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
 from app.utils.frame_utils import apply_drop_shadow, center_window
+
+dark_mode=is_dark_mode()
 
 class ChangePasswordWindow(QDialog):
     def __init__(self):
@@ -40,11 +42,27 @@ class ChangePasswordWindow(QDialog):
         exists, is_authorized = check_user_auth(username)
 
         if not exists:
-            QMessageBox.warning(self, "Error", "User not found.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("User not found.")
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", "User not found.")
             return
 
         if not is_authorized:
-            QMessageBox.warning(self, "Error", "User is not authorized to change credentials.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("User is not authorized to change credentials.")
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", "User is not authorized to change credentials.")
             return
 
         # Close the current ChangePasswordWindow

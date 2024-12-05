@@ -16,6 +16,7 @@ def focus_next_enabled_widget(current_widget, parent_widget):
             new_button = widget
             break
 
+    # new_button = parent_widget.findChild(QPushButton, "New")
     if current_widget in focusable_widgets:
         current_index = focusable_widgets.index(current_widget)
         # Calculate the next widget index

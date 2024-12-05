@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 from app.utils.mode_utils import is_dark_mode
 # Import styles from default_styles
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.utils.cursor.entry_box import MyLineEdit
 
 def setup_ui(window):
     """
@@ -39,7 +40,7 @@ def setup_ui(window):
         layout.addLayout(hbox)
 
     # RFID Tag
-    rfid_tag = QLineEdit(window)
+    rfid_tag = MyLineEdit(window)
     rfid_tag.setFixedWidth(300)
     rfid_tag.setStyleSheet(common_textbox_style)
     add_field(main_layout, "RFID Tag:", rfid_tag)
@@ -52,7 +53,7 @@ def setup_ui(window):
     add_field(main_layout, "Type of Vehicle:", vehicle_type)
 
     # Vehicle No (TextBox)
-    vehicle_no = QLineEdit(window)
+    vehicle_no = MyLineEdit(window)
     vehicle_no.setFixedWidth(300)
     vehicle_no.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Vehicle No:", vehicle_no)
@@ -65,37 +66,37 @@ def setup_ui(window):
     add_field(main_layout, "DO Number:", do_number)
 
     # Transporter (TextBox)
-    transporter = QLineEdit(window)
+    transporter = MyLineEdit(window)
     transporter.setFixedWidth(300)
     transporter.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Transporter:", transporter)
 
     # Weighbridge No (TextBox)
-    weighbridge_no = QLineEdit(window)
+    weighbridge_no = MyLineEdit(window)
     weighbridge_no.setFixedWidth(300)
     weighbridge_no.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Weighbridge No:", weighbridge_no)
 
     # Driver/Owner (TextBox)
-    driver_owner = QLineEdit(window)
+    driver_owner = MyLineEdit(window)
     driver_owner.setFixedWidth(300)
     driver_owner.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Driver/Owner:", driver_owner)
 
     # Visit Purpose (TextBox)
-    visit_purpose = QLineEdit(window)
+    visit_purpose = MyLineEdit(window)
     visit_purpose.setFixedWidth(300)
     visit_purpose.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Visit Purpose:", visit_purpose)
 
     # Place to Visit (TextBox)
-    place_to_visit = QLineEdit(window)
+    place_to_visit = MyLineEdit(window)
     place_to_visit.setFixedWidth(300)
     place_to_visit.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Place to Visit:", place_to_visit)
 
     # Person to Visit (TextBox)
-    person_to_visit = QLineEdit(window)
+    person_to_visit = MyLineEdit(window)
     person_to_visit.setFixedWidth(300)
     person_to_visit.setStyleSheet(common_textbox_style)
     add_field(main_layout, "Person to Visit:", person_to_visit)

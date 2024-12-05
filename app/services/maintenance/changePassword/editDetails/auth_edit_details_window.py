@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from app.ui.maintenance.changePassword.EditDetails.auth_edit_details_ui import setup_ui
 from app.utils.frame_utils import center_window
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags, is_dark_mode
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags, is_dark_mode,set_dark_mode_title_bar
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 
 from app.services.maintenance.changePassword.editDetails.edit_user_details_window import EditUserDetailsWindow
 from app.controllers.maintenance.passwordChange.edit_check_user import check_user_credentials
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
+
+dark_mode=is_dark_mode()
 
 class AuthEditDetailsWindow(QDialog):
     def __init__(self, username):
@@ -40,6 +43,7 @@ class AuthEditDetailsWindow(QDialog):
     def clear_fields(self):
         # Clear the text fields when the window is opened
         self.username_input.clear()
+        self.username_input.setText(get_username_from_file())
 
     def confirm_action(self):
         # Get the new username
@@ -51,11 +55,27 @@ class AuthEditDetailsWindow(QDialog):
             # Open the EditUserDetailsWindow with the user object
             edit_window = EditUserDetailsWindow(user)
             if edit_window.exec_() != QDialog.Accepted:
-                QMessageBox.warning(self, "Cancelled", "User detail update was cancelled.")
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Warning)
+                msg_box.setText("User detail update was cancelled.")
+                msg_box.setWindowTitle("Error")
+                if dark_mode:
+                    msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
+                msg_box.exec_()
+                # QMessageBox.Warning(self, "Cancelled", "User detail update was cancelled.")
 
         else:
             # User credentials are incorrect
-            QMessageBox.warning(self, "Error", "User does not exist.")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText("User does not exist.")
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", "User does not exist.")
 
 
     def cancel_action(self):

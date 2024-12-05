@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog
-from app.ui.toolsWindow.internalRfidTag.newWindow.open_new_window_ui import setup_new_window_ui
+from app.ui.toolsWindow.internalRfidTag.newWindow.open_new_window_alloted_ui import setup_new_window_alloted_ui
 from app.utils.frame_utils import center_window
 from app.utils.mode_utils import apply_mode_styles
 
@@ -11,13 +11,13 @@ class NewWindow(QDialog):
 
 
         # Set up the UI
-        setup_new_window_ui(self, data)
+        setup_new_window_alloted_ui(self, data)
         apply_mode_styles(self)
 
         # Center the window using frame_utils
         center_window(self)
 
-def open_new_window(data):
+def open_new_alloted_window(data):
     """
     Opens a new window displaying the provided data.
 

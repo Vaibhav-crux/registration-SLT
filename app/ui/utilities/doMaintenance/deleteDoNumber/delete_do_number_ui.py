@@ -2,7 +2,20 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit
 from PyQt5.QtCore import Qt
 from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_service import DeleteDoNumberService
 from app.utils.frame_utils import apply_drop_shadow, center_window
-from app.style.default_styles import dark_mode_style, button_style
+from app.style.default_styles import dark_mode_style, button_style, light_mode_style
+# Import mode utility function
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar,apply_mode_styles,apply_window_flags
+from app.utils.cursor.entry_box import MyLineEdit
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
+
+# Check if the current mode is dark or light
+dark_mode = is_dark_mode()
+
+# Apply the appropriate stylesheet
+if dark_mode:
+    common_textbox_style = dark_mode_style
+else:
+    common_textbox_style = light_mode_style
 
 class DeleteDoNumberWindow(QDialog):
 
@@ -10,6 +23,8 @@ class DeleteDoNumberWindow(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Delete DO Number")
         self.setGeometry(100, 100, 400, 200)
+        apply_window_flags(self)
+        apply_mode_styles(self)
         self.do_number = do_number
 
         # Initialize the UI components
@@ -31,6 +46,8 @@ class DeleteDoNumberWindow(QDialog):
         """ Initialize the UI components and layout """
         self.main_layout = QVBoxLayout()
 
+        self.main_layout.setContentsMargins(20, 20, 20, 20)
+        self.main_layout.setSpacing(20)
         self.add_do_number_label()
         self.add_username_field()
         self.add_password_field()
@@ -41,6 +58,7 @@ class DeleteDoNumberWindow(QDialog):
     def add_do_number_label(self):
         """ Add the DO Number label to the layout """
         do_number_label = QLabel(f"You are deleting DO Number: {self.do_number}")
+        do_number_label.setStyleSheet("font-size: 14px; font-weight: 600;")
         do_number_label.setAlignment(Qt.AlignCenter)
         self.main_layout.addWidget(do_number_label)
 
@@ -48,7 +66,9 @@ class DeleteDoNumberWindow(QDialog):
         """ Add the username input field to the layout """
         username_layout = QHBoxLayout()
         username_label = QLabel("Username:")
-        self.username_input = QLineEdit()
+        username_label.setStyleSheet("font-size: 14px; font-weight: 600;")
+        self.username_input = MyLineEdit()
+        self.username_input.setText(get_username_from_file())
         username_layout.addWidget(username_label)
         username_layout.addWidget(self.username_input)
         self.main_layout.addLayout(username_layout)
@@ -57,8 +77,9 @@ class DeleteDoNumberWindow(QDialog):
         """ Add the password input field to the layout """
         password_layout = QHBoxLayout()
         password_label = QLabel("Password:")
-        self.password_input = QLineEdit()
-        self.password_input.setEchoMode(QLineEdit.Password)
+        password_label.setStyleSheet("font-size: 14px; font-weight: 600;")
+        self.password_input = MyLineEdit()
+        self.password_input.setEchoMode(MyLineEdit.Password)
         password_layout.addWidget(password_label)
         password_layout.addWidget(self.password_input)
         self.main_layout.addLayout(password_layout)
@@ -85,10 +106,26 @@ class DeleteDoNumberWindow(QDialog):
         success, message = DeleteDoNumberService.delete_do_number(self.do_number, username, password)
 
         if success:
-            QMessageBox.information(self, "Success", message)
+            msg_box = QMessageBox(self)
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Success")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Information(self, "Success", message)
             self.accept()
         else:
-            QMessageBox.warning(self, "Error", message)
+            msg_box = QMessageBox(self)
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", message)
             self.clear_inputs()
 
     def clear_inputs(self):
@@ -99,7 +136,7 @@ class DeleteDoNumberWindow(QDialog):
 
     def apply_widget_styles(self):
         """ Apply the default dark mode styles to the widgets """
-        self.username_input.setStyleSheet(dark_mode_style)
-        self.password_input.setStyleSheet(dark_mode_style)
+        self.username_input.setStyleSheet(common_textbox_style)
+        self.password_input.setStyleSheet(common_textbox_style)
         self.confirm_button.setStyleSheet(button_style)
         self.cancel_button.setStyleSheet(button_style)

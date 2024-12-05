@@ -49,14 +49,15 @@ def setup_ui(window, get_shift_timings, shift_rows):
     def add_shift_row(shift_name):
         hbox = QHBoxLayout()
 
-        shift_label = QLabel(shift_name, window)
+        shift_label = QLabel(shift_name.title(), window)
         shift_label.setStyleSheet(style)
         shift_label.setFixedWidth(60)
         hbox.addWidget(shift_label)
 
         from_time, to_time = shift_timings.get(shift_name, (QTime(0, 0, 0), QTime(0, 0, 0)))
 
-        from_time_edit = QTimeEdit(QTime.fromString(from_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        # from_time_edit = QTimeEdit(QTime.fromString(from_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        from_time_edit = QTimeEdit(from_time, window)
         from_time_edit.setFixedWidth(150)
         from_time_edit.setDisplayFormat("HH:mm:ss")
         from_time_edit.setStyleSheet(common_textbox_style)
@@ -67,7 +68,8 @@ def setup_ui(window, get_shift_timings, shift_rows):
         dash_label.setStyleSheet("font-size: 14px; color: white;")
         hbox.addWidget(dash_label)
 
-        to_time_edit = QTimeEdit(QTime.fromString(to_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        # to_time_edit = QTimeEdit(QTime.fromString(to_time.strftime('%H:%M:%S'), "HH:mm:ss"), window)
+        to_time_edit = QTimeEdit(to_time, window)
         to_time_edit.setFixedWidth(150)
         to_time_edit.setDisplayFormat("HH:mm:ss")
         to_time_edit.setStyleSheet(common_textbox_style)
@@ -76,7 +78,7 @@ def setup_ui(window, get_shift_timings, shift_rows):
         return hbox, from_time_edit, to_time_edit
 
     # Adding shift rows with values from the database
-    for shift_name in ["A Shift", "B Shift", "C Shift"]:
+    for shift_name in ["A shift", "B shift", "C shift"]:
         shift_row, from_time_edit, to_time_edit = add_shift_row(shift_name)
         shift_rows.append((shift_name, from_time_edit, to_time_edit))
         main_layout.addLayout(shift_row)

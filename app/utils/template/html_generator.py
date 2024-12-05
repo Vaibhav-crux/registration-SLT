@@ -3,22 +3,39 @@ from pathlib import Path
 from datetime import datetime
 from app.utils.random_string_generator import generate_sales_order_no, generate_transaction_id
 
-def generate_html(data, file_name="output.html"):
-    fields_to_include = {
-        "SALES ORDER NO.": data.get("SALES ORDER NO."),
-        "TRANSACTION ID": data.get("TRANSACTION ID"),
-        "USER ID": data.get("User id", "VAIBHAV"),  # Default User ID
-        "DATE": data.get("Create date"),  # Current Date
-        "TIME": data.get("Create Time"),  # Current Time
-        "BARRIER GATE": data.get("BARRIER GATE"),
-        "SALES TYPE": data.get("SALES TYPE"),
-        "RFID EPC": data.get("RFID EPC", ""),
-        "VEHICLE NO.": data.get("VEHICLE NO.", ""),
-        "VEHICLE TYPE": data.get("VEHICLE TYPE", ""),
-        "PAYMENT MODE": data.get("PAYMENT MODE", ""),  # Correct key access
-        "STATUS": data.get("STATUS", ""),  # Correct key access
-        "TOTAL": str(data.get("TOTAL", ""))  # Correct key access
-    }
+def generate_html(data,alloted, file_name="output.html"):
+    if alloted:
+        fields_to_include = {
+            # "SALES ORDER NO.": data.get("SALES ORDER NO."),
+            # "TRANSACTION ID": data.get("TRANSACTION ID"),
+            "USER ID": data.get("User id", "VAIBHAV"),  # Default User ID
+            "DATE": data.get("Create date"),  # Current Date
+            "TIME": data.get("Create Time"),  # Current Time
+            "BARRIER GATE": data.get("BARRIER GATE"),
+            "SALES TYPE": data.get("SALES TYPE"),
+            "RFID EPC": data.get("RFID EPC", ""),
+            "VEHICLE NO.": data.get("VEHICLE NO.", ""),
+            "VEHICLE TYPE": data.get("VEHICLE TYPE", ""),
+            # "PAYMENT MODE": data.get("PAYMENT MODE", ""),  # Correct key access
+            # "STATUS": data.get("STATUS", ""),  # Correct key access
+            # "TOTAL": str(data.get("TOTAL", ""))  # Correct key access
+        }
+    else:
+        fields_to_include = {
+            "SALES ORDER NO.": data.get("SALES ORDER NO."),
+            "TRANSACTION ID": data.get("TRANSACTION ID"),
+            "USER ID": data.get("User id", "VAIBHAV"),  # Default User ID
+            "DATE": data.get("Create date"),  # Current Date
+            "TIME": data.get("Create Time"),  # Current Time
+            "BARRIER GATE": data.get("BARRIER GATE"),
+            "SALES TYPE": data.get("SALES TYPE"),
+            "RFID EPC": data.get("RFID EPC", ""),
+            "VEHICLE NO.": data.get("VEHICLE NO.", ""),
+            "VEHICLE TYPE": data.get("VEHICLE TYPE", ""),
+            "PAYMENT MODE": data.get("PAYMENT MODE", ""),  # Correct key access
+            "STATUS": data.get("STATUS", ""),  # Correct key access
+            "TOTAL": str(data.get("TOTAL", ""))  # Correct key access
+        }
 
     html_content = """
     <!DOCTYPE html>
@@ -87,6 +104,10 @@ def generate_html(data, file_name="output.html"):
             .star-divider {
                 font-size: small;
             }
+
+            .vehicle-reg{
+                font-size: base;
+            }
         </style>
     </head>
 
@@ -99,9 +120,17 @@ def generate_html(data, file_name="output.html"):
             </div>
         </div>
         <div class="star-divider">***************************************************</div>
-
-        <table>
         """
+    if alloted:
+        html_content += """
+        <div class="vehicle-reg">
+            Vehicle registered successfully
+        </div>
+        """
+
+    html_content += """
+        <table>
+    """
     for key, value in fields_to_include.items():
         html_content += f"""
             <tr>

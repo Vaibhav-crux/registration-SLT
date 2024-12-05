@@ -6,6 +6,10 @@ from app.services.tools.externalRegistration.newServices.open_new_window_service
 from app.services.tools.externalRegistration.deleteServices.delete_window_service import open_delete_window
 from app.services.tools.externalRegistration.editServices.edit_window_service import open_edit_window
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
+from app.utils.cursor.entry_box import MyLineEdit
+
+dark_mode=is_dark_mode()
 
 def create_button_layout(window, fields):
     """
@@ -31,10 +35,13 @@ def create_button_layout(window, fields):
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("RFID tag already registered.")
             msg_box.setWindowTitle("Warning")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
         else:
             open_new_window({
-                key: (field.text() if isinstance(field, QLineEdit) else
+                key: (field.text() if isinstance(field, MyLineEdit) else
                       field.currentText() if isinstance(field, QComboBox) else
                       field.date().toString("yyyy-MM-dd"))
                 for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
@@ -57,13 +64,16 @@ def create_button_layout(window, fields):
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("The provided RFID tag or Vehicle No is not registered.")
             msg_box.setWindowTitle("Warning")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
     # Function to handle "Edit" button click
     def handle_edit_button():
         # Gather the current data from the form fields
         data = {
-            key: field.text() if isinstance(field, QLineEdit) else
+            key: field.text() if isinstance(field, MyLineEdit) else
                 field.currentText() if isinstance(field, QComboBox) else
                 field.date().toString("yyyy-MM-dd")  # Format the date correctly for "calendar" field
             for key, field in fields.items()
@@ -108,7 +118,7 @@ def create_button_layout(window, fields):
     clear_button = QPushButton("Clear", window)
     clear_button.setFixedWidth(100)
     clear_button.setStyleSheet(button_style)
-    clear_button.clicked.connect(lambda: clear_fields(fields))
+    clear_button.clicked.connect(lambda: clear_fields(window,fields))
     button_layout.addWidget(clear_button)
 
     return button_layout

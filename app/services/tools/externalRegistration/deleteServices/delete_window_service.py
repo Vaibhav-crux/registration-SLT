@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 # Import the mode utility functions
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,set_dark_mode_title_bar,is_dark_mode
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
@@ -9,6 +9,8 @@ from app.ui.toolsWindow.externalRfidTag.deleteWindow.delete_window_ui import set
 from app.controllers.auth.fetch_user import verify_user_credentials
 # Import the delete function
 from app.controllers.tools.internalRegistration.delete_registration_controller import delete_vehicle_registration
+
+dark_mode=is_dark_mode()
 
 class DeleteWindow(QDialog):
     def __init__(self, rfid_tag, vehicle_no):
@@ -44,6 +46,9 @@ class DeleteWindow(QDialog):
                     msg_box.setIcon(QMessageBox.Information)
                     msg_box.setText("Data has been deleted successfully.")
                     msg_box.setWindowTitle("Success")
+                    if dark_mode:
+                        msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                        set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
                     self.accept()
                 else:
@@ -51,18 +56,27 @@ class DeleteWindow(QDialog):
                     msg_box.setIcon(QMessageBox.Warning)
                     msg_box.setText("Failed to delete the data. Please try again.")
                     msg_box.setWindowTitle("Warning")
+                    if dark_mode:
+                        msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                        set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
             else:
                 msg_box = QMessageBox()
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText("Invalid User ID or Password.")
                 msg_box.setWindowTitle("Warning")
+                if dark_mode:
+                    msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
         else:
             msg_box = QMessageBox()
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please enter both User ID and Password.")
             msg_box.setWindowTitle("Warning")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
 def open_delete_window(rfid_tag, vehicle_no):

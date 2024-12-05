@@ -9,6 +9,9 @@ from app.utils.random_string_generator import generate_sales_order_no, generate_
 from app.controllers.tools.internalRegistration.save_into_alloted_tag import save_alloted_tag
 from app.controllers.tools.internalRegistration.save_into_registration import save_vehicle_registration
 from datetime import datetime
+from app.style.default_styles import button_style
+# Import the frame utility functions
+from app.utils.frame_utils import apply_drop_shadow, center_window
 
 def setup_upi_payment_ui(dialog, total_amount, data):
     layout = QVBoxLayout()
@@ -44,18 +47,22 @@ def setup_upi_payment_ui(dialog, total_amount, data):
     # Confirm button
     confirm_button = QPushButton("Confirm", dialog)
     confirm_button.setFixedWidth(100)
+    confirm_button.setStyleSheet(button_style)
     confirm_button.clicked.connect(lambda: on_confirm_click(dialog, total_amount, data))  # Call on_confirm_click with necessary params
     button_layout.addWidget(confirm_button)
 
     # Cancel button
     cancel_button = QPushButton("Cancel", dialog)
     cancel_button.setFixedWidth(100)
+    cancel_button.setStyleSheet(button_style)
     cancel_button.clicked.connect(dialog.reject)  # Close dialog with reject
     button_layout.addWidget(cancel_button)
 
     layout.addLayout(button_layout)
 
     dialog.setLayout(layout)
+
+    center_window(dialog)
 
 def on_confirm_click(dialog, total_amount, data):
     # Prepare full data with the necessary keys
@@ -88,6 +95,7 @@ def on_confirm_click(dialog, total_amount, data):
         salesType=full_data["SALES TYPE"],
         quantity="1",
         total=full_data["TOTAL"],
+        due=True,
         blacklisted=False
     )
 

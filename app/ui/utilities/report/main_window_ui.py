@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QFrame, QGridLayout, QLabel, QDateEdit, QTimeEdit, QComboBox, QTableWidget, QWidget
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QDate, QTime, Qt
-from app.services.utilities.report.buttons_actions_service import handle_button_action
+from app.services.utilities.report.buttons_actions_service import handle_button_action, reset_button_action
 from app.style.report_button_style import button_styles
 
 def setup_main_window_ui(window: QWidget):
@@ -41,14 +41,13 @@ def setup_main_window_ui(window: QWidget):
     # Get current date and time
     current_date = QDate.currentDate()
     current_time = QTime.currentTime()
-    time_six_hours_back = current_time.addSecs(-12 * 3600)  # Subtract 6 hours
 
     # Labels and entry boxes
     from_date_label = QLabel("From date:")
     from_date_label.setFont(label_font)
 
     from_date_value = QDateEdit(frame2)
-    from_date_value.setDate(current_date)  # Set current date as default
+    from_date_value.setDate(current_date.addDays(-1))  # Set previous day's date as default
 
     to_date_label = QLabel("To date:")
     to_date_label.setFont(label_font)
@@ -60,7 +59,7 @@ def setup_main_window_ui(window: QWidget):
     from_time_label.setFont(label_font)
 
     from_time_value = QTimeEdit(frame2)
-    from_time_value.setTime(time_six_hours_back)  # Set time 6 hours back
+    from_time_value.setTime(current_time)  # Set time 6 hours back
     from_time_value.setDisplayFormat("HH:mm")  # Set to 24-hour format
 
     to_time_label = QLabel("To time:")
@@ -74,7 +73,7 @@ def setup_main_window_ui(window: QWidget):
     vehicle_type_label.setFont(label_font)
 
     vehicle_type_value = QComboBox(frame2)
-    vehicle_type_value.addItems(["TCT", "PDV", "TVV", "TOV", "PCT", "TDBEV", "SCRAPE"])
+    vehicle_type_value.addItems(["ALL","TCT", "PDV", "TVV", "TOV", "PCT", "TDBEV", "SCRAPE"])
 
     search_label = QLabel("Vehicle No:")
     search_label.setFont(label_font)
@@ -168,6 +167,8 @@ def setup_main_window_ui(window: QWidget):
         "search_value": search_value,
         "table": table  # Make sure the table is included
     }
+
+    reset_button.clicked.connect(lambda: reset_button_action(ui_elements))
 
     # Pass the UI elements dictionary to handle_button_action
     handle_button_action("Summary", ui_elements)

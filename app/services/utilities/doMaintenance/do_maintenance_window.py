@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
 from app.utils.frame_utils import apply_drop_shadow, center_window
 from app.ui.utilities.doMaintenance.do_maintenance_ui import setup_ui
 from app.services.utilities.doMaintenance.CreateDoNumber.auth_do_maintenance_service import AuthDoMaintenanceWindow
@@ -8,6 +8,8 @@ from app.ui.utilities.doMaintenance.searchDoNumber.search_do_number_ui import sh
 from app.ui.utilities.doMaintenance.deleteDoNumber.delete_do_number_ui import DeleteDoNumberWindow
 from app.services.utilities.doMaintenance.deleteDoNumber.delete_do_number_service import DeleteDoNumberService
 from app.controllers.utilities.doMaintenance.fetch_do_details_controller import fetch_do_details
+
+dark_mode=is_dark_mode()
 
 # Define constants for messages
 MESSAGE_ENTER_DO_NUMBER = "Please enter a DO Number."
@@ -75,7 +77,15 @@ class DoMaintenanceWindow(QDialog):
         delete_window.exec_()
 
     def show_message(self, message):
-        QMessageBox.information(self, "Information", message)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText(message)
+        msg_box.setWindowTitle("Information")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.exec_()
+        # QMessageBox.Information(self, "Information", message)
 
     def show_result(self, result):
         # Displays the search result in a new ResultWindow.

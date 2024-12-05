@@ -3,8 +3,10 @@ from app.ui.maintenance.changePassword.EditDetails.edit_user_details_ui import s
 from app.utils.frame_utils import center_window
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
-from app.utils.mode_utils import is_dark_mode
+from app.utils.mode_utils import is_dark_mode,set_dark_mode_title_bar
 from app.controllers.maintenance.passwordChange.save_updated_details import update_user_details
+
+dark_mode=is_dark_mode()
 
 class EditUserDetailsWindow(QDialog):
     def __init__(self, user):
@@ -68,7 +70,23 @@ class EditUserDetailsWindow(QDialog):
         success, message = update_user_details(self.user.id, password, fullname, email, mobile, address)
 
         if success:
-            QMessageBox.information(self, "Success", message)
-            self.accept()
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Success")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Information(self, "Success", message)
+            # self.accept()
         else:
-            QMessageBox.warning(self, "Error", message)
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", message)

@@ -26,6 +26,10 @@ def reset_all_elements(elements):
     for entry in ["from_date_value", "to_date_value", "from_time_value", "to_time_value", "vehicle_type_value", "search_value"]:
         elements[entry].show()
 
+def reset_button_action(elements):
+    elements["search_value"].setText("")
+    elements["vehicle_type_value"].setCurrentText("ALL")
+
 def handle_button_action(button_text, elements):
     """
     Handle button actions to update the UI elements.
@@ -33,6 +37,7 @@ def handle_button_action(button_text, elements):
     :param elements: A dictionary of UI elements to be updated.
     """
     reset_all_elements(elements) # Reset UI elements if needed
+    reset_button_action(elements)
 
     # Update UI elements based on the button pressed
     if button_text == "Summary":
@@ -85,6 +90,40 @@ def handle_button_action(button_text, elements):
         
         # Fetch the registration data
         column_names, data = fetch_all_registration_data()
+
+    def set_column_index(column_name):
+        if(column_name==VEHICLE_NO_LABEL):
+            search_column_index = [column_ind for column_ind, column_name in enumerate(column_names) if column_name=="Vehicle Number"]
+        elif (column_name==WEIGHBRIDGE_NO_LABEL):
+            search_column_index = [column_ind for column_ind, column_name in enumerate(column_names) if column_name=="Weighbridge No"]
+        elif (column_name==DO_NUMBER_LABEL):
+            search_column_index = [column_ind for column_ind, column_name in enumerate(column_names) if column_name=="DO Number"]
+        return search_column_index[0]
+
+    def filter_data(data, search_text, search_column_index, vehicle_type_text, vehicle_type_column_index):
+        filtered_data = []
+
+        if not search_text:
+            filtered_data = data
+        else:
+            filtered_data = [row for row in data if search_text in str(row[search_column_index])]
+
+        if elements["vehicle_type_label"].isVisible() and vehicle_type_text:
+            if vehicle_type_text=="ALL":
+                update_table(table, column_names, filtered_data)
+                return
+            else:
+                filtered_data = [row for row in filtered_data if vehicle_type_text in str(row[vehicle_type_column_index])]
+        
+        update_table(table, column_names, filtered_data)
+
+    vehicle_type_column_index = [column_ind for column_ind, column_name in enumerate(column_names) if column_name=="Vehicle Type"]
+
+    elements["vehicle_type_value"].currentTextChanged.connect(
+        lambda: filter_data(data, elements["search_value"].text(), set_column_index(elements["search_label"].text()), elements["vehicle_type_value"].currentText(), vehicle_type_column_index[0]))
+
+    elements["search_value"].returnPressed.connect(
+        lambda: filter_data(data, elements["search_value"].text(), set_column_index(elements["search_label"].text()), elements["vehicle_type_value"].currentText(), vehicle_type_column_index[0]))
 
     # After updating UI and fetching data, update the table
     table = elements.get("table")

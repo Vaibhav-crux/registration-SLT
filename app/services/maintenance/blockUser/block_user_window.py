@@ -1,13 +1,16 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox, QComboBox, QLineEdit, QPushButton
 
 # Import the mode utility functions
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
 from app.ui.maintenance.blacklistedUser.blacklisted_user_ui import setup_ui
 # Import the change_blacklist_status function
 from app.controllers.maintenance.blockUser.change_blacklist_status import change_blacklist_status
+from app.utils.cursor.entry_box import MyLineEdit
+
+dark_mode=is_dark_mode()
 
 class BlockUserWindow(QDialog):
     def __init__(self):
@@ -27,8 +30,8 @@ class BlockUserWindow(QDialog):
         # Get UI elements
         self.confirm_button = self.findChild(QPushButton, "Confirm")
         self.cancel_button = self.findChild(QPushButton, "Cancel")
-        self.rfid_tag_input = self.findChild(QLineEdit, "RFID Tag")
-        self.vehicle_no_input = self.findChild(QLineEdit, "Vehicle No")
+        self.rfid_tag_input = self.findChild(MyLineEdit, "RFID Tag")
+        self.vehicle_no_input = self.findChild(MyLineEdit, "Vehicle No")
         self.action_combo = self.findChild(QComboBox, "Action")
 
         # Connect button actions
@@ -45,9 +48,25 @@ class BlockUserWindow(QDialog):
 
         # Show the appropriate message box
         if success:
-            QMessageBox.information(self, "Success", message)
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Success")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Information(self, "Success", message)
         else:
-            QMessageBox.warning(self, "Error", message)
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Warning)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("Error")
+            if dark_mode:
+                msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                set_dark_mode_title_bar(msg_box)
+            msg_box.exec_()
+            # QMessageBox.Warning(self, "Error", message)
 
     def cancel_action(self):
         self.close()

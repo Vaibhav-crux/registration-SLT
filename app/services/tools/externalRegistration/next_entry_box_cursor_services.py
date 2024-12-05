@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import QLineEdit, QComboBox, QDateEdit, QPushButton
+from app.utils.cursor.entry_box import MyLineEdit
 
 def focus_next_enabled_widget(current_widget, parent_widget):
     # Gather all input widgets that are focusable and enabled
     focusable_widgets = [
-        widget for widget in parent_widget.findChildren((QLineEdit, QComboBox, QDateEdit))
-        if widget.isEnabled() and (not isinstance(widget, (QLineEdit, QDateEdit)) or not widget.isReadOnly())
+        widget for widget in parent_widget.findChildren((MyLineEdit, QComboBox, QDateEdit))
+        if widget.isEnabled() and (not isinstance(widget, (MyLineEdit, QDateEdit)) or not widget.isReadOnly())
     ]
 
     # Find the "New" button

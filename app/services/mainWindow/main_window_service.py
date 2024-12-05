@@ -17,20 +17,24 @@ from app.services.maintenance.changePassword.change_password_window import Chang
 from app.services.maintenance.blockUser.auth_user_window import ChangePasswordWindowBlock
 from app.controllers.mainWindow.fetch_user_full_name import fetch_user_full_name
 from app.controllers.mainWindow.fetch_shift_name import fetch_shift_name
+from app.controllers.mainWindow.fetch_due_amount import fetch_due_amount
 
 class MainWindow(QWidget, MainWindowUI):
     def __init__(self):
         super().__init__()
         self.full_screen_window = None  # Track the FullScreenWindow instance
         self.is_logged_out = False  # Track logout state
+        self.full_name=fetch_user_full_name()
+        self.shift_name=fetch_shift_name()
+        self.due_amount=fetch_due_amount()
         self.initUI()
 
     def initUI(self):
         # Fetch the full name for the active username
-        full_name = fetch_user_full_name()
+        # full_name = fetch_user_full_name()
 
         # Fetch the shift name based on the current time
-        shift_name = fetch_shift_name()
+        # shift_name = fetch_shift_name()
 
         # Initialize the inactivity timer
         self.inactivity_timer = QTimer(self)
@@ -38,7 +42,7 @@ class MainWindow(QWidget, MainWindowUI):
         self.inactivity_timer.setSingleShot(True)
 
         # Setup UI and pass the full name and shift name to be displayed
-        self.setup_ui(self, full_name, shift_name)
+        self.setup_ui(self, self.full_name, self.shift_name,self.due_amount)
 
         # Start the timer to update the time every second
         self.timer = QTimer(self)
@@ -104,7 +108,14 @@ class MainWindow(QWidget, MainWindowUI):
 
     def stop_inactivity_timer(self):
         """Stop the inactivity timer."""
+        self.remaining_time = self.inactivity_timer.remainingTime()
+        # print(f"Inactivity timer stoped. {self.remaining_time}")
         self.inactivity_timer.stop()
+
+    def resume_inactivity_timer(self):
+        # Resume the inactivity timer from where it left off
+        # print("Inactivity timer resumed.")
+        self.start_inactivity_timer()
 
     def logout(self):
         """Handle the logout action."""
@@ -237,47 +248,66 @@ class MainWindow(QWidget, MainWindowUI):
 
     def open_registration_window(self):
         """Open the internal registration pop-up window."""
+        self.stop_inactivity_timer()
         self.registration_window = InternalRegistrationWindow()
+        self.registration_window.finished.connect(self.resume_inactivity_timer)
         self.registration_window.show()
 
     def open_external_registration_window(self):
         """Open the external registration pop-up window."""
+        self.stop_inactivity_timer()
         self.external_registration_window = ExternalRegistrationWindow()
+        self.external_registration_window.finished.connect(self.resume_inactivity_timer)
         self.external_registration_window.show()
     
     def open_report_window(self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = ReportWindow()
-        self.external_registration_window.show()
+        self.stop_inactivity_timer()
+        self.report_window = ReportWindow(self)
+        self.report_window.show()
     
     def open_shift_timing_window(self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = ShiftTimingWindow()
-        self.external_registration_window.show()
+        self.stop_inactivity_timer()
+        self.shift_timing_window = ShiftTimingWindow()
+        self.shift_timing_window.finished.connect(self.resume_inactivity_timer)
+        self.shift_timing_window.show()
     
     def open_do_maintenance_window(self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = DoMaintenanceWindow()
-        self.external_registration_window.show()
+        self.stop_inactivity_timer()
+        self.do_maintenance_window = DoMaintenanceWindow()
+        self.do_maintenance_window.finished.connect(self.resume_inactivity_timer)
+        self.do_maintenance_window.show()
 
     def open_create_user_window (self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = AuthUserWindow()
-        self.external_registration_window.show()  
+        self.stop_inactivity_timer()
+        self.create_user_window = AuthUserWindow()
+        self.create_user_window.finished.connect(self.resume_inactivity_timer)
+        self.create_user_window.show()  
 
     def open_change_password_window (self):
         """Open the external registration pop-up window."""
+        self.stop_inactivity_timer()
         self.change_password_window = ChangePasswordWindow()
+        self.change_password_window.finished.connect(self.resume_inactivity_timer)
         self.change_password_window.show()
 
     def open_block_user_window (self):
         """Open the external registration pop-up window."""
-        self.external_registration_window = ChangePasswordWindowBlock()
-        self.external_registration_window.show()
+        self.stop_inactivity_timer()
+        self.change_password_window = ChangePasswordWindowBlock()
+        self.change_password_window.finished.connect(self.resume_inactivity_timer)
+        self.change_password_window.show()
 
     def update_time(self):
         """Update the time label with the current time."""
         self.time_label.setText(datetime.now().strftime("%H:%M:%S"))
+        shift_name=fetch_shift_name()
+        self.shift_label.setText(shift_name)
+        due=fetch_due_amount()
+        self.id_label.setText(due)
 
     def mousePressEvent(self, event):
         """Handle mouse press events."""

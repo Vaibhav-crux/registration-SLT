@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtCore import QTime
 from datetime import datetime, timedelta
 # Import the mode utility functions
-from app.utils.mode_utils import apply_mode_styles, apply_window_flags
+from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
 # Import the UI setup function
@@ -10,6 +10,8 @@ from app.ui.utilities.shiftTiming.shift_timing_ui import setup_ui
 # Import the controllers for fetching and updating shift timings
 from app.controllers.utilities.shiftTiming.fetch_shift_timing import get_shift_timings
 from app.controllers.utilities.shiftTiming.insert_shift_timing import update_shift_timing
+
+dark_mode=is_dark_mode()
 
 class ShiftTimingWindow(QDialog):
     def __init__(self):
@@ -64,15 +66,39 @@ class ShiftTimingWindow(QDialog):
 
             # Validate that the time difference between from_time and to_time is 8 hours
             if not self.time_difference_is_valid(from_time, to_time):
-                QMessageBox.critical(self, "Invalid Time Difference","The time difference for shifts must be exactly 8 hours.")
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Critical)
+                msg_box.setText("The time difference for shifts must be exactly 8 hours.")
+                msg_box.setWindowTitle("Invalid Time Difference")
+                if dark_mode:
+                    msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
+                msg_box.exec_()
+                # QMessageBox.Critical(self, "Invalid Time Difference","The time difference for shifts must be exactly 8 hours.")
                 return
 
             # Update the database with the new values if the validation passes
             success = update_shift_timing(shift_name, from_time, to_time)
 
             if not success:
-                QMessageBox.critical(self, "Error", f"Failed to update {shift_name}. Please try again.")
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Critical)
+                msg_box.setText(f"Failed to update {shift_name}. Please try again.")
+                msg_box.setWindowTitle("Error")
+                if dark_mode:
+                    msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+                    set_dark_mode_title_bar(msg_box)
+                msg_box.exec_()
+                # QMessageBox.Critical(self, "Error", f"Failed to update {shift_name}. Please try again.")
                 return
 
         # Show success message
-        QMessageBox.information(self, "Success", "Shift timings updated successfully!")
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText("Shift timings updated successfully!")
+        msg_box.setWindowTitle("Success")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.exec_()
+        # QMessageBox.Information(self, "Success", "Shift timings updated successfully!")

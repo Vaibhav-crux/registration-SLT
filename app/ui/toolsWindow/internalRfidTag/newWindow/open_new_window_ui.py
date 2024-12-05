@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QComboBox, QMessageBox
-from app.utils.mode_utils import apply_mode_styles, is_dark_mode
+from app.utils.mode_utils import apply_mode_styles, is_dark_mode,set_dark_mode_title_bar
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
 from app.style.disabled_styles import disabled_style
 from app.services.tools.internalRegistration.newServices.checkbox_status_service import update_due_checkbox_status
@@ -12,6 +12,8 @@ from app.utils.random_string_generator import generate_sales_order_no, generate_
 from app.controllers.tools.internalRegistration.save_into_alloted_tag import save_alloted_tag
 from app.controllers.tools.internalRegistration.save_into_registration import save_vehicle_registration
 from datetime import datetime
+from app.utils.cursor.entry_box import MyLineEdit
+from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
 
 # Define constants
 TOTAL_AMOUNT_LABEL = "Total Amount"
@@ -20,11 +22,12 @@ PAID_STATUS = "Paid"
 NOT_PAID_STATUS = "Not Paid"
 RFID_DETAILS_FILE = "rfid_details.html"
 
+dark_mode = is_dark_mode()
+
 def setup_new_window_ui(window, data):
     apply_mode_styles(window)
     layout = QVBoxLayout()
 
-    dark_mode = is_dark_mode()
     base_style = dark_mode_style if dark_mode else light_mode_style
 
     # Add details to layout
@@ -66,7 +69,7 @@ def add_label_and_value(window, layout, label_text, value, base_style, fixed_wid
     label.setStyleSheet("font-size: 14px; font-weight: bold;")
     hbox.addWidget(label)
 
-    value_widget = QLineEdit(window)
+    value_widget = MyLineEdit(window)
     value_widget.setText(value)
     value_widget.setReadOnly(True)
     value_widget.setFixedWidth(fixed_width)
@@ -81,12 +84,14 @@ def add_total_amount(layout, vehicle_type, base_style):
     return total_amount
 
 
-def add_payment_mode_with_due(layout, window, base_style, fixed_width=230):
+def add_payment_mode_with_due(layout, window, base_style, fixed_width=243):
     hbox = QHBoxLayout()
     label = QLabel("Payment Mode:", window)
     label.setAlignment(Qt.AlignLeft)
     label.setStyleSheet("font-size: 14px; font-weight: bold;")
     hbox.addWidget(label)
+
+    hbox.addSpacing(15) 
 
     combo_box = QComboBox(window)
     combo_box.addItems(["Cash", "UPI"])
@@ -135,19 +140,34 @@ def add_buttons(window, layout, combo_box, due_checkbox, total_amount, data):
 
 def on_confirm_clicked(window, combo_box, due_checkbox, total_amount, data):
     payment_mode = combo_box.currentText()
-    
-    if payment_mode == "Cash" or (payment_mode == "UPI" and due_checkbox.isChecked()):
-        # Show confirmation message box for Cash or UPI with Due
-        if show_confirmation_messagebox(window):
-            handle_confirm_click(window, payment_mode, due_checkbox.isChecked(), total_amount, data)
-    else:
-        # For UPI without Due, skip HTML generation and open the UPI payment dialog
-        show_upi_payment_dialog(window, total_amount, data)
+
+    rfid_data = fetch_vehicle_registration_data(data.get("rfid_tag"))
+
+    if rfid_data:
+        msg_box = QMessageBox(window)
+        msg_box.setIcon(QMessageBox.Information)
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
+        msg_box.setText("Payment already done.")
+        msg_box.setWindowTitle("Duplicate Record Detected")
+        msg_box.exec_()
+    else:    
+        if payment_mode == "Cash" or (payment_mode == "UPI" and due_checkbox.isChecked()):
+            # Show confirmation message box for Cash or UPI with Due
+            if show_confirmation_messagebox(window):
+                handle_confirm_click(window, payment_mode, due_checkbox.isChecked(), total_amount, data)
+        else:
+            # For UPI without Due, skip HTML generation and open the UPI payment dialog
+            show_upi_payment_dialog(window, total_amount, data)
 
 
 def show_confirmation_messagebox(window):
     msg_box = QMessageBox(window)
     msg_box.setIcon(QMessageBox.Question)
+    if dark_mode:
+        msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+        set_dark_mode_title_bar(msg_box)
     msg_box.setText("Are you sure you want to proceed with this payment?")
     msg_box.setWindowTitle("Confirm Payment")
     msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -189,6 +209,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         salesType=full_data["SALES TYPE"],
         quantity="1",
         total=full_data["TOTAL"],
+        due=True if due_checked else False,
         blacklisted=False
     )
 
@@ -215,7 +236,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         )
 
         # Generate HTML receipt
-        generate_html(full_data, RFID_DETAILS_FILE)
+        generate_html(full_data, False, RFID_DETAILS_FILE)
 
         # Show payment receipt window if a new record was saved
         if payment_mode == "Cash" or (payment_mode == "UPI" and due_checked):
@@ -228,4 +249,7 @@ def handle_confirm_click(window, payment_mode, due_checked, total_amount, data):
         msg_box.setIcon(QMessageBox.Information)
         msg_box.setText("Record already exists. No duplicate entries allowed.")
         msg_box.setWindowTitle("Duplicate Record Detected")
+        if dark_mode:
+            msg_box.setStyleSheet("background-color: #2e2e2e; color: white;")
+            set_dark_mode_title_bar(msg_box)
         msg_box.exec_()

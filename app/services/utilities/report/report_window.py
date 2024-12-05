@@ -6,8 +6,8 @@ from app.style.default_styles import dark_mode_style, light_mode_style
 from app.style.report_button_style import button_style, clicked_button_style  # Import both styles
 
 class ReportWindow(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 800, 600)  # Set the size of the window
 
@@ -64,3 +64,11 @@ class ReportWindow(QWidget):
             self.findChild(QFrame).setStyleSheet("background-color: #5D76A9;")  # Dark gray for dark mode
         else:
             self.findChild(QFrame).setStyleSheet("background-color: #f0f0f0;")  # Light gray for light mode
+
+    def closeEvent(self, event):
+        """Override closeEvent to resume the inactivity timer."""
+        # Call the parent method to close the window properly
+        super().closeEvent(event)
+
+        # Resume the inactivity timer when the window is closed
+        self.parent().resume_inactivity_timer()

@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from app.utils.cursor.entry_box import MyLineEdit
 from app.utils.mode_utils import is_dark_mode
 from app.style.default_styles import dark_mode_style, light_mode_style, button_style
+from app.controllers.mainWindow.fetch_user_full_name import get_username_from_file
 
 def setup_ui(window):
     """
@@ -37,6 +38,7 @@ def setup_ui(window):
     user_name.setFixedWidth(300)
     user_name.setStyleSheet(common_textbox_style)
     user_name.setObjectName("user_name")  # Set object name for later retrieval
+    user_name.setText(get_username_from_file())
     add_field(main_layout, "User Name:", user_name)
 
     # Password Field (with hidden characters)
