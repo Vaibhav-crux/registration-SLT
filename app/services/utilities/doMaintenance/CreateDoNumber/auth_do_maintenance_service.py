@@ -11,7 +11,7 @@ class AuthDoMaintenanceWindow(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Create DO Number")
         self.setGeometry(200, 200, 400, 200)
-        self.parent_window = parent
+        self.parent = parent
 
         apply_mode_styles(self)
 
@@ -31,7 +31,7 @@ class AuthDoMaintenanceWindow(QDialog):
         password = self.password_input.text()
 
         if not user_name or not password:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Critical)
             msg_box.setText("Both User Name and Password fields are required.")
             msg_box.setWindowTitle("Input Error")
@@ -44,10 +44,10 @@ class AuthDoMaintenanceWindow(QDialog):
 
         if check_user_credentials(user_name, password):            
             self.close()
-            create_do_window = CreateDoMaintenanceWindow(parent=self.parent_window)
+            create_do_window = CreateDoMaintenanceWindow(self.parent)
             create_do_window.show()
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Critical)
             msg_box.setText("Invalid User Name or Password.")
             msg_box.setWindowTitle("Authentication Failed")

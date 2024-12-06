@@ -26,6 +26,7 @@ class DeleteDoNumberWindow(QDialog):
         apply_window_flags(self)
         apply_mode_styles(self)
         self.do_number = do_number
+        self.parent=parent
 
         # Initialize the UI components
         self.init_ui()
@@ -106,7 +107,7 @@ class DeleteDoNumberWindow(QDialog):
         success, message = DeleteDoNumberService.delete_do_number(self.do_number, username, password)
 
         if success:
-            msg_box = QMessageBox(self)
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Information)
             msg_box.setText(message)
             msg_box.setWindowTitle("Success")
@@ -117,7 +118,7 @@ class DeleteDoNumberWindow(QDialog):
             # QMessageBox.Information(self, "Success", message)
             self.accept()
         else:
-            msg_box = QMessageBox(self)
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText(message)
             msg_box.setWindowTitle("Error")

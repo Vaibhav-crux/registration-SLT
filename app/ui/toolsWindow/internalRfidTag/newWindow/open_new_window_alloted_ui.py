@@ -15,6 +15,7 @@ from datetime import datetime
 from app.utils.cursor.entry_box import MyLineEdit
 from app.controllers.tools.internalRegistration.alloted_tag_controller import get_alloted_tag
 from app.controllers.tools.internalRegistration.vehicle_registration_controller import fetch_vehicle_registration_data
+import pytz
 
 # Define constants
 TOTAL_AMOUNT_LABEL = "Total Amount"
@@ -25,7 +26,7 @@ RFID_DETAILS_FILE = "rfid_details.html"
 
 dark_mode = is_dark_mode()
 
-def setup_new_window_alloted_ui(window, data):
+def setup_new_window_alloted_ui(window, data,parent):
     apply_mode_styles(window)
     layout = QVBoxLayout()
 
@@ -179,12 +180,13 @@ def show_confirmation_messagebox(window):
     return msg_box.exec_() == QMessageBox.Yes
 
 def handle_confirm_click(window, data):
+    timezone = pytz.timezone("Asia/Kolkata")
     full_data = data.copy()
     # full_data["SALES ORDER NO."] = generate_sales_order_no()
     # full_data["TRANSACTION ID"] = generate_transaction_id(data.get("vehicle_no", ""))
     full_data["User id"] = "VAIBHAV"
-    full_data["Create date"] = datetime.now().strftime("%d-%m-%Y")
-    full_data["Create Time"] = datetime.now().strftime("%H:%M:%S HRS")
+    full_data["Create date"] = datetime.now(timezone).strftime("%d-%m-%Y")
+    full_data["Create Time"] = datetime.now(timezone).strftime("%H:%M:%S HRS")
     full_data["BARRIER GATE"] = "NCL BINA PROJECT MAIN BARRIER"
     full_data["SALES TYPE"] = "RFID ALLOCATION"
     full_data["RFID EPC"] = data.get("rfid_tag", "")

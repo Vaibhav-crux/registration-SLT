@@ -12,6 +12,7 @@ from datetime import datetime
 from app.style.default_styles import button_style
 # Import the frame utility functions
 from app.utils.frame_utils import apply_drop_shadow, center_window
+import pytz
 
 def setup_upi_payment_ui(dialog, total_amount, data):
     layout = QVBoxLayout()
@@ -65,13 +66,14 @@ def setup_upi_payment_ui(dialog, total_amount, data):
     center_window(dialog)
 
 def on_confirm_click(dialog, total_amount, data):
+    timezone = pytz.timezone("Asia/Kolkata")
     # Prepare full data with the necessary keys
     full_data = data.copy()
     full_data["SALES ORDER NO."] = full_data.get("SALES ORDER NO.", generate_sales_order_no())
     full_data["TRANSACTION ID"] = full_data.get("TRANSACTION ID", generate_transaction_id(data.get("vehicle_no", "")))
     full_data["User id"] = "VAIBHAV"  # Assuming a static user id
-    full_data["Create date"] = datetime.now().strftime("%d-%m-%Y")
-    full_data["Create Time"] = datetime.now().strftime("%H:%M:%S HRS")
+    full_data["Create date"] = datetime.now(timezone).strftime("%d-%m-%Y")
+    full_data["Create Time"] = datetime.now(timezone).strftime("%H:%M:%S HRS")
     full_data["BARRIER GATE"] = "NCL BINA PROJECT MAIN BARRIER"
     full_data["SALES TYPE"] = "RFID ALLOCATION"
     full_data["RFID EPC"] = data.get("rfid_tag", "")

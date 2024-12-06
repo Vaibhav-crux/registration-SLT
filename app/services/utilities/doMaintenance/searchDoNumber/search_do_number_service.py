@@ -7,8 +7,8 @@ from app.controllers.utilities.doMaintenance.fetch_do_details_controller import 
 from app.utils.mode_utils import apply_mode_styles
 
 class SearchDoNumberService(QDialog):  
-    def __init__(self, result):
-        super().__init__()  
+    def __init__(self, result,parent=None):
+        super().__init__(parent)  
         self.setWindowTitle("DO Number Details")
 
         # Set the width and height of the window

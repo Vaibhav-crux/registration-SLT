@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt, QPoint
 import os
 from datetime import datetime
 import calendar
+import pytz
 
 
 class MainWindowUI:
@@ -18,11 +19,12 @@ class MainWindowUI:
         window.info_frame.setGeometry(window.width() - 380, 100, 350, 360)
 
         # Fetch the current date and day
-        current_date = datetime.now().strftime("%d-%m-%Y")
-        current_day = calendar.day_name[datetime.now().weekday()]
+        timezone = pytz.timezone("Asia/Kolkata")
+        current_date = datetime.now(timezone).strftime("%d-%m-%Y")
+        current_day = calendar.day_name[datetime.now(timezone).weekday()]
 
         # Create labels for time, date, day, and shift information
-        window.time_label = QLabel(datetime.now().strftime("%H:%M:%S"), window.info_frame)
+        window.time_label = QLabel(datetime.now(timezone).strftime("%H:%M:%S"), window.info_frame)
         window.date_label = QLabel(current_date, window.info_frame)
         window.day_label = QLabel(current_day, window.info_frame)
         window.user_label = QLabel(full_name, window.info_frame)  # Display the full name passed from the controller
@@ -130,16 +132,18 @@ class MainWindowUI:
 
         # Bottom-right image
         window.bottom_right_image = QLabel(window)
-        bottom_right_pixmap = QPixmap("app/images/processed/logo.png").scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        bottom_right_pixmap = QPixmap("app/images/processed/logo.png").scaled(350, 360, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         window.bottom_right_image.setPixmap(bottom_right_pixmap)
+        window.bottom_right_image.setAlignment(Qt.AlignCenter)
 
         # Set the geometry of the image to place it at the bottom-right corner with the correct size
-        window.bottom_right_image.setGeometry(window.width() - 20, window.height() - 170, 150, 150)
+        window.bottom_right_image.setGeometry(window.width() - 380, window.height() - 360 - 20, 350, 360)
 
         # Add a background and a border to make it stand out
         window.bottom_right_image.setStyleSheet("""
             QLabel {
                 background-color: rgba(255, 255, 255, 50);  /* Light translucent background */
+                border-radius: 15px;
             }
         """)
 

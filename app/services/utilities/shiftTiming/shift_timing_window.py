@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from PyQt5.QtCore import QTime
+from PyQt5.QtCore import QTime,Qt
 from datetime import datetime, timedelta
 # Import the mode utility functions
 from app.utils.mode_utils import apply_mode_styles, apply_window_flags,is_dark_mode,set_dark_mode_title_bar
@@ -14,9 +14,10 @@ from app.controllers.utilities.shiftTiming.insert_shift_timing import update_shi
 dark_mode=is_dark_mode()
 
 class ShiftTimingWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Shift Timing")
+        self.parent=parent
         
         # Adjust the width and height of the window
         self.setGeometry(100, 100, 500, 250)  # Increase width, decrease height
@@ -66,7 +67,7 @@ class ShiftTimingWindow(QDialog):
 
             # Validate that the time difference between from_time and to_time is 8 hours
             if not self.time_difference_is_valid(from_time, to_time):
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(self.parent)
                 msg_box.setIcon(QMessageBox.Critical)
                 msg_box.setText("The time difference for shifts must be exactly 8 hours.")
                 msg_box.setWindowTitle("Invalid Time Difference")
@@ -81,7 +82,7 @@ class ShiftTimingWindow(QDialog):
             success = update_shift_timing(shift_name, from_time, to_time)
 
             if not success:
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(self.parent)
                 msg_box.setIcon(QMessageBox.Critical)
                 msg_box.setText(f"Failed to update {shift_name}. Please try again.")
                 msg_box.setWindowTitle("Error")
@@ -93,7 +94,7 @@ class ShiftTimingWindow(QDialog):
                 return
 
         # Show success message
-        msg_box = QMessageBox()
+        msg_box = QMessageBox(self.parent)
         msg_box.setIcon(QMessageBox.Information)
         msg_box.setText("Shift timings updated successfully!")
         msg_box.setWindowTitle("Success")

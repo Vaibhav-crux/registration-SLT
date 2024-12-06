@@ -14,10 +14,11 @@ from app.controllers.tools.internalRegistration.update_registration_controller i
 dark_mode=is_dark_mode()
 
 class EditWindow(QDialog):
-    def __init__(self, data, enabled_fields):
-        super().__init__()
+    def __init__(self, data, enabled_fields,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Edit Registration")
         self.setGeometry(100, 100, 500, 400)
+        self.parent=parent
         
         apply_window_flags(self)
         apply_mode_styles(self)
@@ -36,7 +37,7 @@ class EditWindow(QDialog):
         success, message = update_vehicle_registration(self.data, self.fields)
         
         if success:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Information)
             msg_box.setText(message)
             msg_box.setWindowTitle("Success")
@@ -47,7 +48,7 @@ class EditWindow(QDialog):
             # QMessageBox.Information(self, "Success", message)
             self.accept()
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Critical)
             msg_box.setText(message)
             msg_box.setWindowTitle("Error")
@@ -58,7 +59,7 @@ class EditWindow(QDialog):
             # QMessageBox.Critical(self, "Error", message)
 
 
-def open_edit_window(data, vehicle_type):
+def open_edit_window(data, vehicle_type,parent=None):
     fields = {
         "driver_owner": MyLineEdit(),
         "visit_purpose": MyLineEdit(),
@@ -70,5 +71,5 @@ def open_edit_window(data, vehicle_type):
     update_edit_fields_write_access(vehicle_type, fields)
     enabled_fields = [key for key, field in fields.items() if field.isEnabled()]
 
-    dialog = EditWindow(data, enabled_fields)
+    dialog = EditWindow(data, enabled_fields,parent)
     dialog.exec_()

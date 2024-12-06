@@ -18,15 +18,16 @@ from datetime import datetime
 from app.utils.cursor.entry_box import MyLineEdit
 
 class ExternalRegistrationWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("External Registration")
         self.setGeometry(100, 100, 400, 500)
         apply_window_flags(self)
         apply_mode_styles(self)
         center_window(self)
         apply_drop_shadow(self)
-        setup_ui(self)  # Set up UI and initialize widgets
+        self.parent=parent
+        setup_ui(self,self.parent)  # Set up UI and initialize widgets
 
         # Assign references to widgets using findChild
         self.rfid_tag = self.findChild(MyLineEdit, "rfid_tag")

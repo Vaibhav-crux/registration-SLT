@@ -19,7 +19,7 @@ from app.services.tools.internalRegistration.update_fields_write_access import c
 from app.controllers.tools.internalRegistration.alloted_tag_controller import get_alloted_tag
 from app.services.tools.internalRegistration.newServices.open_new_window_alloted_service import open_new_alloted_window
 
-def create_button_layout(window, fields):
+def create_button_layout(window, fields,parent):
     """
     Creates and returns a layout containing the 'New', 'Edit', 'Delete', and 'Clear' buttons.
     :param window: The QDialog window to set up the buttons on.
@@ -102,7 +102,7 @@ def create_button_layout(window, fields):
         vehicle_no = fields["vehicle_no"].text()
 
         if not check_null_fields(fields["vehicle_type"].currentText(),fields):
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please input all necessary fields.")
             msg_box.setWindowTitle("Warning")
@@ -123,10 +123,10 @@ def create_button_layout(window, fields):
                         field.currentText() if isinstance(field, QComboBox) else
                         field.date().toString("yyyy-MM-dd"))
                     for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
-                })
+                },parent)
             # Check if RFID tag exists
             elif alloted_tag and rfid_data:
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(parent)
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText("RFID tag already registered.")
                 msg_box.setWindowTitle("Warning")
@@ -140,7 +140,7 @@ def create_button_layout(window, fields):
                         field.currentText() if isinstance(field, QComboBox) else
                         field.date().toString("yyyy-MM-dd"))
                     for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
-                })
+                },parent)
 
     # Function to handle "Delete" button click
     def handle_delete_button():
@@ -153,7 +153,7 @@ def create_button_layout(window, fields):
 
         # Check if both RFID tag and vehicle number exist
         if rfid_data and vehicle_data:
-            open_delete_window(rfid_tag, vehicle_no)
+            open_delete_window(rfid_tag, vehicle_no,parent)
             rfid_data = fetch_vehicle_registration_data(rfid_tag)
 
             if not rfid_data:
@@ -169,7 +169,7 @@ def create_button_layout(window, fields):
                 
                 window.status_label.setText("Status: Please Enter Vehicle Number or RFID Tag")
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("The provided RFID tag or Vehicle No is not registered.")
             msg_box.setWindowTitle("Warning")
@@ -203,9 +203,9 @@ def create_button_layout(window, fields):
 
         if rfid_data and vehicle_data:
             # Open the edit window with the complete data dictionary
-            open_edit_window(data, vehicle_type)
+            open_edit_window(data, vehicle_type,parent)
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("The provided RFID tag or Vehicle No is not registered.")
             msg_box.setWindowTitle("Warning")

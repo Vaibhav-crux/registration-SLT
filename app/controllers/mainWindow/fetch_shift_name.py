@@ -2,6 +2,7 @@ from datetime import datetime, time
 from sqlalchemy import or_, and_
 from app.config.refreshSession import create_session
 from app.models.shiftTiming import ShiftTiming
+import pytz
 
 def fetch_shift_name():
     """Fetch the shift name based on the current time."""
@@ -9,7 +10,8 @@ def fetch_shift_name():
 
     try:
         # Get the current time
-        now = datetime.now().time()
+        timezone = pytz.timezone("Asia/Kolkata")
+        now = datetime.now(timezone).time()
 
         # Query the database to find the current shift
         # For shifts that cross midnight, we need to handle the range properly

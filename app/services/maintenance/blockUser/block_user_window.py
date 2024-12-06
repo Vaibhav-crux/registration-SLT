@@ -13,10 +13,11 @@ from app.utils.cursor.entry_box import MyLineEdit
 dark_mode=is_dark_mode()
 
 class BlockUserWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Blacklist User")
         self.setGeometry(100, 100, 400, 300)
+        self.parent=parent
 
         # Apply utility functions
         apply_window_flags(self)
@@ -48,7 +49,7 @@ class BlockUserWindow(QDialog):
 
         # Show the appropriate message box
         if success:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Information)
             msg_box.setText(message)
             msg_box.setWindowTitle("Success")
@@ -58,7 +59,7 @@ class BlockUserWindow(QDialog):
             msg_box.exec_()
             # QMessageBox.Information(self, "Success", message)
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText(message)
             msg_box.setWindowTitle("Error")
