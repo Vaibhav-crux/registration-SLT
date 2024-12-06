@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import QVBoxLayout, QLabel, QFrame, QLineEdit, QPushButton, QHBoxLayout
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from app.utils.frame_utils import apply_drop_shadow
+from datetime import datetime
+import pytz
 
 class LoginWindowUI:
     def __init__(self, parent):
@@ -13,6 +15,8 @@ class LoginWindowUI:
     def setup_ui(self):
         # Create the floating card
         self.create_floating_card()
+
+        self.create_info_frame()
 
     def create_floating_card(self):
         # Create a frame that will act as the floating card
@@ -64,7 +68,7 @@ class LoginWindowUI:
 
         # Load the logo image and add it as a QLabel
         self.logo = QLabel(self.frame)
-        logo_pixmap = QPixmap("app/images/processed/logo.png").scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        logo_pixmap = QPixmap("app/images/processed/logo.png").scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.logo.setPixmap(logo_pixmap)
         self.logo.setAlignment(Qt.AlignCenter)
 
@@ -122,6 +126,48 @@ class LoginWindowUI:
         input_layout.addWidget(self.submit_button)
 
         layout.addLayout(input_layout)
+
+    def create_info_frame(self):
+        self.info_frame = QFrame(self.parent)
+        self.info_frame.setFixedSize(220, 180)
+        self.info_frame.setStyleSheet("background-color: rgba(255, 255, 255, 50); border-radius: 15px;")
+
+        self.time_label = QLabel()
+        self.time_label.setFont(QFont("Roboto", 16, QFont.Bold))
+        self.time_label.setStyleSheet("padding: 5px;")
+        self.time_label.setAlignment(Qt.AlignLeft)
+
+        self.date_label = QLabel()
+        self.date_label.setFont(QFont("Roboto", 16, QFont.Bold))
+        self.date_label.setStyleSheet("padding: 5px;")
+        self.date_label.setAlignment(Qt.AlignLeft)
+
+        self.day_label = QLabel()
+        self.day_label.setFont(QFont("Roboto", 16, QFont.Bold))
+        self.day_label.setStyleSheet("padding: 5px;")
+        self.day_label.setAlignment(Qt.AlignLeft)
+
+        vbox = QVBoxLayout(self.info_frame)
+        vbox.addWidget(self.time_label)
+        vbox.addWidget(self.date_label)
+        vbox.addWidget(self.day_label)
+
+        self.info_frame.move(40, 40)
+
+        self.timer = QTimer(self.parent)
+        self.timer.timeout.connect(self.update_time_and_date)
+        self.timer.start(1000)
+
+        self.update_time_and_date()
+
+    def update_time_and_date(self):
+        timezone = pytz.timezone("Asia/Kolkata")
+        current_time = datetime.now(timezone).strftime("%H:%M:%S")
+        current_date = datetime.now(timezone).strftime("%d-%m-%Y")
+        current_day = datetime.now(timezone).strftime("%A")
+        self.time_label.setText(current_time)
+        self.date_label.setText(current_date)
+        self.day_label.setText(current_day)
 
     def reposition_frame(self):
         right_offset = 350

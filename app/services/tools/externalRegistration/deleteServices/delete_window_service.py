@@ -13,10 +13,11 @@ from app.controllers.tools.internalRegistration.delete_registration_controller i
 dark_mode=is_dark_mode()
 
 class DeleteWindow(QDialog):
-    def __init__(self, rfid_tag, vehicle_no):
-        super().__init__()
+    def __init__(self, rfid_tag, vehicle_no,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Delete Confirmation")
         self.setGeometry(100, 100, 400, 300)
+        self.parent=parent
         
         # Apply window flags to remove the "?" and only show the close button
         apply_window_flags(self)
@@ -42,7 +43,7 @@ class DeleteWindow(QDialog):
         if user_id and password:
             if verify_user_credentials(user_id, password):
                 if delete_vehicle_registration(self.rfid_tag, self.vehicle_no):
-                    msg_box = QMessageBox()
+                    msg_box = QMessageBox(self.parent)
                     msg_box.setIcon(QMessageBox.Information)
                     msg_box.setText("Data has been deleted successfully.")
                     msg_box.setWindowTitle("Success")
@@ -52,7 +53,7 @@ class DeleteWindow(QDialog):
                     msg_box.exec_()
                     self.accept()
                 else:
-                    msg_box = QMessageBox()
+                    msg_box = QMessageBox(self.parent)
                     msg_box.setIcon(QMessageBox.Warning)
                     msg_box.setText("Failed to delete the data. Please try again.")
                     msg_box.setWindowTitle("Warning")
@@ -61,7 +62,7 @@ class DeleteWindow(QDialog):
                         set_dark_mode_title_bar(msg_box)
                     msg_box.exec_()
             else:
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(self.parent)
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText("Invalid User ID or Password.")
                 msg_box.setWindowTitle("Warning")
@@ -70,7 +71,7 @@ class DeleteWindow(QDialog):
                     set_dark_mode_title_bar(msg_box)
                 msg_box.exec_()
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please enter both User ID and Password.")
             msg_box.setWindowTitle("Warning")
@@ -79,6 +80,6 @@ class DeleteWindow(QDialog):
                 set_dark_mode_title_bar(msg_box)
             msg_box.exec_()
 
-def open_delete_window(rfid_tag, vehicle_no):
-    dialog = DeleteWindow(rfid_tag, vehicle_no)
+def open_delete_window(rfid_tag, vehicle_no,parent=None):
+    dialog = DeleteWindow(rfid_tag, vehicle_no,parent)
     dialog.exec_()

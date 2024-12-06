@@ -11,10 +11,11 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 dark_mode=is_dark_mode()
 
 class ChangePasswordWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Change Credentials")
         self.setGeometry(100, 100, 400, 300)
+        self.parent=parent
 
         # Apply utility functions
         apply_window_flags(self)
@@ -42,7 +43,7 @@ class ChangePasswordWindow(QDialog):
         exists, is_authorized = check_user_auth(username)
 
         if not exists:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("User not found.")
             msg_box.setWindowTitle("Error")
@@ -54,7 +55,7 @@ class ChangePasswordWindow(QDialog):
             return
 
         if not is_authorized:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("User is not authorized to change credentials.")
             msg_box.setWindowTitle("Error")
@@ -69,7 +70,7 @@ class ChangePasswordWindow(QDialog):
         self.close()
 
         # Open the AuthEditDetailsWindow with the username and password
-        self.auth_edit_details_window = AuthEditDetailsWindow(username)
+        self.auth_edit_details_window = AuthEditDetailsWindow(username,self.parent)
         self.auth_edit_details_window.exec_()
 
 

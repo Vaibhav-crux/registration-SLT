@@ -11,10 +11,11 @@ from app.services.maintenance.blockUser.block_user_window import BlockUserWindow
 dark_mode=is_dark_mode()
 
 class ChangePasswordWindowBlock(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Change Credentials")
         self.setGeometry(100, 100, 400, 300)
+        self.parent=parent
 
         # Apply utility functions
         apply_window_flags(self)
@@ -42,7 +43,7 @@ class ChangePasswordWindowBlock(QDialog):
         exists, is_authorized = check_user_auth(username)
 
         if not exists:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("User not found.")
             msg_box.setWindowTitle("Error")
@@ -54,7 +55,7 @@ class ChangePasswordWindowBlock(QDialog):
             return
 
         if not is_authorized:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("User is not authorized to change credentials.")
             msg_box.setWindowTitle("Error")
@@ -69,7 +70,7 @@ class ChangePasswordWindowBlock(QDialog):
         self.close()
         
         # Open the BlockUserWindow when credentials are correct
-        block_user_window = BlockUserWindow()
+        block_user_window = BlockUserWindow(self.parent)
         block_user_window.exec_()
 
 

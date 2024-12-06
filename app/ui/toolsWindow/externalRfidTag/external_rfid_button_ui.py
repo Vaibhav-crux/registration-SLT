@@ -11,7 +11,7 @@ from app.utils.cursor.entry_box import MyLineEdit
 
 dark_mode=is_dark_mode()
 
-def create_button_layout(window, fields):
+def create_button_layout(window, fields,parent):
     """
     Creates and returns a layout containing the 'New', 'Edit', 'Delete', and 'Clear' buttons.
     :param window: The QDialog window to set up the buttons on.
@@ -31,7 +31,7 @@ def create_button_layout(window, fields):
 
         # Check if RFID tag exists
         if rfid_data:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("RFID tag already registered.")
             msg_box.setWindowTitle("Warning")
@@ -45,7 +45,7 @@ def create_button_layout(window, fields):
                       field.currentText() if isinstance(field, QComboBox) else
                       field.date().toString("yyyy-MM-dd"))
                 for key, field in fields.items() if field.isEnabled()  # Collect only enabled fields
-            })
+            },parent)
 
     # Function to handle "Delete" button click
     def handle_delete_button():
@@ -58,9 +58,9 @@ def create_button_layout(window, fields):
 
         # Check if both RFID tag and vehicle number exist
         if rfid_data and vehicle_data:
-            open_delete_window(rfid_tag, vehicle_no)
+            open_delete_window(rfid_tag, vehicle_no,parent)
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("The provided RFID tag or Vehicle No is not registered.")
             msg_box.setWindowTitle("Warning")
@@ -89,7 +89,7 @@ def create_button_layout(window, fields):
         data["validity_till"] = fields["calendar"].date().toString("yyyy-MM-dd")
 
         # Open the edit window with the complete data dictionary
-        open_edit_window(data, vehicle_type)
+        open_edit_window(data, vehicle_type,parent)
 
 
 

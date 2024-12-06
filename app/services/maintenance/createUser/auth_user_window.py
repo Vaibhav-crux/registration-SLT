@@ -12,10 +12,11 @@ from app.utils.frame_utils import apply_drop_shadow, center_window
 dark_mode=is_dark_mode()
 
 class AuthUserWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Change Credentials")
+    def __init__(self,parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Authorize User")
         self.setGeometry(100, 100, 400, 300)
+        self.parent=parent
 
         # Apply utility functions
         apply_window_flags(self)
@@ -51,7 +52,7 @@ class AuthUserWindow(QDialog):
         password = self.password_input.text()
         
         if not username or not password:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText('Please enter both username and password.')
             msg_box.setWindowTitle('Input Error')
@@ -68,13 +69,13 @@ class AuthUserWindow(QDialog):
 
             if user:
                 # Open the CreateUserWindow
-                self.create_user_window = CreateUserWindow()
+                self.create_user_window = CreateUserWindow(self.parent)
                 self.create_user_window.show()
                 
                 # Close the AuthUserWindow
                 self.close()
             else:
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(self.parent)
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText('Invalid username or password.')
                 msg_box.setWindowTitle('Login Failed')
@@ -85,7 +86,7 @@ class AuthUserWindow(QDialog):
 
                 # QMessageBox.Warning(self, 'Login Failed', 'Invalid username or password.')
         except Exception as e:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText(f'An error occurred: {str(e)}')
             msg_box.setWindowTitle("Error")

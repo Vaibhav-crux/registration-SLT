@@ -13,7 +13,7 @@ from app.controllers.tools.internalRegistration.do_no_controller import fetch_do
 # Import custom date entry box with specific settings
 from app.utils.cursor.entry_box import MyDateEdit,MyLineEdit
 
-def setup_ui(window):
+def setup_ui(window,parent):
     """
     Set up the UI layout for the InternalRegistrationWindow with additional fields and buttons.
     :param window: The QDialog window to set up the UI on.
@@ -123,7 +123,7 @@ def setup_ui(window):
 
     # Add status frame and button layout to main layout
     main_layout.addWidget(status_frame)
-    main_layout.addLayout(create_button_layout(window, fields))
+    main_layout.addLayout(create_button_layout(window, fields,parent))
 
     # Set the main layout on the window
     window.setLayout(main_layout)

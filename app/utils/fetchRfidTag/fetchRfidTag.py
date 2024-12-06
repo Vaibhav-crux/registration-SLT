@@ -5,7 +5,8 @@ def open_com_port():
     # Load the DLL
     global basic_dll
     try:
-        basic_dll = ctypes.CDLL('C:/Windows/SysWOW64/Basic.dll')
+        # basic_dll = ctypes.CDLL('C:/Windows/SysWOW64/Basic.dll')
+        basic_dll = ctypes.CDLL('D:/Starlabs/rfid-dll/Basic.dll')
     except OSError as e:
         print(f"Error loading DLL: {e}")
         return "00000000000000000000000"

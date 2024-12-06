@@ -11,9 +11,10 @@ from app.controllers.mainWindow.fetch_user_full_name import get_username_from_fi
 dark_mode=is_dark_mode()
 
 class AuthEditDetailsWindow(QDialog):
-    def __init__(self, username):
-        super().__init__()
+    def __init__(self, username,parent=None):
+        super().__init__(parent)
         self.username = username
+        self.parent=parent
 
         # Set up the UI
         setup_ui(self)
@@ -53,9 +54,9 @@ class AuthEditDetailsWindow(QDialog):
         user = check_user_credentials(new_username)
         if user:
             # Open the EditUserDetailsWindow with the user object
-            edit_window = EditUserDetailsWindow(user)
+            edit_window = EditUserDetailsWindow(user,self.parent)
             if edit_window.exec_() != QDialog.Accepted:
-                msg_box = QMessageBox()
+                msg_box = QMessageBox(self.parent)
                 msg_box.setIcon(QMessageBox.Warning)
                 msg_box.setText("User detail update was cancelled.")
                 msg_box.setWindowTitle("Error")
@@ -67,7 +68,7 @@ class AuthEditDetailsWindow(QDialog):
 
         else:
             # User credentials are incorrect
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("User does not exist.")
             msg_box.setWindowTitle("Error")

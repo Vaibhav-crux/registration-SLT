@@ -9,12 +9,13 @@ from app.controllers.maintenance.passwordChange.save_updated_details import upda
 dark_mode=is_dark_mode()
 
 class EditUserDetailsWindow(QDialog):
-    def __init__(self, user):
-        super().__init__()
+    def __init__(self, user,parent=None):
+        super().__init__(parent)
         self.user = user
 
         # Set the fixed size of the window
         self.setFixedSize(500, 400)
+        self.parent=parent
 
         # Set up the UI
         setup_ui(self)
@@ -70,7 +71,7 @@ class EditUserDetailsWindow(QDialog):
         success, message = update_user_details(self.user.id, password, fullname, email, mobile, address)
 
         if success:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Information)
             msg_box.setText(message)
             msg_box.setWindowTitle("Success")
@@ -81,7 +82,7 @@ class EditUserDetailsWindow(QDialog):
             # QMessageBox.Information(self, "Success", message)
             # self.accept()
         else:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText(message)
             msg_box.setWindowTitle("Error")

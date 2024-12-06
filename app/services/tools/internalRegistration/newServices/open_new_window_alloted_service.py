@@ -4,24 +4,24 @@ from app.utils.frame_utils import center_window
 from app.utils.mode_utils import apply_mode_styles
 
 class NewWindow(QDialog):
-    def __init__(self, data):
-        super().__init__()
+    def __init__(self, data,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("RFID Details")
         self.setGeometry(150, 150, 400, 500)
 
 
         # Set up the UI
-        setup_new_window_alloted_ui(self, data)
+        setup_new_window_alloted_ui(self, data,parent)
         apply_mode_styles(self)
 
         # Center the window using frame_utils
         center_window(self)
 
-def open_new_alloted_window(data):
+def open_new_alloted_window(data,parent=None):
     """
     Opens a new window displaying the provided data.
 
     :param data: A dictionary with details to display in the new window.
     """
-    new_window = NewWindow(data)
+    new_window = NewWindow(data,parent)
     new_window.exec_()

@@ -15,10 +15,11 @@ dark_mode=is_dark_mode()
 
 input_error = "Input Error"
 class CreateUserWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Create User")
         self.setGeometry(100, 100, 400, 500)
+        self.parent=parent
 
         # Apply window flags to remove the "?" and only show the close button
         apply_window_flags(self)
@@ -66,7 +67,7 @@ class CreateUserWindow(QDialog):
 
         # Validate essential fields
         if not username or not password or not full_name or not designation:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please ensure username, password, designation and full name are filled out.")
             msg_box.setWindowTitle('Input Error')
@@ -79,7 +80,7 @@ class CreateUserWindow(QDialog):
 
         # Validate mobile number for 10 digits
         if len(mobile_number) != 10 or not mobile_number.isdigit():
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please enter a valid 10-digit mobile number.")
             msg_box.setWindowTitle('Input Error')
@@ -105,7 +106,7 @@ class CreateUserWindow(QDialog):
         )
 
         # Display message to the user
-        msg_box = QMessageBox()
+        msg_box = QMessageBox(self.parent)
         msg_box.setIcon(QMessageBox.Information)
         msg_box.setText(message)
         msg_box.setWindowTitle('Result')
@@ -126,7 +127,7 @@ class CreateUserWindow(QDialog):
     def delete_user(self):
         username = self.user_name.text()
         if not username:
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Warning)
             msg_box.setText("Please enter a username to delete.")
             msg_box.setWindowTitle('Input Error')
@@ -138,7 +139,7 @@ class CreateUserWindow(QDialog):
             return
 
         # Confirm deletion
-        msg_box = QMessageBox()
+        msg_box = QMessageBox(self.parent)
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setText(f"Are you sure you want to delete the user '{username}'?")
         msg_box.setWindowTitle("Confirm Delete")
@@ -153,7 +154,7 @@ class CreateUserWindow(QDialog):
         if confirm == QMessageBox.Yes:
             # Call the function to delete user
             message = delete_user_by_username(username)
-            msg_box = QMessageBox()
+            msg_box = QMessageBox(self.parent)
             msg_box.setIcon(QMessageBox.Information)
             msg_box.setText(message)
             msg_box.setWindowTitle('Result')

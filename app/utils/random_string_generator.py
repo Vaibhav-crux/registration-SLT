@@ -1,10 +1,12 @@
 import random
 import string
 from datetime import datetime
+import pytz
 
 def generate_sales_order_no():
     """Generates a unique sales order number based on the current date and a random 4-digit number."""
-    date_part = datetime.now().strftime("%Y-%m-%d")
+    timezone = pytz.timezone("Asia/Kolkata")
+    date_part = datetime.now(timezone).strftime("%Y-%m-%d")
     random_number = ''.join(random.choices(string.digits, k=4))
     return f"STARLABS-{date_part}-PROJECT-{random_number}"
 

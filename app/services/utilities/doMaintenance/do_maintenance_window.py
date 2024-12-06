@@ -15,10 +15,11 @@ dark_mode=is_dark_mode()
 MESSAGE_ENTER_DO_NUMBER = "Please enter a DO Number."
 
 class DoMaintenanceWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         self.setWindowTitle("DO Maintenance")
         self.setGeometry(100, 100, 400, 200)
+        self.parent=parent
 
         # Apply window flags, mode styles, center the window, and add drop shadow
         apply_window_flags(self)
@@ -38,7 +39,7 @@ class DoMaintenanceWindow(QDialog):
         self.do_number_input.setFocus()
 
     def open_new_do_window(self):
-        new_do_window = AuthDoMaintenanceWindow(self)
+        new_do_window = AuthDoMaintenanceWindow(self.parent)
         new_do_window.exec_()  # Open the window as a modal dialog
 
     def perform_search(self):
@@ -73,11 +74,11 @@ class DoMaintenanceWindow(QDialog):
             self.show_message(f"No record found for DO Number: {do_number}")
             return
 
-        delete_window = DeleteDoNumberWindow(do_number, self)
+        delete_window = DeleteDoNumberWindow(do_number, self.parent)
         delete_window.exec_()
 
     def show_message(self, message):
-        msg_box = QMessageBox()
+        msg_box = QMessageBox(self.parent)
         msg_box.setIcon(QMessageBox.Information)
         msg_box.setText(message)
         msg_box.setWindowTitle("Information")
@@ -89,7 +90,7 @@ class DoMaintenanceWindow(QDialog):
 
     def show_result(self, result):
         # Displays the search result in a new ResultWindow.
-        result_window = SearchDoNumberService(result)
+        result_window = SearchDoNumberService(result,self.parent)
         result_window.exec_()
 
         # Set focus back to the Do Number textbox

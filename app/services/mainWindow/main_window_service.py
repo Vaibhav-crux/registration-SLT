@@ -18,6 +18,7 @@ from app.services.maintenance.blockUser.auth_user_window import ChangePasswordWi
 from app.controllers.mainWindow.fetch_user_full_name import fetch_user_full_name
 from app.controllers.mainWindow.fetch_shift_name import fetch_shift_name
 from app.controllers.mainWindow.fetch_due_amount import fetch_due_amount
+import pytz
 
 class MainWindow(QWidget, MainWindowUI):
     def __init__(self):
@@ -173,8 +174,8 @@ class MainWindow(QWidget, MainWindowUI):
         self.power_button.setGeometry(self.width() - 60, 20, 40, 40)
 
         # Reposition the bottom-right image
-        image_width = 300
-        image_height = 150
+        image_width = 400
+        image_height = 300
         self.bottom_right_image.setGeometry(self.width() - image_width - 20, self.height() - image_height - 20, image_width, image_height)
 
         self.start_inactivity_timer()  # Restart the inactivity timer on resize
@@ -249,14 +250,14 @@ class MainWindow(QWidget, MainWindowUI):
     def open_registration_window(self):
         """Open the internal registration pop-up window."""
         self.stop_inactivity_timer()
-        self.registration_window = InternalRegistrationWindow()
+        self.registration_window = InternalRegistrationWindow(self)
         self.registration_window.finished.connect(self.resume_inactivity_timer)
         self.registration_window.show()
 
     def open_external_registration_window(self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.external_registration_window = ExternalRegistrationWindow()
+        self.external_registration_window = ExternalRegistrationWindow(self)
         self.external_registration_window.finished.connect(self.resume_inactivity_timer)
         self.external_registration_window.show()
     
@@ -269,41 +270,42 @@ class MainWindow(QWidget, MainWindowUI):
     def open_shift_timing_window(self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.shift_timing_window = ShiftTimingWindow()
+        self.shift_timing_window = ShiftTimingWindow(self)
         self.shift_timing_window.finished.connect(self.resume_inactivity_timer)
         self.shift_timing_window.show()
     
     def open_do_maintenance_window(self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.do_maintenance_window = DoMaintenanceWindow()
+        self.do_maintenance_window = DoMaintenanceWindow(self)
         self.do_maintenance_window.finished.connect(self.resume_inactivity_timer)
         self.do_maintenance_window.show()
 
     def open_create_user_window (self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.create_user_window = AuthUserWindow()
+        self.create_user_window = AuthUserWindow(self)
         self.create_user_window.finished.connect(self.resume_inactivity_timer)
         self.create_user_window.show()  
 
     def open_change_password_window (self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.change_password_window = ChangePasswordWindow()
+        self.change_password_window = ChangePasswordWindow(self)
         self.change_password_window.finished.connect(self.resume_inactivity_timer)
         self.change_password_window.show()
 
     def open_block_user_window (self):
         """Open the external registration pop-up window."""
         self.stop_inactivity_timer()
-        self.change_password_window = ChangePasswordWindowBlock()
+        self.change_password_window = ChangePasswordWindowBlock(self)
         self.change_password_window.finished.connect(self.resume_inactivity_timer)
         self.change_password_window.show()
 
     def update_time(self):
         """Update the time label with the current time."""
-        self.time_label.setText(datetime.now().strftime("%H:%M:%S"))
+        timezone = pytz.timezone("Asia/Kolkata")
+        self.time_label.setText(datetime.now(timezone).strftime("%H:%M:%S"))
         shift_name=fetch_shift_name()
         self.shift_label.setText(shift_name)
         due=fetch_due_amount()
